@@ -46,7 +46,11 @@ const ScenarioHelper = () => {
         headers: JSON.stringify(Object.fromEntries(fetchResponse.headers.entries()), null, 2)
       }));
 
-      const data = await fetchResponse.json();
+      // Handle JSONP response - extract JSON from callback wrapper
+      const textResponse = await fetchResponse.text();
+      const jsonMatch = textResponse.match(/callback\((.*)\)/);
+      const jsonString = jsonMatch ? jsonMatch[1] : textResponse;
+      const data = JSON.parse(jsonString);
       
       setDebugInfo(prev => ({
         ...prev,
