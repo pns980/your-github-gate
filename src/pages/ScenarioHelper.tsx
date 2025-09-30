@@ -88,16 +88,18 @@ const ScenarioHelper = () => {
         throw new Error("The API returned an unexpected response format. Please check the Google Apps Script.");
       }
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error",
-        description: "Failed to get guidance. Please try again.",
+        description: message,
         variant: "destructive"
       });
       
-      setResponse("Unable to generate guidance at this time. Please try again later.");
+      setResponse(message);
+      setAppliedRules("");
       setDebugInfo(prev => ({
         ...prev,
-        response: error instanceof Error ? error.message : "Unknown error"
+        response: message
       }));
     } finally {
       setLoading(false);
