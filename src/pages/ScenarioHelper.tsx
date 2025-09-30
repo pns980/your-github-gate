@@ -74,6 +74,30 @@ const ScenarioHelper = () => {
         }
       }
 
+      // Handle the case where the server failed to parse the AI response but provided the raw response
+      if (data.success === false && data.error === "AI response parsing failed" && data.raw_response) {
+        try {
+          // Try to parse the raw response on the client side
+          const rawResponse = data.raw_response.trim();
+          const cleanedResponse = rawResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+          const parsedAiResponse = JSON.parse(cleanedResponse);
+
+          // Use the parsed response as if it came from the server properly
+          data = {
+            success: true,
+            reply: parsedAiResponse.reply,
+            rulesUsed: parsedAiResponse.rules_used
+          };
+        } catch (clientParseError) {
+          throw new Error(`Server error: ${data.error || 'Unknown error'}`);
+        }
+      }
+
+      // Handle the new response format with success wrapper
+      if (data.success === false) {
+        throw new Error(`Server error: ${data.error || 'Unknown error'}`);
+      }
+
       if (data.reply) {
         setResponse(data.reply);
         setAppliedRules(data.rulesUsed || "No guidelines information available");
