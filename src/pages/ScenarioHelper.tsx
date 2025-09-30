@@ -46,16 +46,27 @@ const ScenarioHelper = () => {
         headers: JSON.stringify(Object.fromEntries(fetchResponse.headers.entries()), null, 2)
       }));
 
-      // Handle JSONP response - extract JSON from callback wrapper
       const textResponse = await fetchResponse.text();
-      const jsonMatch = textResponse.match(/callback\((.*)\)/);
-      const jsonString = jsonMatch ? jsonMatch[1] : textResponse;
-      const data = JSON.parse(jsonString);
       
       setDebugInfo(prev => ({
         ...prev,
-        response: JSON.stringify(data, null, 2)
+        response: textResponse
       }));
+
+      // Try to parse as JSON, handling both plain JSON and JSONP
+      let data;
+      try {
+        // First try plain JSON
+        data = JSON.parse(textResponse);
+      } catch {
+        // If that fails, try JSONP format
+        const jsonMatch = textResponse.match(/callback\((.*)\)/);
+        if (jsonMatch) {
+          data = JSON.parse(jsonMatch[1]);
+        } else {
+          throw new Error("Could not parse response");
+        }
+      }
 
       if (data.reply) {
         setResponse(data.reply);
@@ -65,8 +76,10 @@ const ScenarioHelper = () => {
           title: "Success!",
           description: "Your guidance has been generated"
         });
+      } else if (data.error) {
+        throw new Error(data.error);
       } else {
-        throw new Error("Invalid response format");
+        throw new Error("The API returned an unexpected response format. Please check the Google Apps Script.");
       }
     } catch (error) {
       toast({
