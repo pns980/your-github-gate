@@ -34,7 +34,7 @@ const ScenarioHelper = () => {
     setAppliedRules("");
 
     try {
-      const url = `https://script.google.com/macros/s/AKfycbw6qXXzzJj-5ulyAqOBxL33j8CyUc9CiVxl3sD15ItgbHRhF-z5FLFxsY7Ue8b1Gd2t/exec?scenario=${encodeURIComponent(scenario)}`;
+      const url = `https://script.google.com/macros/s/AKfycbws1B_0FX-z2lxiKFqGiqcqIABMadbeM72911aEoB2kxWsDalahzGgUcWpGFrw8GjVn6g/exec?scenario=${encodeURIComponent(scenario)}`;
       
       setDebugInfo(prev => ({ ...prev, url }));
 
