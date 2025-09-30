@@ -62,9 +62,15 @@ const ScenarioHelper = () => {
         // If that fails, try JSONP format
         const jsonMatch = textResponse.match(/callback\((.*)\)/);
         if (jsonMatch) {
-          data = JSON.parse(jsonMatch[1]);
+          try {
+            data = JSON.parse(jsonMatch[1]);
+          } catch {
+            // JSONP parsing failed, treat as error message
+            throw new Error(textResponse);
+          }
         } else {
-          throw new Error("Could not parse response");
+          // Not JSON or JSONP - the response itself is likely an error message
+          throw new Error(textResponse);
         }
       }
 
