@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Home } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Home, Settings } from "lucide-react";
 import { Rule, FilterState } from "@/types/rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,7 @@ const fallbackData: Rule[] = [
 ];
 
 const RulesBrowser = () => {
+  const navigate = useNavigate();
   const [rulesData, setRulesData] = useState<Rule[]>([]);
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
   const [activeFilters, setActiveFilters] = useState<FilterState>({
@@ -160,12 +161,22 @@ const RulesBrowser = () => {
   return (
     <div className="min-h-screen gradient-bg p-5">
       <div className="max-w-[1400px] mx-auto">
-        <Link to="/">
-          <Button variant="outline" className="mb-6 bg-white/10 hover:bg-white/20 text-white border-white/30">
-            <Home className="mr-2 h-4 w-4" />
-            Back to Scenario Helper
+        <div className="flex justify-between items-center mb-6">
+          <Link to="/">
+            <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/30">
+              <Home className="mr-2 h-4 w-4" />
+              Back to Scenario Helper
+            </Button>
+          </Link>
+          <Button 
+            onClick={() => navigate('/rules/manage')} 
+            variant="outline" 
+            className="bg-white/10 hover:bg-white/20 text-white border-white/30"
+          >
+            <Settings className="mr-2 h-4 w-4" />
+            Manage Rules
           </Button>
-        </Link>
+        </div>
 
         <div className="text-center mb-12">
           <h1 className="text-white text-5xl mb-4 font-light drop-shadow-lg">📋 No. 1 Rules</h1>

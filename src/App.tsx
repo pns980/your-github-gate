@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScenarioHelper from "./pages/ScenarioHelper";
 import RulesBrowser from "./pages/RulesBrowser";
+import RulesManagement from "./pages/RulesManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<ScenarioHelper />} />
           <Route path="/rules" element={<RulesBrowser />} />
+          <Route path="/rules/manage" element={<RulesManagement />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
