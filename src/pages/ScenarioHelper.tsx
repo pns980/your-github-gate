@@ -100,7 +100,16 @@ const ScenarioHelper = () => {
 
       if (data.reply) {
         setResponse(data.reply);
-        setAppliedRules(data.rulesUsed || "No guidelines information available");
+        
+        // Format rules_used array into readable text
+        if (data.rules_used && Array.isArray(data.rules_used) && data.rules_used.length > 0) {
+          const formattedRules = data.rules_used
+            .map((rule: any) => `• ${rule.title}\n  ${rule.reason}`)
+            .join("\n\n");
+          setAppliedRules(formattedRules);
+        } else {
+          setAppliedRules("No guidelines information available");
+        }
         
         toast({
           title: "Success!",
