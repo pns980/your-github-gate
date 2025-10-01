@@ -142,30 +142,73 @@ const RulesManagement = () => {
     });
   };
 
+  const parseCSVLine = (text: string): string[] => {
+    const result: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const nextChar = text[i + 1];
+      
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          // Escaped quote
+          current += '"';
+          i++; // Skip next quote
+        } else {
+          // Toggle quote state
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        // Field separator
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    
+    // Push last field
+    result.push(current.trim());
+    return result;
+  };
+
   const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
       const text = await file.text();
-      const lines = text.split("\n");
-      const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
+      const lines = text.split(/\r?\n/);
+      const headers = parseCSVLine(lines[0]).map((h) => h.trim().toLowerCase());
 
-      const rules = lines.slice(1).map((line) => {
-        const values = line.split(",").map((v) => v.trim());
+      const rules = [];
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue; // Skip empty lines
+        
+        const values = parseCSVLine(line);
         const rule: any = {};
 
         headers.forEach((header, index) => {
-          if (header === "title") rule.title = values[index];
-          if (header === "description" || header === "full_description")
-            rule.full_description = values[index];
-          if (header === "area") rule.area = values[index];
-          if (header === "discipline") rule.discipline = values[index];
-          if (header === "skill") rule.skill = values[index];
+          const value = values[index]?.trim() || '';
+          if (header === "title") rule.title = value;
+          if (header === "description") rule.full_description = value;
+          if (header === "area") rule.area = value;
+          if (header === "discipline") rule.discipline = value;
+          if (header === "skill") rule.skill = value;
         });
 
-        return rule;
-      }).filter(rule => rule.title && rule.full_description && rule.area && rule.discipline && rule.skill);
+        // Only add rules with all required fields
+        if (rule.title && rule.full_description && rule.area && rule.discipline && rule.skill) {
+          rules.push(rule);
+        }
+      }
+
+      if (rules.length === 0) {
+        throw new Error("No valid rules found in CSV file");
+      }
 
       const { error } = await supabase.from("rules").insert(rules);
 
@@ -186,6 +229,26 @@ const RulesManagement = () => {
     e.target.value = "";
   };
 
+  const handleDeleteAll = async () => {
+    if (!confirm("Are you sure you want to delete ALL rules? This action cannot be undone!")) return;
+    
+    if (!confirm("This will permanently delete all rules. Are you absolutely sure?")) return;
+
+    try {
+      const { error } = await supabase.from("rules").delete().neq('id', '00000000-0000-0000-0000-000000000000');
+
+      if (error) throw error;
+      toast({ title: "Success", description: "All rules deleted successfully" });
+      fetchRules();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
@@ -201,6 +264,10 @@ const RulesManagement = () => {
             <h1 className="text-4xl font-bold">Rules Management</h1>
           </div>
           <div className="flex gap-2">
+            <Button variant="destructive" onClick={handleDeleteAll}>
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete All
+            </Button>
             <Button variant="outline" asChild>
               <label htmlFor="csv-import" className="cursor-pointer">
                 <Upload className="h-4 w-4 mr-2" />
@@ -318,6 +385,7 @@ const RulesManagement = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
+                  <TableHead>Description</TableHead>
                   <TableHead>Area</TableHead>
                   <TableHead>Discipline</TableHead>
                   <TableHead>Skill</TableHead>
@@ -327,14 +395,19 @@ const RulesManagement = () => {
               <TableBody>
                 {rules.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8">
+                    <TableCell colSpan={6} className="text-center py-8">
                       No rules yet. Add your first rule or import from CSV.
                     </TableCell>
                   </TableRow>
                 ) : (
                   rules.map((rule) => (
                     <TableRow key={rule.id}>
-                      <TableCell className="font-medium">{rule.title}</TableCell>
+                      <TableCell className="font-medium max-w-xs">{rule.title}</TableCell>
+                      <TableCell className="max-w-md">
+                        <div className="line-clamp-2 text-sm text-muted-foreground">
+                          {rule.full_description}
+                        </div>
+                      </TableCell>
                       <TableCell>{rule.area}</TableCell>
                       <TableCell>{rule.discipline}</TableCell>
                       <TableCell>{rule.skill}</TableCell>
