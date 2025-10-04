@@ -1,13 +1,15 @@
 export interface Rule {
   title: string;
-  fullDescription: string;
-  area: string;
-  discipline: string;
-  skill: string;
+  description: string;
 }
 
-export interface FilterState {
-  area: string;
-  discipline: string;
-  skill: string;
+export interface RuleResponse {
+  id?: string;
+  rule_title: string;
+  resonates: boolean;
+  applicable: boolean;
+  learned_new: boolean;
+  thoughts: string;
+  created_at?: string;
 }
+

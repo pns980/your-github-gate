@@ -26,10 +26,7 @@ import { ArrowLeft, Plus, Pencil, Trash2, Upload } from "lucide-react";
 interface Rule {
   id: string;
   title: string;
-  full_description: string;
-  area: string;
-  discipline: string;
-  skill: string;
+  description: string;
 }
 
 const RulesManagement = () => {
@@ -41,10 +38,7 @@ const RulesManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
-    full_description: "",
-    area: "",
-    discipline: "",
-    skill: "",
+    description: "",
   });
 
   useEffect(() => {
@@ -123,10 +117,7 @@ const RulesManagement = () => {
     setEditingRule(rule);
     setFormData({
       title: rule.title,
-      full_description: rule.full_description,
-      area: rule.area,
-      discipline: rule.discipline,
-      skill: rule.skill,
+      description: rule.description,
     });
     setIsDialogOpen(true);
   };
@@ -135,10 +126,7 @@ const RulesManagement = () => {
     setEditingRule(null);
     setFormData({
       title: "",
-      full_description: "",
-      area: "",
-      discipline: "",
-      skill: "",
+      description: "",
     });
   };
 
@@ -194,14 +182,11 @@ const RulesManagement = () => {
         headers.forEach((header, index) => {
           const value = values[index]?.trim() || '';
           if (header === "title") rule.title = value;
-          if (header === "description") rule.full_description = value;
-          if (header === "area") rule.area = value;
-          if (header === "discipline") rule.discipline = value;
-          if (header === "skill") rule.skill = value;
+          if (header === "description") rule.description = value;
         });
 
         // Only add rules with all required fields
-        if (rule.title && rule.full_description && rule.area && rule.discipline && rule.skill) {
+        if (rule.title && rule.description) {
           rules.push(rule);
         }
       }
@@ -310,54 +295,16 @@ const RulesManagement = () => {
                     <Label htmlFor="description">Description</Label>
                     <Textarea
                       id="description"
-                      value={formData.full_description}
+                      value={formData.description}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          full_description: e.target.value,
+                          description: e.target.value,
                         })
                       }
                       required
                       rows={4}
                     />
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <Label htmlFor="area">Area</Label>
-                      <Input
-                        id="area"
-                        value={formData.area}
-                        onChange={(e) =>
-                          setFormData({ ...formData, area: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="discipline">Discipline</Label>
-                      <Input
-                        id="discipline"
-                        value={formData.discipline}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            discipline: e.target.value,
-                          })
-                        }
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="skill">Skill</Label>
-                      <Input
-                        id="skill"
-                        value={formData.skill}
-                        onChange={(e) =>
-                          setFormData({ ...formData, skill: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
                   </div>
                   <div className="flex justify-end gap-2">
                     <Button
@@ -383,19 +330,16 @@ const RulesManagement = () => {
           <div className="border rounded-lg">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Area</TableHead>
-                  <TableHead>Discipline</TableHead>
-                  <TableHead>Skill</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
-                </TableRow>
+              <TableRow>
+                <TableHead>Title</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead className="w-[100px]">Actions</TableHead>
+              </TableRow>
               </TableHeader>
               <TableBody>
                 {rules.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8">
+                    <TableCell colSpan={3} className="text-center py-8">
                       No rules yet. Add your first rule or import from CSV.
                     </TableCell>
                   </TableRow>
@@ -405,12 +349,9 @@ const RulesManagement = () => {
                       <TableCell className="font-medium max-w-xs">{rule.title}</TableCell>
                       <TableCell className="max-w-md">
                         <div className="line-clamp-2 text-sm text-muted-foreground">
-                          {rule.full_description}
+                          {rule.description}
                         </div>
                       </TableCell>
-                      <TableCell>{rule.area}</TableCell>
-                      <TableCell>{rule.discipline}</TableCell>
-                      <TableCell>{rule.skill}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
                           <Button

@@ -14,34 +14,55 @@ export type Database = {
   }
   public: {
     Tables: {
+      rule_responses: {
+        Row: {
+          applicable: boolean
+          created_at: string
+          id: string
+          learned_new: boolean
+          resonates: boolean
+          rule_title: string
+          thoughts: string | null
+        }
+        Insert: {
+          applicable: boolean
+          created_at?: string
+          id?: string
+          learned_new: boolean
+          resonates: boolean
+          rule_title: string
+          thoughts?: string | null
+        }
+        Update: {
+          applicable?: boolean
+          created_at?: string
+          id?: string
+          learned_new?: boolean
+          resonates?: boolean
+          rule_title?: string
+          thoughts?: string | null
+        }
+        Relationships: []
+      }
       rules: {
         Row: {
-          area: string
           created_at: string
-          discipline: string
-          full_description: string
+          description: string
           id: string
-          skill: string
           title: string
           updated_at: string
         }
         Insert: {
-          area: string
           created_at?: string
-          discipline: string
-          full_description: string
+          description: string
           id?: string
-          skill: string
           title: string
           updated_at?: string
         }
         Update: {
-          area?: string
           created_at?: string
-          discipline?: string
-          full_description?: string
+          description?: string
           id?: string
-          skill?: string
           title?: string
           updated_at?: string
         }
