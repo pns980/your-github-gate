@@ -92,6 +92,9 @@ const RulesBrowser = () => {
 
   const applyFilters = () => {
     const filtered = rulesData.filter(rule => {
+      // Ensure title and description exist before filtering
+      if (!rule.title || !rule.description) return false;
+      
       const matchesSearch = !searchTerm || 
         rule.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
         rule.description.toLowerCase().includes(searchTerm.toLowerCase());
