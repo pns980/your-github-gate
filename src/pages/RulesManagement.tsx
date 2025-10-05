@@ -130,9 +130,10 @@ const RulesManagement = () => {
     });
   };
 
-  const parseCSVLine = (text: string, delimiter: string = ','): string[] => {
-    const result: string[] = [];
-    let current = '';
+  const parseCSV = (text: string, delimiter: string = ','): string[][] => {
+    const rows: string[][] = [];
+    let currentRow: string[] = [];
+    let currentField = '';
     let inQuotes = false;
     
     for (let i = 0; i < text.length; i++) {
@@ -142,7 +143,7 @@ const RulesManagement = () => {
       if (char === '"') {
         if (inQuotes && nextChar === '"') {
           // Escaped quote
-          current += '"';
+          currentField += '"';
           i++; // Skip next quote
         } else {
           // Toggle quote state
@@ -150,16 +151,35 @@ const RulesManagement = () => {
         }
       } else if (char === delimiter && !inQuotes) {
         // Field separator
-        result.push(current.trim());
-        current = '';
+        currentRow.push(currentField.trim());
+        currentField = '';
+      } else if ((char === '\n' || char === '\r') && !inQuotes) {
+        // Row separator (outside quotes)
+        if (char === '\r' && nextChar === '\n') {
+          i++; // Skip \n in \r\n
+        }
+        if (currentField || currentRow.length > 0) {
+          currentRow.push(currentField.trim());
+          if (currentRow.some(field => field)) { // Only add non-empty rows
+            rows.push(currentRow);
+          }
+          currentRow = [];
+          currentField = '';
+        }
       } else {
-        current += char;
+        currentField += char;
       }
     }
     
-    // Push last field
-    result.push(current.trim());
-    return result;
+    // Push last field and row
+    if (currentField || currentRow.length > 0) {
+      currentRow.push(currentField.trim());
+      if (currentRow.some(field => field)) {
+        rows.push(currentRow);
+      }
+    }
+    
+    return rows;
   };
 
   const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,20 +188,22 @@ const RulesManagement = () => {
 
     try {
       const text = await file.text();
-      const lines = text.split(/\r?\n/);
       
       // Detect delimiter (semicolon or comma)
-      const firstLine = lines[0];
+      const firstLine = text.split(/\r?\n/)[0];
       const delimiter = firstLine.includes(';') ? ';' : ',';
       
-      const headers = parseCSVLine(firstLine, delimiter).map((h) => h.trim().toLowerCase());
-
+      const rows = parseCSV(text, delimiter);
+      
+      if (rows.length === 0) {
+        throw new Error("CSV file is empty");
+      }
+      
+      const headers = rows[0].map((h) => h.trim().toLowerCase());
       const rules = [];
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue; // Skip empty lines
-        
-        const values = parseCSVLine(line, delimiter);
+
+      for (let i = 1; i < rows.length; i++) {
+        const values = rows[i];
         const rule: any = {};
 
         headers.forEach((header, index) => {
