@@ -26,6 +26,9 @@ const RulesBrowser = () => {
   const [loading, setLoading] = useState(true);
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
   const [loadStatus, setLoadStatus] = useState('');
+  const [selectedArea, setSelectedArea] = useState('All Areas');
+  const [selectedDiscipline, setSelectedDiscipline] = useState('All Disciplines');
+  const [selectedSkill, setSelectedSkill] = useState('All Skills');
 
 
   useEffect(() => {
@@ -34,7 +37,7 @@ const RulesBrowser = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [searchTerm, rulesData]);
+  }, [searchTerm, rulesData, selectedArea, selectedDiscipline, selectedSkill]);
 
   const loadData = async () => {
     setLoading(true);
@@ -92,17 +95,23 @@ const RulesBrowser = () => {
 
   const applyFilters = () => {
     const filtered = rulesData.filter(rule => {
-      // If no search term, show all rules
-      if (!searchTerm) return true;
-      
-      // Safely check title and description with fallback to empty string
+      // Search filter
       const title = rule.title || '';
       const description = rule.description || '';
-      
-      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      const matchesSearch = !searchTerm || 
+        title.toLowerCase().includes(searchTerm.toLowerCase()) || 
         description.toLowerCase().includes(searchTerm.toLowerCase());
       
-      return matchesSearch;
+      // Area filter
+      const matchesArea = selectedArea === 'All Areas' || rule.area === selectedArea;
+      
+      // Discipline filter
+      const matchesDiscipline = selectedDiscipline === 'All Disciplines' || rule.discipline === selectedDiscipline;
+      
+      // Skill filter
+      const matchesSkill = selectedSkill === 'All Skills' || rule.skill === selectedSkill;
+      
+      return matchesSearch && matchesArea && matchesDiscipline && matchesSkill;
     });
     
     setFilteredRules(filtered);
@@ -110,6 +119,9 @@ const RulesBrowser = () => {
 
   const resetFilters = () => {
     setSearchTerm('');
+    setSelectedArea('All Areas');
+    setSelectedDiscipline('All Disciplines');
+    setSelectedSkill('All Skills');
   };
 
   const toggleCard = (index: number) => {
@@ -174,6 +186,72 @@ const RulesBrowser = () => {
             className="max-w-[600px] mx-auto bg-white/95 border-none rounded-full px-6 py-5 text-base shadow-lg"
           />
           
+          <div className="mt-8 space-y-6">
+            <div>
+              <h3 className="text-white/90 text-sm font-semibold uppercase tracking-wider mb-3">Area</h3>
+              <div className="flex flex-wrap gap-3 justify-center">
+                {['All Areas', 'People', 'Self', 'Business'].map((area) => (
+                  <Button
+                    key={area}
+                    onClick={() => setSelectedArea(area)}
+                    variant={selectedArea === area ? "default" : "outline"}
+                    className={selectedArea === area 
+                      ? "bg-white text-primary hover:bg-white/90" 
+                      : "bg-white/10 text-white border-white/30 hover:bg-white/20"}
+                  >
+                    {area}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-white/90 text-sm font-semibold uppercase tracking-wider mb-3">Discipline</h3>
+              <div className="flex flex-wrap gap-3 justify-center">
+                {['All Disciplines', 'Perception', 'Will', 'Action'].map((discipline) => (
+                  <Button
+                    key={discipline}
+                    onClick={() => setSelectedDiscipline(discipline)}
+                    variant={selectedDiscipline === discipline ? "default" : "outline"}
+                    className={selectedDiscipline === discipline 
+                      ? "bg-white text-primary hover:bg-white/90" 
+                      : "bg-white/10 text-white border-white/30 hover:bg-white/20"}
+                  >
+                    {discipline}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-white/90 text-sm font-semibold uppercase tracking-wider mb-3">Skill</h3>
+              <div className="flex flex-wrap gap-3 justify-center">
+                {['All Skills', 'Communication', 'Teamwork', 'Analytical skills', 'Empathy', 'Work ethic', 'Leadership', 'Self-management'].map((skill) => (
+                  <Button
+                    key={skill}
+                    onClick={() => setSelectedSkill(skill)}
+                    variant={selectedSkill === skill ? "default" : "outline"}
+                    className={selectedSkill === skill 
+                      ? "bg-white text-primary hover:bg-white/90" 
+                      : "bg-white/10 text-white border-white/30 hover:bg-white/20"}
+                  >
+                    {skill}
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center">
+              <Button
+                onClick={resetFilters}
+                variant="outline"
+                className="bg-white/10 text-white border-white/30 hover:bg-white/20"
+              >
+                🔄 Reset All Filters
+              </Button>
+            </div>
+          </div>
+          
           {loadStatus && (
             <div className="mt-5 text-center text-white/80 text-sm">{loadStatus}</div>
           )}
@@ -199,6 +277,24 @@ const RulesBrowser = () => {
                   className="bg-white/95 rounded-3xl p-8 shadow-xl backdrop-blur-md border border-white/30 transition-all hover:translate-y-[-8px] hover:shadow-2xl relative overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-accent"></div>
+                  
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {rule.area && (
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-red-500 text-white">
+                        {rule.area}
+                      </span>
+                    )}
+                    {rule.discipline && (
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-teal-500 text-white">
+                        {rule.discipline}
+                      </span>
+                    )}
+                    {rule.skill && (
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-emerald-500 text-white">
+                        {rule.skill}
+                      </span>
+                    )}
+                  </div>
                   
                   <h3 className="text-2xl font-bold text-gray-800 mb-4 leading-tight">
                     {rule.title || 'Untitled'}
