@@ -130,7 +130,7 @@ const RulesManagement = () => {
     });
   };
 
-  const parseCSVLine = (text: string): string[] => {
+  const parseCSVLine = (text: string, delimiter: string = ','): string[] => {
     const result: string[] = [];
     let current = '';
     let inQuotes = false;
@@ -148,7 +148,7 @@ const RulesManagement = () => {
           // Toggle quote state
           inQuotes = !inQuotes;
         }
-      } else if (char === ',' && !inQuotes) {
+      } else if (char === delimiter && !inQuotes) {
         // Field separator
         result.push(current.trim());
         current = '';
@@ -169,14 +169,19 @@ const RulesManagement = () => {
     try {
       const text = await file.text();
       const lines = text.split(/\r?\n/);
-      const headers = parseCSVLine(lines[0]).map((h) => h.trim().toLowerCase());
+      
+      // Detect delimiter (semicolon or comma)
+      const firstLine = lines[0];
+      const delimiter = firstLine.includes(';') ? ';' : ',';
+      
+      const headers = parseCSVLine(firstLine, delimiter).map((h) => h.trim().toLowerCase());
 
       const rules = [];
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue; // Skip empty lines
         
-        const values = parseCSVLine(line);
+        const values = parseCSVLine(line, delimiter);
         const rule: any = {};
 
         headers.forEach((header, index) => {
