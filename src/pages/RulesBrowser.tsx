@@ -92,12 +92,15 @@ const RulesBrowser = () => {
 
   const applyFilters = () => {
     const filtered = rulesData.filter(rule => {
-      // Ensure title and description exist before filtering
-      if (!rule.title || !rule.description) return false;
+      // If no search term, show all rules
+      if (!searchTerm) return true;
       
-      const matchesSearch = !searchTerm || 
-        rule.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        rule.description.toLowerCase().includes(searchTerm.toLowerCase());
+      // Safely check title and description with fallback to empty string
+      const title = rule.title || '';
+      const description = rule.description || '';
+      
+      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        description.toLowerCase().includes(searchTerm.toLowerCase());
       
       return matchesSearch;
     });
