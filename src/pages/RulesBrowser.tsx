@@ -43,9 +43,10 @@ const RulesBrowser = () => {
     setLoading(true);
     try {
       const data = await loadDataWithJSONP();
-      if (Array.isArray(data) && data.length > 0) {
-        setRulesData(data);
-        setLoadStatus(`Successfully loaded ${data.length} rules from Google Sheets!`);
+      const normalized = normalizeRules(data as any);
+      if (Array.isArray(normalized) && normalized.length > 0) {
+        setRulesData(normalized);
+        setLoadStatus(`Successfully loaded ${normalized.length} rules from Google Sheets!`);
       } else {
         throw new Error('No data received');
       }
@@ -91,6 +92,18 @@ const RulesBrowser = () => {
       script.src = `${SCRIPT_URL}?callback=${callbackName}&_=${timestamp}`;
       document.head.appendChild(script);
     });
+  };
+
+  const normalizeText = (val: any) => typeof val === 'string' ? val.trim() : (val == null ? '' : String(val).trim());
+
+  const normalizeRules = (data: any[]): Rule[] => {
+    return (data || []).map((r: any) => ({
+      title: normalizeText(r.title ?? r.Title ?? r.TITLE),
+      description: normalizeText(r.description ?? r.Description ?? r.DESCRIPTION),
+      area: normalizeText(r.area ?? r.Area ?? r.AREA),
+      discipline: normalizeText(r.discipline ?? r.Discipline ?? r.DISCIPLINE),
+      skill: normalizeText(r.skill ?? r.Skill ?? r.SKILL),
+    }));
   };
 
   const applyFilters = () => {
@@ -269,7 +282,8 @@ const RulesBrowser = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredRules.map((rule, index) => {
-              const isExpanded = expandedCards.has(rule.title);
+              const cardKey = rule.title || `rule-${index}`;
+              const isExpanded = expandedCards.has(cardKey);
               
               return (
                 <div
@@ -307,7 +321,7 @@ const RulesBrowser = () => {
                   )}
                   
                   <Button
-                    onClick={() => toggleCard(rule.title)}
+                    onClick={() => toggleCard(cardKey)}
                     className={`rounded-full px-5 py-2.5 text-xs font-medium uppercase tracking-wide transition-all ${
                       isExpanded
                         ? 'bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg text-white'
