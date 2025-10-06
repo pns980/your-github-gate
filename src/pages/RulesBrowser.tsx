@@ -24,7 +24,7 @@ const RulesBrowser = () => {
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [loadStatus, setLoadStatus] = useState('');
   const [selectedArea, setSelectedArea] = useState('All Areas');
   const [selectedDiscipline, setSelectedDiscipline] = useState('All Disciplines');
@@ -124,13 +124,13 @@ const RulesBrowser = () => {
     setSelectedSkill('All Skills');
   };
 
-  const toggleCard = (index: number) => {
+  const toggleCard = (title: string) => {
     setExpandedCards(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(index)) {
-        newSet.delete(index);
+      if (newSet.has(title)) {
+        newSet.delete(title);
       } else {
-        newSet.add(index);
+        newSet.add(title);
       }
       return newSet;
     });
@@ -269,7 +269,7 @@ const RulesBrowser = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredRules.map((rule, index) => {
-              const isExpanded = expandedCards.has(index);
+              const isExpanded = expandedCards.has(rule.title);
               
               return (
                 <div
@@ -307,7 +307,7 @@ const RulesBrowser = () => {
                   )}
                   
                   <Button
-                    onClick={() => toggleCard(index)}
+                    onClick={() => toggleCard(rule.title)}
                     className={`rounded-full px-5 py-2.5 text-xs font-medium uppercase tracking-wide transition-all ${
                       isExpanded
                         ? 'bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg text-white'
