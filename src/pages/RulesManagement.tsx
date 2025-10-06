@@ -21,12 +21,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Plus, Pencil, Trash2, Upload } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, Upload, Download } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Rule {
   id: string;
   title: string;
   description: string;
+  area?: string;
+  discipline?: string;
+  skill?: string;
 }
 
 const RulesManagement = () => {
@@ -39,7 +49,11 @@ const RulesManagement = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    area: "",
+    discipline: "",
+    skill: "",
   });
+  const [importing, setImporting] = useState(false);
 
   useEffect(() => {
     fetchRules();
@@ -118,6 +132,9 @@ const RulesManagement = () => {
     setFormData({
       title: rule.title,
       description: rule.description,
+      area: rule.area || "",
+      discipline: rule.discipline || "",
+      skill: rule.skill || "",
     });
     setIsDialogOpen(true);
   };
@@ -127,6 +144,9 @@ const RulesManagement = () => {
     setFormData({
       title: "",
       description: "",
+      area: "",
+      discipline: "",
+      skill: "",
     });
   };
 
@@ -210,9 +230,12 @@ const RulesManagement = () => {
           const value = values[index]?.trim() || '';
           if (header === "title") rule.title = value;
           if (header === "description") rule.description = value;
+          if (header === "area") rule.area = value;
+          if (header === "discipline") rule.discipline = value;
+          if (header === "skill") rule.skill = value;
         });
 
-        // Only add rules with all required fields
+        // Only add rules with required fields (title and description)
         if (rule.title && rule.description) {
           rules.push(rule);
         }
@@ -239,6 +262,90 @@ const RulesManagement = () => {
     }
 
     e.target.value = "";
+  };
+
+  const loadDataWithJSONP = (): Promise<any[]> => {
+    return new Promise((resolve, reject) => {
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6qXXzzJj-5ulyAqOBxL33j8CyUc9CiVxl3sD15ItgbHRhF-z5FLFxsY7Ue8b1Gd2t/exec';
+      const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+      const timestamp = Date.now();
+      
+      const timeoutId = setTimeout(() => {
+        cleanup();
+        reject(new Error('Request timeout'));
+      }, 15000);
+      
+      (window as any)[callbackName] = function(data: any[]) {
+        cleanup();
+        resolve(data);
+      };
+      
+      function cleanup() {
+        clearTimeout(timeoutId);
+        if (script && script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+        if ((window as any)[callbackName]) {
+          delete (window as any)[callbackName];
+        }
+      }
+      
+      const script = document.createElement('script');
+      script.onerror = function() {
+        cleanup();
+        reject(new Error('Failed to load data'));
+      };
+      
+      script.src = `${SCRIPT_URL}?callback=${callbackName}&_=${timestamp}`;
+      document.head.appendChild(script);
+    });
+  };
+
+  const handleGoogleSheetsImport = async () => {
+    if (!confirm("This will import all rules from Google Sheets. Continue?")) return;
+    
+    setImporting(true);
+    try {
+      const data = await loadDataWithJSONP();
+      
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('No data received from Google Sheets');
+      }
+
+      const normalizeText = (val: any) => typeof val === 'string' ? val.trim() : (val == null ? '' : String(val).trim());
+
+      const rules = data.map((r: any) => ({
+        title: normalizeText(r.title ?? r.Title ?? r.TITLE),
+        description: normalizeText(
+          r.description ?? r.fullDescription ?? r.FullDescription ?? r.FULLDESCRIPTION ?? r.Description ?? r.DESCRIPTION
+        ),
+        area: normalizeText(r.area ?? r.Area ?? r.AREA) || null,
+        discipline: normalizeText(r.discipline ?? r.Discipline ?? r.DISCIPLINE) || null,
+        skill: normalizeText(r.skill ?? r.Skill ?? r.SKILL) || null,
+      })).filter((rule: any) => rule.title && rule.description);
+
+      if (rules.length === 0) {
+        throw new Error('No valid rules found in Google Sheets');
+      }
+
+      const { error } = await supabase.from("rules").insert(rules);
+
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: `Imported ${rules.length} rules from Google Sheets`,
+      });
+      fetchRules();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setImporting(false);
+    }
   };
 
   const handleDeleteAll = async () => {
@@ -279,6 +386,14 @@ const RulesManagement = () => {
             <Button variant="destructive" onClick={handleDeleteAll}>
               <Trash2 className="h-4 w-4 mr-2" />
               Delete All
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={handleGoogleSheetsImport}
+              disabled={importing}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {importing ? "Importing..." : "Import from Google Sheets"}
             </Button>
             <Button variant="outline" asChild>
               <label htmlFor="csv-import" className="cursor-pointer">
@@ -333,6 +448,69 @@ const RulesManagement = () => {
                       rows={4}
                     />
                   </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="area">Area</Label>
+                      <Select
+                        value={formData.area}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, area: value })
+                        }
+                      >
+                        <SelectTrigger id="area">
+                          <SelectValue placeholder="Select area" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">None</SelectItem>
+                          <SelectItem value="People">People</SelectItem>
+                          <SelectItem value="Self">Self</SelectItem>
+                          <SelectItem value="Business">Business</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="discipline">Discipline</Label>
+                      <Select
+                        value={formData.discipline}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, discipline: value })
+                        }
+                      >
+                        <SelectTrigger id="discipline">
+                          <SelectValue placeholder="Select discipline" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">None</SelectItem>
+                          <SelectItem value="Perception">Perception</SelectItem>
+                          <SelectItem value="Will">Will</SelectItem>
+                          <SelectItem value="Action">Action</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="skill">Skill</Label>
+                      <Select
+                        value={formData.skill}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, skill: value })
+                        }
+                      >
+                        <SelectTrigger id="skill">
+                          <SelectValue placeholder="Select skill" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">None</SelectItem>
+                          <SelectItem value="Communication">Communication</SelectItem>
+                          <SelectItem value="Teamwork">Teamwork</SelectItem>
+                          <SelectItem value="Analytical skills">Analytical skills</SelectItem>
+                          <SelectItem value="Empathy">Empathy</SelectItem>
+                          <SelectItem value="Work ethic">Work ethic</SelectItem>
+                          <SelectItem value="Leadership">Leadership</SelectItem>
+                          <SelectItem value="Self-management">Self-management</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                   <div className="flex justify-end gap-2">
                     <Button
                       type="button"
@@ -360,14 +538,17 @@ const RulesManagement = () => {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Description</TableHead>
+                <TableHead>Area</TableHead>
+                <TableHead>Discipline</TableHead>
+                <TableHead>Skill</TableHead>
                 <TableHead className="w-[100px]">Actions</TableHead>
               </TableRow>
               </TableHeader>
               <TableBody>
                 {rules.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={3} className="text-center py-8">
-                      No rules yet. Add your first rule or import from CSV.
+                    <TableCell colSpan={6} className="text-center py-8">
+                      No rules yet. Add your first rule, import from CSV, or import from Google Sheets.
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -379,6 +560,9 @@ const RulesManagement = () => {
                           {rule.description}
                         </div>
                       </TableCell>
+                      <TableCell className="text-sm">{rule.area || "-"}</TableCell>
+                      <TableCell className="text-sm">{rule.discipline || "-"}</TableCell>
+                      <TableCell className="text-sm">{rule.skill || "-"}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
                           <Button

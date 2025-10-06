@@ -46,23 +46,32 @@ export type Database = {
       }
       rules: {
         Row: {
+          area: string | null
           created_at: string
           description: string
+          discipline: string | null
           id: string
+          skill: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          area?: string | null
           created_at?: string
           description: string
+          discipline?: string | null
           id?: string
+          skill?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          area?: string | null
           created_at?: string
           description?: string
+          discipline?: string | null
           id?: string
+          skill?: string | null
           title?: string
           updated_at?: string
         }
