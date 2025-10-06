@@ -99,7 +99,9 @@ const RulesBrowser = () => {
   const normalizeRules = (data: any[]): Rule[] => {
     return (data || []).map((r: any) => ({
       title: normalizeText(r.title ?? r.Title ?? r.TITLE),
-      description: normalizeText(r.description ?? r.Description ?? r.DESCRIPTION),
+      description: normalizeText(
+        r.description ?? r.fullDescription ?? r.FullDescription ?? r.FULLDESCRIPTION ?? r.Description ?? r.DESCRIPTION
+      ),
       area: normalizeText(r.area ?? r.Area ?? r.AREA),
       discipline: normalizeText(r.discipline ?? r.Discipline ?? r.DISCIPLINE),
       skill: normalizeText(r.skill ?? r.Skill ?? r.SKILL),
@@ -111,19 +113,28 @@ const RulesBrowser = () => {
       // Search filter
       const title = rule.title || '';
       const description = rule.description || '';
-      const matchesSearch = !searchTerm || 
-        title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        description.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      // Area filter
-      const matchesArea = selectedArea === 'All Areas' || rule.area === selectedArea;
-      
-      // Discipline filter
-      const matchesDiscipline = selectedDiscipline === 'All Disciplines' || rule.discipline === selectedDiscipline;
-      
-      // Skill filter
-      const matchesSkill = selectedSkill === 'All Skills' || rule.skill === selectedSkill;
-      
+      const q = searchTerm.toLowerCase();
+      const matchesSearch = !q || title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
+
+      // Area can be multiple values separated by semicolons
+      let matchesArea = selectedArea === 'All Areas';
+      if (!matchesArea && rule.area) {
+        const areas = rule.area.toLowerCase().split(';').map(a => a.trim());
+        matchesArea = areas.includes(selectedArea.toLowerCase());
+      }
+
+      // Discipline single value
+      let matchesDiscipline = selectedDiscipline === 'All Disciplines';
+      if (!matchesDiscipline && rule.discipline) {
+        matchesDiscipline = rule.discipline.toLowerCase().trim() === selectedDiscipline.toLowerCase();
+      }
+
+      // Skill single value
+      let matchesSkill = selectedSkill === 'All Skills';
+      if (!matchesSkill && rule.skill) {
+        matchesSkill = rule.skill.toLowerCase().trim() === selectedSkill.toLowerCase();
+      }
+
       return matchesSearch && matchesArea && matchesDiscipline && matchesSkill;
     });
     
