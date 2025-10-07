@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, Settings } from "lucide-react";
+import { Home, RefreshCw, Settings } from "lucide-react";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,13 +11,10 @@ const RulesBrowser = () => {
   const [rulesData, setRulesData] = useState<Rule[]>([]);
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(true);
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
-  const [loadStatus, setLoadStatus] = useState('');
   const [selectedArea, setSelectedArea] = useState('All Areas');
   const [selectedDiscipline, setSelectedDiscipline] = useState('All Disciplines');
   const [selectedSkill, setSelectedSkill] = useState('All Skills');
-
 
   useEffect(() => {
     loadData();
@@ -28,7 +25,6 @@ const RulesBrowser = () => {
   }, [searchTerm, rulesData, selectedArea, selectedDiscipline, selectedSkill]);
 
   const loadData = async () => {
-    setLoading(true);
     try {
       const { data, error } = await supabase
         .from('rules')
@@ -46,38 +42,30 @@ const RulesBrowser = () => {
       }));
       
       setRulesData(rules);
-      setLoadStatus(`Successfully loaded ${rules.length} rules from database!`);
     } catch (error) {
       console.error('Error loading rules:', error);
       setRulesData([]);
-      setLoadStatus('Could not load rules from database.');
-    } finally {
-      setLoading(false);
     }
   };
 
   const applyFilters = () => {
     const filtered = rulesData.filter(rule => {
-      // Search filter
       const title = rule.title || '';
       const description = rule.description || '';
       const q = searchTerm.toLowerCase();
       const matchesSearch = !q || title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
 
-      // Area can be multiple values separated by semicolons
       let matchesArea = selectedArea === 'All Areas';
       if (!matchesArea && rule.area) {
         const areas = rule.area.toLowerCase().split(';').map(a => a.trim());
         matchesArea = areas.includes(selectedArea.toLowerCase());
       }
 
-      // Discipline single value
       let matchesDiscipline = selectedDiscipline === 'All Disciplines';
       if (!matchesDiscipline && rule.discipline) {
         matchesDiscipline = rule.discipline.toLowerCase().trim() === selectedDiscipline.toLowerCase();
       }
 
-      // Skill single value
       let matchesSkill = selectedSkill === 'All Skills';
       if (!matchesSkill && rule.skill) {
         matchesSkill = rule.skill.toLowerCase().trim() === selectedSkill.toLowerCase();
@@ -108,67 +96,59 @@ const RulesBrowser = () => {
     });
   };
 
-  const capitalizeFirst = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center p-5">
-        <div className="text-center text-white">
-          <div className="text-5xl mb-4 animate-spin">📊</div>
-          <div className="text-xl">Loading your rules...</div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen gradient-bg p-5">
-      <div className="max-w-[1400px] mx-auto">
-        <div className="flex justify-between items-center mb-6">
+    <div className="min-h-screen gradient-bg p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Navigation */}
+        <div className="flex gap-3 mb-8">
           <Link to="/">
-            <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/30">
+            <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
               <Home className="mr-2 h-4 w-4" />
-              Back to Scenario Helper
+              Scenario Helper
+            </Button>
+          </Link>
+          <Link to="/review">
+            <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Rule Review
             </Button>
           </Link>
           <Button 
             onClick={() => navigate('/rules/manage')} 
             variant="outline" 
-            className="bg-white/10 hover:bg-white/20 text-white border-white/30"
+            className="bg-white/90 hover:bg-white border-border ml-auto"
           >
             <Settings className="mr-2 h-4 w-4" />
             Manage Rules
           </Button>
         </div>
 
-        <div className="text-center mb-12">
-          <h1 className="text-white text-5xl mb-4 font-light drop-shadow-lg">📋 No. 1 Rules</h1>
-          <p className="text-white/90 text-xl font-light">100 practical rules for managing people, business, and yourself</p>
+        {/* Page Title */}
+        <div className="mb-8">
+          <h1 className="text-5xl font-bold text-foreground mb-3">Rules Browser</h1>
+          <p className="text-xl text-muted-foreground">100 practical rules for managing people, business, and yourself</p>
         </div>
         
-        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-10 border border-white/20 shadow-xl">
+        {/* Filters Card */}
+        <div className="bg-card rounded-lg p-8 mb-10 border border-border shadow-lg">
           <Input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search rules by title or content..."
-            className="max-w-[600px] mx-auto bg-white/95 border-none rounded-full px-6 py-5 text-base shadow-lg"
+            className="max-w-2xl mx-auto mb-8"
           />
           
-          <div className="mt-8 space-y-6">
+          <div className="space-y-6">
             <div>
-              <h3 className="text-white/90 text-sm font-semibold uppercase tracking-wider mb-3">Area</h3>
+              <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Area</h3>
               <div className="flex flex-wrap gap-3 justify-center">
                 {['All Areas', 'People', 'Self', 'Business'].map((area) => (
                   <Button
                     key={area}
                     onClick={() => setSelectedArea(area)}
                     variant={selectedArea === area ? "default" : "outline"}
-                    className={selectedArea === area 
-                      ? "bg-white text-primary hover:bg-white/90" 
-                      : "bg-white/10 text-white border-white/30 hover:bg-white/20"}
+                    className={selectedArea === area ? "bg-primary text-primary-foreground" : ""}
                   >
                     {area}
                   </Button>
@@ -177,16 +157,14 @@ const RulesBrowser = () => {
             </div>
 
             <div>
-              <h3 className="text-white/90 text-sm font-semibold uppercase tracking-wider mb-3">Discipline</h3>
+              <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Discipline</h3>
               <div className="flex flex-wrap gap-3 justify-center">
                 {['All Disciplines', 'Perception', 'Will', 'Action'].map((discipline) => (
                   <Button
                     key={discipline}
                     onClick={() => setSelectedDiscipline(discipline)}
                     variant={selectedDiscipline === discipline ? "default" : "outline"}
-                    className={selectedDiscipline === discipline 
-                      ? "bg-white text-primary hover:bg-white/90" 
-                      : "bg-white/10 text-white border-white/30 hover:bg-white/20"}
+                    className={selectedDiscipline === discipline ? "bg-primary text-primary-foreground" : ""}
                   >
                     {discipline}
                   </Button>
@@ -195,16 +173,14 @@ const RulesBrowser = () => {
             </div>
 
             <div>
-              <h3 className="text-white/90 text-sm font-semibold uppercase tracking-wider mb-3">Skill</h3>
+              <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Skill</h3>
               <div className="flex flex-wrap gap-3 justify-center">
                 {['All Skills', 'Communication', 'Teamwork', 'Analytical skills', 'Empathy', 'Work ethic', 'Leadership', 'Self-management'].map((skill) => (
                   <Button
                     key={skill}
                     onClick={() => setSelectedSkill(skill)}
                     variant={selectedSkill === skill ? "default" : "outline"}
-                    className={selectedSkill === skill 
-                      ? "bg-white text-primary hover:bg-white/90" 
-                      : "bg-white/10 text-white border-white/30 hover:bg-white/20"}
+                    className={selectedSkill === skill ? "bg-primary text-primary-foreground" : ""}
                   >
                     {skill}
                   </Button>
@@ -216,24 +192,20 @@ const RulesBrowser = () => {
               <Button
                 onClick={resetFilters}
                 variant="outline"
-                className="bg-white/10 text-white border-white/30 hover:bg-white/20"
               >
-                🔄 Reset All Filters
+                Reset All Filters
               </Button>
             </div>
           </div>
           
-          {loadStatus && (
-            <div className="mt-5 text-center text-white/80 text-sm">{loadStatus}</div>
-          )}
-          
-          <div className="mt-5 text-center text-white/80 text-sm font-light">
+          <div className="mt-5 text-center text-muted-foreground text-sm">
             Showing {filteredRules.length} of {rulesData.length} rules
           </div>
         </div>
         
+        {/* Rules Grid */}
         {filteredRules.length === 0 ? (
-          <div className="text-center text-white/80 text-2xl mt-20 p-10 bg-white/10 rounded-3xl backdrop-blur-md">
+          <div className="text-center text-muted-foreground text-2xl mt-20 p-10 bg-card rounded-lg border border-border">
             <h3 className="mb-2">No rules found matching your criteria.</h3>
             <p className="text-lg">Try adjusting your search or filters.</p>
           </div>
@@ -246,45 +218,39 @@ const RulesBrowser = () => {
               return (
                 <div
                   key={index}
-                  className="bg-white/95 rounded-3xl p-8 shadow-xl backdrop-blur-md border border-white/30 transition-all hover:translate-y-[-8px] hover:shadow-2xl relative overflow-hidden"
+                  className="bg-card rounded-lg p-8 shadow-lg border border-border transition-all hover:shadow-xl"
                 >
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-accent"></div>
-                  
                   <div className="flex flex-wrap gap-2 mb-4">
                     {rule.area && (
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-red-500 text-white">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
                         {rule.area}
                       </span>
                     )}
                     {rule.discipline && (
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-teal-500 text-white">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
                         {rule.discipline}
                       </span>
                     )}
                     {rule.skill && (
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-emerald-500 text-white">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
                         {rule.skill}
                       </span>
                     )}
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4 leading-tight">
+                  <h3 className="text-2xl font-bold text-foreground mb-4 leading-tight">
                     {rule.title || 'Untitled'}
                   </h3>
                   
                   {isExpanded && (
-                    <div className="text-gray-600 text-sm leading-relaxed mb-4 text-justify">
+                    <div className="text-muted-foreground text-sm leading-relaxed mb-4 text-justify">
                       {rule.description || 'No description available.'}
                     </div>
                   )}
                   
                   <Button
                     onClick={() => toggleCard(cardKey)}
-                    className={`rounded-full px-5 py-2.5 text-xs font-medium uppercase tracking-wide transition-all ${
-                      isExpanded
-                        ? 'bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg text-white'
-                        : 'bg-gradient-to-r from-primary to-accent hover:shadow-lg text-white'
-                    }`}
+                    className={isExpanded ? "bg-secondary text-secondary-foreground hover:bg-secondary/80" : "bg-primary text-primary-foreground hover:bg-primary/90"}
                   >
                     {isExpanded ? 'Show Less' : 'Read More'}
                   </Button>

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Home, BookOpen } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
 
 interface Rule {
   id: string;
@@ -37,7 +38,6 @@ const RuleReview = () => {
       if (data && data.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.length);
         setCurrentRule(data[randomIndex]);
-        // Reset form
         setResonates("");
         setApplicable("");
         setLearnedNew("");
@@ -90,7 +90,6 @@ const RuleReview = () => {
         description: "Thank you for your feedback!",
       });
 
-      // Load next rule automatically
       loadRandomRule();
     } catch (error) {
       console.error("Error submitting response:", error);
@@ -105,29 +104,47 @@ const RuleReview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-4xl font-bold">Rule Review</h1>
-          <Button onClick={loadRandomRule} disabled={loading}>
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Loading...
-              </>
-            ) : (
-              "Give me another"
-            )}
+    <div className="min-h-screen gradient-bg p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Navigation */}
+        <div className="flex gap-3 mb-8">
+          <Link to="/">
+            <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
+              <Home className="mr-2 h-4 w-4" />
+              Scenario Helper
+            </Button>
+          </Link>
+          <Link to="/rules">
+            <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
+              <BookOpen className="mr-2 h-4 w-4" />
+              Rules Browser
+            </Button>
+          </Link>
+        </div>
+
+        {/* Page Title */}
+        <div className="flex justify-between items-start mb-8">
+          <div>
+            <h1 className="text-5xl font-bold text-foreground mb-3">Rule Review</h1>
+            <p className="text-xl text-muted-foreground">Review and provide feedback on rules</p>
+          </div>
+          <Button 
+            onClick={loadRandomRule} 
+            disabled={loading}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            {loading ? "Loading..." : "Give Me Another"}
           </Button>
         </div>
 
+        {/* Rule Card */}
         {currentRule ? (
-          <Card>
+          <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl">{currentRule.title}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <p className="text-muted-foreground whitespace-pre-wrap">
+              <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
                 {currentRule.description}
               </p>
 
@@ -208,26 +225,19 @@ const RuleReview = () => {
                 <Button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="w-full"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                   size="lg"
                 >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    "Submit"
-                  )}
+                  {submitting ? "Submitting..." : "Submit"}
                 </Button>
               </div>
             </CardContent>
           </Card>
         ) : (
-          <Card>
+          <Card className="shadow-lg">
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground mb-4">
-                Click "Give me another" to start reviewing rules
+                Click "Give Me Another" to start reviewing rules
               </p>
             </CardContent>
           </Card>
