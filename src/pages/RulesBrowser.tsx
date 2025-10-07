@@ -98,7 +98,7 @@ const RulesBrowser = () => {
 
   return (
     <div className="min-h-screen gradient-bg p-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Navigation */}
         <div className="flex gap-3 mb-8">
           <Link to="/">
@@ -142,7 +142,7 @@ const RulesBrowser = () => {
           <div className="space-y-6">
             <div>
               <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Area</h3>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-wrap gap-3">
                 {['All Areas', 'People', 'Self', 'Business'].map((area) => (
                   <Button
                     key={area}
@@ -158,7 +158,7 @@ const RulesBrowser = () => {
 
             <div>
               <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Discipline</h3>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-wrap gap-3">
                 {['All Disciplines', 'Perception', 'Will', 'Action'].map((discipline) => (
                   <Button
                     key={discipline}
@@ -174,7 +174,7 @@ const RulesBrowser = () => {
 
             <div>
               <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Skill</h3>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-wrap gap-3">
                 {['All Skills', 'Communication', 'Teamwork', 'Analytical skills', 'Empathy', 'Work ethic', 'Leadership', 'Self-management'].map((skill) => (
                   <Button
                     key={skill}
@@ -221,11 +221,11 @@ const RulesBrowser = () => {
                   className="bg-card rounded-lg p-8 shadow-lg border border-border transition-all hover:shadow-xl"
                 >
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {rule.area && (
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
-                        {rule.area}
+                    {rule.area && rule.area.split(';').map((area, idx) => (
+                      <span key={idx} className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
+                        {area.trim()}
                       </span>
-                    )}
+                    ))}
                     {rule.discipline && (
                       <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
                         {rule.discipline}
