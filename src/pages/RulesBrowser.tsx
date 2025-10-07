@@ -4,19 +4,7 @@ import { Home, Settings } from "lucide-react";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6qXXzzJj-5ulyAqOBxL33j8CyUc9CiVxl3sD15ItgbHRhF-z5FLFxsY7Ue8b1Gd2t/exec';
-
-const fallbackData: Rule[] = [
-  {
-    title: "Think for yourself.",
-    description: "No №1 Rule carries more irony and universality as this one which basically says that there are no universal rules, no forever truths. Each of us is right for themselves at each given moment, even if we contradict ourselves from a moment ago. There's no universal judge to deliberate and guide us but our internal moral compass. It may sound liberating, but I see it as the ultimate burden of responsibility. For practical purposes (i.e. to avoid an internal fundamental philosophical debate for each of our million plus decisions made every day) developing a set of decision rules in some shape or form is probably advisable. At this point, I feel relatively confident having built a solid foundation and if any of it resonates and spares a person from overanalyzing agony - it's a wonderful bonus. But sharing it with others almost felt compulsive despite my belief in the only thing that ultimately works - to think for yourself. Good luck to us all with that."
-  },
-  {
-    title: "You can't improve what you can't measure",
-    description: "A brief story from professional experience: After 4-5 relatively flat years, we broke the barrier and returned to steady growth mode. What changed? We finally set up measurements of utilization, revenue per capita, receivables, etc. Average overall satisfaction increased in 5 years from 3.81/5.00 and reached 4.13/5.00 far surpassing our target of 4.00. What made the difference? Detailed engagement survey covering management, team leads, roles, career development, available resources, etc. And the same principle applied in personal life: Around the 40th birthday the time had come to start thinking about retirement. The plan required as input detailed data on income, expenses and desired standard of living, output would be a detailed retirement plan. A close-to-final was done in about an hour. How? A detailed family budget diligently kept for over 10 years. What aspects of your habits, skills, personal life or business do you believe are worth enhancing? Make measurement the initial step toward reaching the next level of improvement."
-  }
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const RulesBrowser = () => {
   const navigate = useNavigate();
@@ -42,70 +30,30 @@ const RulesBrowser = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const data = await loadDataWithJSONP();
-      const normalized = normalizeRules(data as any);
-      if (Array.isArray(normalized) && normalized.length > 0) {
-        setRulesData(normalized);
-        setLoadStatus(`Successfully loaded ${normalized.length} rules from Google Sheets!`);
-      } else {
-        throw new Error('No data received');
-      }
+      const { data, error } = await supabase
+        .from('rules')
+        .select('*')
+        .order('title');
+      
+      if (error) throw error;
+      
+      const rules: Rule[] = (data || []).map(r => ({
+        title: r.title,
+        description: r.description,
+        area: r.area || undefined,
+        discipline: r.discipline || undefined,
+        skill: r.skill || undefined,
+      }));
+      
+      setRulesData(rules);
+      setLoadStatus(`Successfully loaded ${rules.length} rules from database!`);
     } catch (error) {
-      setRulesData(fallbackData);
-      setLoadStatus(`Could not load from Google Sheets. Showing ${fallbackData.length} sample rules instead.`);
+      console.error('Error loading rules:', error);
+      setRulesData([]);
+      setLoadStatus('Could not load rules from database.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const loadDataWithJSONP = (): Promise<Rule[]> => {
-    return new Promise((resolve, reject) => {
-      const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-      const timestamp = Date.now();
-      
-      const timeoutId = setTimeout(() => {
-        cleanup();
-        reject(new Error('Request timeout'));
-      }, 15000);
-      
-      (window as any)[callbackName] = function(data: Rule[]) {
-        cleanup();
-        resolve(data);
-      };
-      
-      function cleanup() {
-        clearTimeout(timeoutId);
-        if (script && script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-        if ((window as any)[callbackName]) {
-          delete (window as any)[callbackName];
-        }
-      }
-      
-      const script = document.createElement('script');
-      script.onerror = function() {
-        cleanup();
-        reject(new Error('Failed to load data'));
-      };
-      
-      script.src = `${SCRIPT_URL}?callback=${callbackName}&_=${timestamp}`;
-      document.head.appendChild(script);
-    });
-  };
-
-  const normalizeText = (val: any) => typeof val === 'string' ? val.trim() : (val == null ? '' : String(val).trim());
-
-  const normalizeRules = (data: any[]): Rule[] => {
-    return (data || []).map((r: any) => ({
-      title: normalizeText(r.title ?? r.Title ?? r.TITLE),
-      description: normalizeText(
-        r.description ?? r.fullDescription ?? r.FullDescription ?? r.FULLDESCRIPTION ?? r.Description ?? r.DESCRIPTION
-      ),
-      area: normalizeText(r.area ?? r.Area ?? r.AREA),
-      discipline: normalizeText(r.discipline ?? r.Discipline ?? r.DISCIPLINE),
-      skill: normalizeText(r.skill ?? r.Skill ?? r.SKILL),
-    }));
   };
 
   const applyFilters = () => {
@@ -169,8 +117,7 @@ const RulesBrowser = () => {
       <div className="min-h-screen gradient-bg flex items-center justify-center p-5">
         <div className="text-center text-white">
           <div className="text-5xl mb-4 animate-spin">📊</div>
-          <div className="text-xl">Loading your rules from Google Sheets...</div>
-          <div className="text-sm opacity-70 mt-2">This may take a few seconds</div>
+          <div className="text-xl">Loading your rules...</div>
         </div>
       </div>
     );
