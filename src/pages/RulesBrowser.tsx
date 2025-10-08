@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { Home, RefreshCw, Settings, X } from "lucide-react";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const RulesBrowser = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [rulesData, setRulesData] = useState<Rule[]>([]);
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
@@ -22,6 +23,17 @@ const RulesBrowser = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  // Handle opening specific rule from navigation state
+  useEffect(() => {
+    if (location.state?.openRuleTitle && rulesData.length > 0) {
+      const ruleToOpen = rulesData.find(r => r.title === location.state.openRuleTitle);
+      if (ruleToOpen) {
+        setSelectedRule(ruleToOpen);
+        setIsDialogOpen(true);
+      }
+    }
+  }, [location.state, rulesData]);
 
   useEffect(() => {
     applyFilters();
@@ -305,11 +317,17 @@ const RulesBrowser = () => {
             </div>
             <div className="flex gap-2 mt-6">
               <Button
-                onClick={() => setIsDialogOpen(false)}
+                onClick={() => {
+                  setIsDialogOpen(false);
+                  // If we came from scenario helper, navigate back with state
+                  if (location.state?.returnTo === 'scenario' && location.state?.scenarioState) {
+                    navigate('/', { state: location.state.scenarioState });
+                  }
+                }}
                 variant="outline"
                 className="flex-1"
               >
-                Back to List
+                {location.state?.returnTo === 'scenario' ? 'Back to Guidance' : 'Back to List'}
               </Button>
               <Button
                 onClick={() => {

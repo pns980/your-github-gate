@@ -1,16 +1,47 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { BookOpen, RefreshCw, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
 const ScenarioHelper = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [scenario, setScenario] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
-  const [appliedRules, setAppliedRules] = useState("");
+  const [appliedRules, setAppliedRules] = useState<any[]>([]);
+  const [placeholderExample, setPlaceholderExample] = useState("I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?");
   const { toast } = useToast();
+
+  // Restore state when navigating back from rule browser
+  useEffect(() => {
+    if (location.state?.scenario) {
+      setScenario(location.state.scenario);
+      setResponse(location.state.response);
+      setAppliedRules(location.state.appliedRules);
+    }
+  }, [location.state]);
+
+  // Generate dynamic placeholder examples
+  useEffect(() => {
+    const examples = [
+      "I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?",
+      "My colleague takes credit for my ideas in meetings. What's the best way to handle this?",
+      "I'm struggling to balance multiple priorities at work. How can I manage my time better?",
+      "A client is being unreasonable with their demands. How should I set boundaries?",
+      "I need to give critical feedback to my manager. What's the best approach?"
+    ];
+    
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % examples.length;
+      setPlaceholderExample(examples[currentIndex]);
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async () => {
     if (!scenario.trim()) {
@@ -24,7 +55,7 @@ const ScenarioHelper = () => {
 
     setLoading(true);
     setResponse("");
-    setAppliedRules("");
+    setAppliedRules([]);
 
     try {
       const url = `https://script.google.com/macros/s/AKfycbwSZ0eIG1ZzQbpw0Je_tMZKnt8cIIcGhjgd683sVY-qrGuzUpY2oHYFr6Uqb5lVz4FJgQ/exec?scenario=${encodeURIComponent(scenario)}`;
@@ -72,12 +103,9 @@ const ScenarioHelper = () => {
         setResponse(data.reply);
         
         if (data.rules_used && Array.isArray(data.rules_used) && data.rules_used.length > 0) {
-          const formattedRules = data.rules_used
-            .map((rule: any) => `• ${rule.title}\n  ${rule.reason}`)
-            .join("\n\n");
-          setAppliedRules(formattedRules);
+          setAppliedRules(data.rules_used);
         } else {
-          setAppliedRules("No guidelines information available");
+          setAppliedRules([]);
         }
         
         toast({
@@ -98,7 +126,7 @@ const ScenarioHelper = () => {
       });
       
       setResponse(message);
-      setAppliedRules("");
+      setAppliedRules([]);
     } finally {
       setLoading(false);
     }
@@ -125,8 +153,8 @@ const ScenarioHelper = () => {
 
         {/* Page Title */}
         <div className="mb-8">
-          <h1 className="text-5xl font-bold text-foreground mb-3">Scenario AI Helper</h1>
-          <p className="text-xl text-muted-foreground">Get intelligent guidance based on proven principles</p>
+          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(var(--muted-foreground))' }}>Find the perfec baby step forward</h1>
+          <p className="text-xl text-muted-foreground">Then go one better and find a #1 rule for life</p>
         </div>
 
         {/* Main Content Card */}
@@ -138,7 +166,7 @@ const ScenarioHelper = () => {
             <Textarea
               value={scenario}
               onChange={(e) => setScenario(e.target.value)}
-              placeholder="Example: I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?"
+              placeholder={placeholderExample}
               className="min-h-[150px] text-base resize-y"
             />
             <div className="text-right text-sm text-muted-foreground mt-2">
@@ -152,13 +180,13 @@ const ScenarioHelper = () => {
               disabled={loading}
               className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto"
             >
-              {loading ? "Analyzing scenario..." : "Get AI Guidance"}
+              {loading ? "Scanning #1 rules for perfec guidance..." : "Get perfec guidance"}
             </Button>
             
             {loading && (
               <div className="mt-4 flex items-center justify-center gap-3 text-muted-foreground">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                <span>Analyzing scenario...</span>
+                <span>Scanning #1 rules for perfec guidance...</span>
               </div>
             )}
           </div>
@@ -167,7 +195,7 @@ const ScenarioHelper = () => {
             <div className="bg-muted/50 rounded-lg p-8 border border-border">
               <h2 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-2">
                 <Lightbulb className="h-6 w-6 text-accent" />
-                Guidance
+                Perfec Guidance
               </h2>
               
               <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border border-border">
@@ -178,10 +206,32 @@ const ScenarioHelper = () => {
               
               <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
                 <h3 className="text-xl font-semibold mb-4 text-foreground">
-                  Applied Guidelines
+                  #1 Rules Applied
                 </h3>
-                <div className="text-foreground leading-relaxed whitespace-pre-wrap">
-                  {appliedRules}
+                <div className="text-foreground leading-relaxed space-y-4">
+                  {appliedRules.length > 0 ? (
+                    appliedRules.map((rule: any, index: number) => (
+                      <div key={index} className="space-y-1">
+                        <button
+                          onClick={() => navigate('/rules', { 
+                            state: { 
+                              openRuleTitle: rule.title,
+                              returnTo: 'scenario',
+                              scenarioState: { scenario, response, appliedRules }
+                            } 
+                          })}
+                          className="font-bold text-primary hover:underline text-left"
+                        >
+                          • {rule.title}
+                        </button>
+                        <div className="pl-4 text-muted-foreground">
+                          {rule.reason}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No guidelines information available</p>
+                  )}
                 </div>
               </div>
             </div>
