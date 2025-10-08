@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Home, BookOpen } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ interface Rule {
 }
 
 const RuleReview = () => {
+  const location = useLocation();
   const [currentRule, setCurrentRule] = useState<Rule | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -24,6 +25,22 @@ const RuleReview = () => {
   const [learnedNew, setLearnedNew] = useState<string>("");
   const [thoughts, setThoughts] = useState("");
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Check if a rule was passed via navigation state
+    if (location.state?.rule) {
+      const passedRule = location.state.rule;
+      setCurrentRule({
+        id: passedRule.id || '',
+        title: passedRule.title,
+        description: passedRule.description
+      });
+      setResonates("");
+      setApplicable("");
+      setLearnedNew("");
+      setThoughts("");
+    }
+  }, [location.state]);
 
   const loadRandomRule = async () => {
     setLoading(true);

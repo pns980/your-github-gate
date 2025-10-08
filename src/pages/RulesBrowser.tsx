@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, RefreshCw, Settings } from "lucide-react";
+import { Home, RefreshCw, Settings, X } from "lucide-react";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const RulesBrowser = () => {
@@ -11,10 +12,11 @@ const RulesBrowser = () => {
   const [rulesData, setRulesData] = useState<Rule[]>([]);
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [selectedArea, setSelectedArea] = useState('All Areas');
   const [selectedDiscipline, setSelectedDiscipline] = useState('All Disciplines');
   const [selectedSkill, setSelectedSkill] = useState('All Skills');
+  const [selectedRule, setSelectedRule] = useState<Rule | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -84,16 +86,13 @@ const RulesBrowser = () => {
     setSelectedSkill('All Skills');
   };
 
-  const toggleCard = (title: string) => {
-    setExpandedCards(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(title)) {
-        newSet.delete(title);
-      } else {
-        newSet.add(title);
-      }
-      return newSet;
-    });
+  const openRuleDialog = (rule: Rule) => {
+    setSelectedRule(rule);
+    setIsDialogOpen(true);
+  };
+
+  const handlePerfecIt = (rule: Rule) => {
+    navigate('/review', { state: { rule } });
   };
 
   return (
@@ -125,8 +124,8 @@ const RulesBrowser = () => {
 
         {/* Page Title */}
         <div className="mb-8">
-          <h1 className="text-5xl font-bold text-foreground mb-3">Rules Browser</h1>
-          <p className="text-xl text-muted-foreground">100 practical rules for managing people, business, and yourself</p>
+          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 90%)' }}>Indulge your perfecism</h1>
+          <p className="text-xl text-muted-foreground">The complete list of almost all #1 rules.</p>
         </div>
         
         {/* Filters Card */}
@@ -135,7 +134,7 @@ const RulesBrowser = () => {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search rules by title or content..."
+            placeholder="Enter any keyword and find a related #1 rule..."
             className="max-w-2xl mx-auto mb-8"
           />
           
@@ -213,26 +212,44 @@ const RulesBrowser = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredRules.map((rule, index) => {
               const cardKey = rule.title || `rule-${index}`;
-              const isExpanded = expandedCards.has(cardKey);
               
               return (
                 <div
                   key={index}
-                  className="bg-card rounded-lg p-8 shadow-lg border border-border transition-all hover:shadow-xl"
+                  className="bg-card rounded-lg p-6 shadow-lg border border-border transition-all hover:shadow-xl flex flex-col"
                 >
                   <div className="flex flex-wrap gap-2 mb-4">
                     {rule.area && rule.area.split(';').map((area, idx) => (
-                      <span key={idx} className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
+                      <span 
+                        key={idx} 
+                        className="px-3 py-1 rounded-full text-xs font-semibold uppercase"
+                        style={{ 
+                          backgroundColor: 'hsl(var(--tag-area))', 
+                          color: 'hsl(var(--tag-area-foreground))' 
+                        }}
+                      >
                         {area.trim()}
                       </span>
                     ))}
                     {rule.discipline && (
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
+                      <span 
+                        className="px-3 py-1 rounded-full text-xs font-semibold uppercase"
+                        style={{ 
+                          backgroundColor: 'hsl(var(--tag-discipline))', 
+                          color: 'hsl(var(--tag-discipline-foreground))' 
+                        }}
+                      >
                         {rule.discipline}
                       </span>
                     )}
                     {rule.skill && (
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase bg-secondary text-secondary-foreground">
+                      <span 
+                        className="px-3 py-1 rounded-full text-xs font-semibold uppercase"
+                        style={{ 
+                          backgroundColor: 'hsl(var(--tag-skill))', 
+                          color: 'hsl(var(--tag-skill-foreground))' 
+                        }}
+                      >
                         {rule.skill}
                       </span>
                     )}
@@ -242,23 +259,64 @@ const RulesBrowser = () => {
                     {rule.title || 'Untitled'}
                   </h3>
                   
-                  {isExpanded && (
-                    <div className="text-muted-foreground text-sm leading-relaxed mb-4 text-justify">
-                      {rule.description || 'No description available.'}
-                    </div>
-                  )}
-                  
-                  <Button
-                    onClick={() => toggleCard(cardKey)}
-                    className={isExpanded ? "bg-secondary text-secondary-foreground hover:bg-secondary/80" : "bg-primary text-primary-foreground hover:bg-primary/90"}
-                  >
-                    {isExpanded ? 'Show Less' : 'Read More'}
-                  </Button>
+                  <div className="mt-auto flex gap-2">
+                    <Button
+                      onClick={() => openRuleDialog(rule)}
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1"
+                      size="sm"
+                    >
+                      Read More
+                    </Button>
+                    <Button
+                      onClick={() => handlePerfecIt(rule)}
+                      variant="outline"
+                      className="flex-1"
+                      size="sm"
+                    >
+                      Perfec it
+                    </Button>
+                  </div>
                 </div>
               );
             })}
           </div>
         )}
+
+        {/* Rule Detail Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold pr-8">
+                {selectedRule?.title || 'Untitled'}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="mt-4">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {selectedRule?.description || 'No description available.'}
+              </p>
+            </div>
+            <div className="flex gap-2 mt-6">
+              <Button
+                onClick={() => setIsDialogOpen(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Back to List
+              </Button>
+              <Button
+                onClick={() => {
+                  if (selectedRule) {
+                    setIsDialogOpen(false);
+                    handlePerfecIt(selectedRule);
+                  }
+                }}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1"
+              >
+                Perfec it
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

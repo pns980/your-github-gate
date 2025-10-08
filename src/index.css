@@ -49,6 +49,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 10%;
     --sidebar-border: 0 0% 90%;
     --sidebar-ring: 24 88% 58%;
+    
+    --tag-area: 120 60% 85%;
+    --tag-area-foreground: 120 60% 25%;
+    --tag-discipline: 210 60% 85%;
+    --tag-discipline-foreground: 210 60% 25%;
+    --tag-skill: 30 60% 85%;
+    --tag-skill-foreground: 30 60% 25%;
   }
 
   .dark {
@@ -91,6 +98,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 20%;
     --sidebar-ring: 24 88% 58%;
+    
+    --tag-area: 120 50% 30%;
+    --tag-area-foreground: 120 50% 85%;
+    --tag-discipline: 210 50% 30%;
+    --tag-discipline-foreground: 210 50% 85%;
+    --tag-skill: 30 50% 30%;
+    --tag-skill-foreground: 30 50% 85%;
   }
 }
 
