@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Home, RefreshCw, Settings, X } from "lucide-react";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,13 @@ import { supabase } from "@/integrations/supabase/client";
 
 const RulesBrowser = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [rulesData, setRulesData] = useState<Rule[]>([]);
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedArea, setSelectedArea] = useState('All Areas');
-  const [selectedDiscipline, setSelectedDiscipline] = useState('All Disciplines');
-  const [selectedSkill, setSelectedSkill] = useState('All Skills');
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [selectedArea, setSelectedArea] = useState(searchParams.get('area') || 'All Areas');
+  const [selectedDiscipline, setSelectedDiscipline] = useState(searchParams.get('discipline') || 'All Disciplines');
+  const [selectedSkill, setSelectedSkill] = useState(searchParams.get('skill') || 'All Skills');
   const [selectedRule, setSelectedRule] = useState<Rule | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -24,7 +25,14 @@ const RulesBrowser = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [searchTerm, rulesData, selectedArea, selectedDiscipline, selectedSkill]);
+    // Update URL with current filter state
+    const params = new URLSearchParams();
+    if (searchTerm) params.set('search', searchTerm);
+    if (selectedArea !== 'All Areas') params.set('area', selectedArea);
+    if (selectedDiscipline !== 'All Disciplines') params.set('discipline', selectedDiscipline);
+    if (selectedSkill !== 'All Skills') params.set('skill', selectedSkill);
+    setSearchParams(params, { replace: true });
+  }, [searchTerm, rulesData, selectedArea, selectedDiscipline, selectedSkill, setSearchParams]);
 
   const loadData = async () => {
     try {
