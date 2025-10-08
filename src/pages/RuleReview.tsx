@@ -239,14 +239,25 @@ const RuleReview = () => {
                   />
                 </div>
 
-                <Button
-                  onClick={handleSubmit}
-                  disabled={submitting}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                  size="lg"
-                >
-                  {submitting ? "Submitting..." : "Submit"}
-                </Button>
+                <div className="flex gap-3">
+                  <Link to="/rules" className="flex-1">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      size="lg"
+                    >
+                      Back to List
+                    </Button>
+                  </Link>
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                    size="lg"
+                  >
+                    {submitting ? "Submitting..." : "Submit"}
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
