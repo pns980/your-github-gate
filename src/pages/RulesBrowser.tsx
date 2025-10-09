@@ -27,10 +27,15 @@ const RulesBrowser = () => {
   // Handle opening specific rule from navigation state
   useEffect(() => {
     if (location.state?.openRuleTitle && rulesData.length > 0) {
-      const ruleToOpen = rulesData.find(r => r.title === location.state.openRuleTitle);
+      const titleToFind = location.state.openRuleTitle.trim().toLowerCase();
+      const ruleToOpen = rulesData.find(r => 
+        r.title.trim().toLowerCase() === titleToFind
+      );
       if (ruleToOpen) {
         setSelectedRule(ruleToOpen);
         setIsDialogOpen(true);
+        // Clear the state to prevent reopening on re-render
+        window.history.replaceState({}, document.title);
       }
     }
   }, [location.state, rulesData]);

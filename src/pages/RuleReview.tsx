@@ -142,7 +142,7 @@ const RuleReview = () => {
         {/* Page Title */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-5xl font-bold text-foreground mb-3">Rule Review</h1>
+            <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Rule Review</h1>
             <p className="text-xl text-muted-foreground">Review and provide feedback on rules</p>
           </div>
           <Button 

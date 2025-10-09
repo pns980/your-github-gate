@@ -92,7 +92,7 @@ const ResponsesViewer = () => {
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-4xl font-bold">Rule Responses</h1>
+          <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Rule Responses</h1>
           <Button onClick={loadResponses}>Refresh</Button>
         </div>
 
