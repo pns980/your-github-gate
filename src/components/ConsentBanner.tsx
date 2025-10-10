@@ -62,7 +62,8 @@ export function ConsentBanner() {
                 We use cookies and similar technologies to analyze our traffic and improve your experience. 
                 This includes Google Analytics to understand how visitors interact with our website. 
                 You can choose to accept or reject these analytics cookies. 
-                Essential cookies required for the website to function are always active.
+                Essential cookies required for the website to function are always active.{" "}
+                <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button onClick={handleAccept} size="sm">

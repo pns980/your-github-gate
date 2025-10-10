@@ -110,7 +110,8 @@ const Contact = () => {
             >
               I consent to the processing of my personal data (name, email, and message) 
               for the purpose of responding to my inquiry. This data will be stored securely 
-              and will not be shared with third parties.
+              and will not be shared with third parties. See our{" "}
+              <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>.
             </Label>
           </div>
 
@@ -119,7 +120,9 @@ const Contact = () => {
           </Button>
         </form>
 
-        <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground">
+        <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground space-x-4">
+          <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
+          <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
           <Link to="/contact" className="hover:text-primary">Contact</Link>
         </footer>
       </div>
