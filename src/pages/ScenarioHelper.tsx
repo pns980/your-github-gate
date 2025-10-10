@@ -49,13 +49,23 @@ const ScenarioHelper = () => {
       "I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?",
       "My colleague takes credit for my ideas in meetings. What's the best way to handle this?",
       "I'm struggling to balance multiple priorities at work. How can I manage my time better?",
-      "A client is being unreasonable with their demands. How should I set boundaries?",
-      "I need to give critical feedback to my manager. What's the best approach?",
-      "My team is resistant to a new process I'm trying to implement. How do I get buy-in?",
-      "I'm feeling burnt out and unmotivated at work. What should I do?",
-      "A coworker is spreading gossip about me. How should I handle this situation?",
+      "A close friend always cancels plans at the last minute. How should I address this without damaging our friendship?",
+      "I want to start exercising regularly but can't seem to stick to a routine. What approach should I take?",
+      "I've been procrastinating on an important personal project for months. How do I overcome this?",
+      "My friend is going through a tough time, but I don't know how to help. What's the best way to support them?",
+      "I spend too much time on social media and it's affecting my productivity. How can I break this habit?",
+      "I want to learn a new skill but feel overwhelmed by where to start. What should I do?",
+      "A family member constantly criticizes my life choices. How should I set boundaries?",
+      "I'm feeling stuck in my personal growth and unsure of my next steps. How do I move forward?",
+      "I started a new hobby but I'm not progressing as fast as I'd like. Should I keep going or try something else?",
+      "My sleep schedule is a mess and it's affecting everything. How can I fix this?",
+      "I have a hard time saying no to people and end up overcommitted. How do I change this pattern?",
+      "I want to be more consistent with reading but always end up choosing TV instead. What can I do?",
+      "A friend borrowed money and hasn't paid me back. How should I bring this up?",
+      "I'm trying to eat healthier but keep falling back into old habits. What's a sustainable approach?",
+      "I feel like I'm not making meaningful connections with people. How can I build deeper friendships?",
       "I made a significant mistake on a project. How do I own up to it?",
-      "I'm stuck in analysis paralysis and can't make a decision. What should I do?"
+      "I'm comparing myself to others on social media and feeling inadequate. How do I stop this?"
     ];
     
     const randomIndex = Math.floor(Math.random() * randomScenarios.length);
