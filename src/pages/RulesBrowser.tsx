@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { Home, RefreshCw } from "lucide-react";
+import { Home, RefreshCw, Info } from "lucide-react";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,6 +135,12 @@ const RulesBrowser = () => {
             <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
               <RefreshCw className="mr-2 h-4 w-4" />
               Rule Review
+            </Button>
+          </Link>
+          <Link to="/about">
+            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+              <Info className="mr-2 h-4 w-4" />
+              About
             </Button>
           </Link>
         </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, BookOpen, RefreshCw, ArrowLeft, Calendar, MessageSquare } from "lucide-react";
+import { Home, BookOpen, RefreshCw, ArrowLeft, Calendar, MessageSquare, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -107,6 +107,12 @@ const GuidanceViewer = () => {
             <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
               <RefreshCw className="mr-2 h-4 w-4" />
               Rule Review
+            </Button>
+          </Link>
+          <Link to="/about">
+            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+              <Info className="mr-2 h-4 w-4" />
+              About
             </Button>
           </Link>
         </div>

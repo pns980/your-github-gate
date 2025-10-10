@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen } from "lucide-react";
+import { Home, BookOpen, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -140,13 +140,19 @@ const RuleReview = () => {
               Rules Browser
             </Button>
           </Link>
+          <Link to="/about">
+            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+              <Info className="mr-2 h-4 w-4" />
+              About
+            </Button>
+          </Link>
         </div>
 
         {/* Page Title */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Rule Review</h1>
-            <p className="text-xl text-muted-foreground">Review and provide feedback on rules</p>
+            <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Wanna one better for a bit?</h1>
+            <p className="text-xl text-muted-foreground">Leave your mark on a perfec™ #1 rule</p>
           </div>
           <Button 
             onClick={loadRandomRule} 
