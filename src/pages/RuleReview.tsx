@@ -39,6 +39,9 @@ const RuleReview = () => {
       setApplicable("");
       setLearnedNew("");
       setThoughts("");
+    } else {
+      // Load a random rule on initial page load
+      loadRandomRule();
     }
   }, [location.state]);
 
