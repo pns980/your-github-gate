@@ -141,7 +141,7 @@ const RulesBrowser = () => {
 
         {/* Page Title */}
         <div className="mb-8">
-          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 90%)' }}>Indulge your perfecism</h1>
+          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 90%)' }}>Indulge your perfec™ism</h1>
           <p className="text-xl text-muted-foreground">The complete list of almost all #1 rules.</p>
         </div>
         
@@ -290,7 +290,7 @@ const RulesBrowser = () => {
                       className="flex-1"
                       size="sm"
                     >
-                      Perfec it
+                      Perfec™ it
                     </Button>
                   </div>
                 </div>
@@ -335,7 +335,7 @@ const RulesBrowser = () => {
                 }}
                 className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1"
               >
-                Perfec it
+                Perfec™ it
               </Button>
             </div>
           </DialogContent>

@@ -173,7 +173,7 @@ const ScenarioHelper = () => {
 
         {/* Page Title */}
         <div className="mb-8">
-          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec baby step forward</h1>
+          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec™ baby step forward</h1>
           <p className="text-xl text-muted-foreground">Then go one better and find a #1 rule for life</p>
         </div>
 
@@ -200,13 +200,13 @@ const ScenarioHelper = () => {
               disabled={loading}
               className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto"
             >
-              {loading ? "Scanning #1 rules for perfec guidance..." : "Get perfec guidance"}
+              {loading ? "Scanning #1 rules for perfec™ guidance..." : "Get perfec™ guidance"}
             </Button>
             
             {loading && (
               <div className="mt-4 flex items-center justify-center gap-3 text-muted-foreground">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                <span>Scanning #1 rules for perfec guidance...</span>
+                <span>Scanning #1 rules for perfec™ guidance...</span>
               </div>
             )}
           </div>
@@ -215,7 +215,7 @@ const ScenarioHelper = () => {
             <div className="bg-muted/50 rounded-lg p-8 border border-border">
               <h2 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-2">
                 <Lightbulb className="h-6 w-6 text-accent" />
-                Perfec Guidance
+                Perfec™ Guidance
               </h2>
               
               <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border border-border">
