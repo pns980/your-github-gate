@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { Home, RefreshCw, Settings, X } from "lucide-react";
+import { Home, RefreshCw } from "lucide-react";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -137,14 +137,6 @@ const RulesBrowser = () => {
               Rule Review
             </Button>
           </Link>
-          <Button 
-            onClick={() => navigate('/rules/manage')} 
-            variant="outline" 
-            className="bg-white/90 hover:bg-white border-border ml-auto"
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            Manage Rules
-          </Button>
         </div>
 
         {/* Page Title */}
