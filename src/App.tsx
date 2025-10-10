@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ConsentBanner } from "@/components/ConsentBanner";
 import ScenarioHelper from "./pages/ScenarioHelper";
 import RulesBrowser from "./pages/RulesBrowser";
 import RulesManagement from "./pages/RulesManagement";
@@ -23,6 +24,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <ConsentBanner />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ScenarioHelper />} />
