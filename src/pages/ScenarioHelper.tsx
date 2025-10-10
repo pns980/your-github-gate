@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { BookOpen, RefreshCw, Lightbulb } from "lucide-react";
+import { BookOpen, RefreshCw, Lightbulb, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -161,6 +161,12 @@ const ScenarioHelper = () => {
             <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
               <RefreshCw className="mr-2 h-4 w-4" />
               Rule Review
+            </Button>
+          </Link>
+          <Link to="/guidance">
+            <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
+              <FileText className="mr-2 h-4 w-4" />
+              Guidance Records
             </Button>
           </Link>
         </div>
