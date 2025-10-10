@@ -280,6 +280,10 @@ const RuleReview = () => {
           </Card>
         )}
       </div>
+
+      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground">
+        <Link to="/contact" className="hover:text-primary">Contact</Link>
+      </footer>
     </div>
   );
 };

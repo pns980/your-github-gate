@@ -207,6 +207,10 @@ const GuidanceViewer = () => {
           </div>
         )}
       </div>
+
+      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto">
+        <Link to="/contact" className="hover:text-primary">Contact</Link>
+      </footer>
     </div>
   );
 };
