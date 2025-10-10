@@ -44,6 +44,24 @@ const ScenarioHelper = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const generateRandomScenario = () => {
+    const randomScenarios = [
+      "I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?",
+      "My colleague takes credit for my ideas in meetings. What's the best way to handle this?",
+      "I'm struggling to balance multiple priorities at work. How can I manage my time better?",
+      "A client is being unreasonable with their demands. How should I set boundaries?",
+      "I need to give critical feedback to my manager. What's the best approach?",
+      "My team is resistant to a new process I'm trying to implement. How do I get buy-in?",
+      "I'm feeling burnt out and unmotivated at work. What should I do?",
+      "A coworker is spreading gossip about me. How should I handle this situation?",
+      "I made a significant mistake on a project. How do I own up to it?",
+      "I'm stuck in analysis paralysis and can't make a decision. What should I do?"
+    ];
+    
+    const randomIndex = Math.floor(Math.random() * randomScenarios.length);
+    setScenario(randomScenarios[randomIndex]);
+  };
+
   const handleSubmit = async () => {
     if (!scenario.trim()) {
       toast({
@@ -202,6 +220,17 @@ const ScenarioHelper = () => {
             >
               {loading ? "Scanning #1 rules for perfec™ guidance..." : "Get perfec™ guidance"}
             </Button>
+            
+            <div className="mt-3">
+              <Button
+                onClick={generateRandomScenario}
+                disabled={loading}
+                variant="ghost"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                I'm too lazy to come up with a scenario, let AI replace me for a bit and generate one
+              </Button>
+            </div>
             
             {loading && (
               <div className="mt-4 flex items-center justify-center gap-3 text-muted-foreground">
