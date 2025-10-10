@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
@@ -11,6 +12,7 @@ const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -33,6 +35,7 @@ const Contact = () => {
       setName("");
       setEmail("");
       setMessage("");
+      setConsent(false);
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({
@@ -94,7 +97,24 @@ const Contact = () => {
             />
           </div>
 
-          <Button type="submit" disabled={isSubmitting} className="w-full">
+          <div className="flex items-start space-x-3 pt-2">
+            <Checkbox
+              id="consent"
+              checked={consent}
+              onCheckedChange={(checked) => setConsent(checked === true)}
+              required
+            />
+            <Label 
+              htmlFor="consent" 
+              className="text-sm leading-relaxed cursor-pointer"
+            >
+              I consent to the processing of my personal data (name, email, and message) 
+              for the purpose of responding to my inquiry. This data will be stored securely 
+              and will not be shared with third parties.
+            </Label>
+          </div>
+
+          <Button type="submit" disabled={isSubmitting || !consent} className="w-full">
             {isSubmitting ? "Sending..." : "Send Message"}
           </Button>
         </form>
