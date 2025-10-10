@@ -17,7 +17,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
 
-    --primary: 24 88% 58%;
+    --primary: 110 50% 65%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 96%;
@@ -26,7 +26,7 @@ All colors MUST be HSL.
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 33 100% 52%;
+    --accent: 110 50% 65%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -34,7 +34,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 24 88% 58%;
+    --ring: 110 50% 65%;
 
     --radius: 1rem;
 
@@ -48,7 +48,7 @@ All colors MUST be HSL.
     --sidebar-accent: 0 0% 96%;
     --sidebar-accent-foreground: 0 0% 10%;
     --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 24 88% 58%;
+    --sidebar-ring: 110 50% 65%;
     
     --tag-area: 120 60% 85%;
     --tag-area-foreground: 120 60% 25%;
@@ -68,7 +68,7 @@ All colors MUST be HSL.
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 24 88% 58%;
+    --primary: 110 50% 55%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 20%;
@@ -77,7 +77,7 @@ All colors MUST be HSL.
     --muted: 0 0% 20%;
     --muted-foreground: 0 0% 65%;
 
-    --accent: 33 100% 52%;
+    --accent: 110 50% 55%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -85,19 +85,19 @@ All colors MUST be HSL.
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 24 88% 58%;
+    --ring: 110 50% 55%;
     
     --gradient-start: 0 0% 20%;
     --gradient-end: 0 0% 10%;
     
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 24 88% 58%;
+    --sidebar-primary: 110 50% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 20%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 24 88% 58%;
+    --sidebar-ring: 110 50% 55%;
     
     --tag-area: 120 50% 30%;
     --tag-area-foreground: 120 50% 85%;
