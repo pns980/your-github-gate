@@ -4,6 +4,7 @@ import { BookOpen, RefreshCw, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const ScenarioHelper = () => {
   const navigate = useNavigate();
@@ -102,10 +103,23 @@ const ScenarioHelper = () => {
       if (data.reply) {
         setResponse(data.reply);
         
-        if (data.rules_used && Array.isArray(data.rules_used) && data.rules_used.length > 0) {
-          setAppliedRules(data.rules_used);
-        } else {
-          setAppliedRules([]);
+        const rulesUsed = (data.rules_used && Array.isArray(data.rules_used) && data.rules_used.length > 0) 
+          ? data.rules_used 
+          : [];
+        
+        setAppliedRules(rulesUsed);
+        
+        // Save guidance record to database
+        try {
+          const ruleTitles = rulesUsed.map((rule: any) => rule.title);
+          await supabase.from('guidance_records').insert({
+            scenario: scenario.trim(),
+            guidance: data.reply,
+            applied_rules: ruleTitles
+          });
+        } catch (dbError) {
+          console.error('Error saving guidance record:', dbError);
+          // Don't show error to user, just log it
         }
         
         toast({

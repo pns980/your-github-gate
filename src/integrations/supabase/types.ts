@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      guidance_records: {
+        Row: {
+          applied_rules: string[]
+          created_at: string
+          guidance: string
+          id: string
+          scenario: string
+        }
+        Insert: {
+          applied_rules: string[]
+          created_at?: string
+          guidance: string
+          id?: string
+          scenario: string
+        }
+        Update: {
+          applied_rules?: string[]
+          created_at?: string
+          guidance?: string
+          id?: string
+          scenario?: string
+        }
+        Relationships: []
+      }
       rule_responses: {
         Row: {
           applicable: boolean
