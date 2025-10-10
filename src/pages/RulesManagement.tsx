@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import AdminHeader from "@/components/AdminHeader";
 
 interface Rule {
   id: string;
@@ -369,52 +370,54 @@ const RulesManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/rules")}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Rules Management</h1>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="destructive" onClick={handleDeleteAll}>
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete All
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={handleGoogleSheetsImport}
-              disabled={importing}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {importing ? "Importing..." : "Import from Google Sheets"}
-            </Button>
-            <Button variant="outline" asChild>
-              <label htmlFor="csv-import" className="cursor-pointer">
-                <Upload className="h-4 w-4 mr-2" />
-                Import CSV
-                <input
-                  id="csv-import"
-                  type="file"
-                  accept=".csv"
-                  onChange={handleCSVImport}
-                  className="hidden"
-                />
-              </label>
-            </Button>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button onClick={resetForm}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Rule
-                </Button>
-              </DialogTrigger>
+    <>
+      <AdminHeader />
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("/rules")}
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Rules Management</h1>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="destructive" onClick={handleDeleteAll}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete All
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={handleGoogleSheetsImport}
+                disabled={importing}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                {importing ? "Importing..." : "Import from Google Sheets"}
+              </Button>
+              <Button variant="outline" asChild>
+                <label htmlFor="csv-import" className="cursor-pointer">
+                  <Upload className="h-4 w-4 mr-2" />
+                  Import CSV
+                  <input
+                    id="csv-import"
+                    type="file"
+                    accept=".csv"
+                    onChange={handleCSVImport}
+                    className="hidden"
+                  />
+                </label>
+              </Button>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={resetForm}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Rule
+                  </Button>
+                </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>
@@ -594,6 +597,7 @@ const RulesManagement = () => {
         <Link to="/contact" className="hover:text-primary">Contact</Link>
       </footer>
     </div>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import AdminHeader from "@/components/AdminHeader";
 
 interface ContactSubmission {
   id: string;
@@ -83,25 +84,27 @@ const Messages = () => {
   };
 
   return (
-    <div className="min-h-screen gradient-bg p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center gap-3 mb-8">
-          <Link to="/">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground">
-              <Home className="mr-2 h-4 w-4" />
-              Home
-            </Button>
-          </Link>
-        </div>
+    <>
+      <AdminHeader />
+      <div className="min-h-screen gradient-bg p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-8">
+            <Link to="/">
+              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground">
+                <Home className="mr-2 h-4 w-4" />
+                Home
+              </Button>
+            </Link>
+          </div>
 
-        <div className="mb-8">
-          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>
-            Contact Messages
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            View all contact form submissions
-          </p>
-        </div>
+          <div className="mb-8">
+            <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>
+              Contact Messages
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              View all contact form submissions
+            </p>
+          </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
@@ -172,6 +175,7 @@ const Messages = () => {
         <Link to="/contact" className="hover:text-primary">Contact</Link>
       </footer>
     </div>
+    </>
   );
 };
 

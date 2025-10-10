@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import AdminHeader from "@/components/AdminHeader";
 
 interface GuidanceRecord {
   id: string;
@@ -87,44 +88,46 @@ const GuidanceViewer = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Navigation */}
-        <div className="flex gap-3 mb-8">
-          <Link to="/">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <Home className="mr-2 h-4 w-4" />
-              Scenario Helper
-            </Button>
-          </Link>
-          <Link to="/rules">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <BookOpen className="mr-2 h-4 w-4" />
-              Rules Browser
-            </Button>
-          </Link>
-          <Link to="/review">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Rule Review
-            </Button>
-          </Link>
-          <Link to="/about">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <Info className="mr-2 h-4 w-4" />
-              About
-            </Button>
-          </Link>
-        </div>
+    <>
+      <AdminHeader />
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Navigation */}
+          <div className="flex gap-3 mb-8">
+            <Link to="/">
+              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+                <Home className="mr-2 h-4 w-4" />
+                Scenario Helper
+              </Button>
+            </Link>
+            <Link to="/rules">
+              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+                <BookOpen className="mr-2 h-4 w-4" />
+                Rules Browser
+              </Button>
+            </Link>
+            <Link to="/review">
+              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Rule Review
+              </Button>
+            </Link>
+            <Link to="/about">
+              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+                <Info className="mr-2 h-4 w-4" />
+                About
+              </Button>
+            </Link>
+          </div>
 
-        {/* Page Header */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Guidance Records</h1>
-          <Button onClick={loadRecords} disabled={loading}>
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
-          </Button>
-        </div>
+          {/* Page Header */}
+          <div className="flex justify-between items-center">
+            <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Guidance Records</h1>
+            <Button onClick={loadRecords} disabled={loading}>
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Refresh
+            </Button>
+          </div>
 
         {/* Records List */}
         {loading ? (
@@ -212,6 +215,7 @@ const GuidanceViewer = () => {
         <Link to="/contact" className="hover:text-primary">Contact</Link>
       </footer>
     </div>
+    </>
   );
 };
 

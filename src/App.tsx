@@ -12,7 +12,9 @@ import GuidanceViewer from "./pages/GuidanceViewer";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Messages from "./pages/Messages";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -26,12 +28,13 @@ const App = () => (
           <Route path="/" element={<ScenarioHelper />} />
           <Route path="/review" element={<RuleReview />} />
           <Route path="/rules" element={<RulesBrowser />} />
-          <Route path="/rules/manage" element={<RulesManagement />} />
-          <Route path="/responses" element={<ResponsesViewer />} />
-          <Route path="/guidance" element={<GuidanceViewer />} />
+          <Route path="/rules/manage" element={<ProtectedRoute><RulesManagement /></ProtectedRoute>} />
+          <Route path="/responses" element={<ProtectedRoute><ResponsesViewer /></ProtectedRoute>} />
+          <Route path="/guidance" element={<ProtectedRoute><GuidanceViewer /></ProtectedRoute>} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+          <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
