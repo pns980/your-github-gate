@@ -9,6 +9,7 @@ import RulesManagement from "./pages/RulesManagement";
 import RuleReview from "./pages/RuleReview";
 import ResponsesViewer from "./pages/ResponsesViewer";
 import GuidanceViewer from "./pages/GuidanceViewer";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/rules/manage" element={<RulesManagement />} />
           <Route path="/responses" element={<ResponsesViewer />} />
           <Route path="/guidance" element={<GuidanceViewer />} />
+          <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
