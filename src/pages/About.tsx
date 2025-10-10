@@ -42,6 +42,7 @@ const About = () => {
               <li>the celebration of being one better than yesterday</li>
               <li>the joy of mistakes as growth opportunities</li>
               <li>the understanding that bad and better coexist</li>
+              <li>the feeling at home when things go "boom"</li>
               <li>the belief that if you cannot change something then it's perfect</li>
               <li>the acceptance of the human condition as our once in a lifetime opportunity to propel an infinite progression</li>
               <li>the antidote for the insecurity behind perfectionism</li>
