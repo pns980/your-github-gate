@@ -129,13 +129,13 @@ const RuleReview = () => {
         {/* Navigation */}
         <div className="flex gap-3 mb-8">
           <Link to="/">
-            <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
+            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
               <Home className="mr-2 h-4 w-4" />
               Scenario Helper
             </Button>
           </Link>
           <Link to="/rules">
-            <Button variant="outline" className="bg-white/90 hover:bg-white border-border">
+            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
               <BookOpen className="mr-2 h-4 w-4" />
               Rules Browser
             </Button>
