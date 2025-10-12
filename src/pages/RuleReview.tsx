@@ -110,6 +110,7 @@ const RuleReview = () => {
         description: "Thank you for your feedback!",
       });
 
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       loadRandomRule();
     } catch (error) {
       console.error("Error submitting response:", error);
@@ -127,7 +128,7 @@ const RuleReview = () => {
     <div className="min-h-screen gradient-bg p-8">
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex flex-wrap gap-3 mb-8">
           <Link to="/">
             <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
               <Home className="mr-2 h-4 w-4" />
@@ -149,18 +150,18 @@ const RuleReview = () => {
         </div>
 
         {/* Page Title */}
-        <div className="flex justify-between items-start mb-8">
-          <div>
-            <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Wanna one better for a bit?</h1>
+        <div className="mb-8">
+          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Wanna one better for a bit?</h1>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <p className="text-xl text-muted-foreground">Leave your mark on a perfec™ #1 rule</p>
+            <Button 
+              onClick={loadRandomRule} 
+              disabled={loading}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
+            >
+              {loading ? "Loading..." : "Give Me Another"}
+            </Button>
           </div>
-          <Button 
-            onClick={loadRandomRule} 
-            disabled={loading}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          >
-            {loading ? "Loading..." : "Give Me Another"}
-          </Button>
         </div>
 
         {/* Rule Card */}

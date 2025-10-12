@@ -178,7 +178,7 @@ const ScenarioHelper = () => {
     <div className="min-h-screen gradient-bg p-8">
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex flex-wrap gap-3 mb-8">
           <Link to="/rules">
             <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
               <BookOpen className="mr-2 h-4 w-4" />
@@ -231,12 +231,12 @@ const ScenarioHelper = () => {
               {loading ? "Scanning #1 rules for perfec™ guidance..." : "Get perfec™ guidance"}
             </Button>
             
-            <div className="mt-3">
+            <div className="mt-3 px-4">
               <Button
                 onClick={generateRandomScenario}
                 disabled={loading}
                 variant="ghost"
-                className="text-sm text-muted-foreground hover:text-foreground"
+                className="text-sm text-muted-foreground hover:text-foreground whitespace-normal h-auto py-2"
               >
                 I'm too lazy to come up with a scenario, let AI replace me for a bit and generate one
               </Button>
