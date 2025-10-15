@@ -384,7 +384,7 @@ const ScenarioHelper = () => {
         </div>
 
         {/* Perfec™ Cycling Bullets */}
-        <div className="mt-8 bg-card/50 rounded-lg p-8 border border-border">
+        <div className="mt-8 bg-white rounded-lg p-8 border border-border shadow-lg">
           <h2 className="text-2xl font-bold mb-6 text-foreground text-center">
             What is perfec™?
           </h2>
