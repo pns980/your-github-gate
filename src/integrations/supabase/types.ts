@@ -44,6 +44,7 @@ export type Database = {
           created_at: string
           guidance: string
           id: string
+          rating: string | null
           scenario: string
         }
         Insert: {
@@ -51,6 +52,7 @@ export type Database = {
           created_at?: string
           guidance: string
           id?: string
+          rating?: string | null
           scenario: string
         }
         Update: {
@@ -58,6 +60,7 @@ export type Database = {
           created_at?: string
           guidance?: string
           id?: string
+          rating?: string | null
           scenario?: string
         }
         Relationships: []

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { BookOpen, RefreshCw, Lightbulb, Info } from "lucide-react";
+import { BookOpen, RefreshCw, Lightbulb, Info, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -14,6 +14,8 @@ const ScenarioHelper = () => {
   const [response, setResponse] = useState("");
   const [appliedRules, setAppliedRules] = useState<any[]>([]);
   const [placeholderExample, setPlaceholderExample] = useState("I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?");
+  const [currentGuidanceId, setCurrentGuidanceId] = useState<string | null>(null);
+  const [rating, setRating] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Restore state when navigating back from rule browser
@@ -140,11 +142,20 @@ const ScenarioHelper = () => {
         // Save guidance record to database
         try {
           const ruleTitles = rulesUsed.map((rule: any) => rule.title);
-          await supabase.from('guidance_records').insert({
-            scenario: scenario.trim(),
-            guidance: data.reply,
-            applied_rules: ruleTitles
-          });
+          const { data: insertedData, error: insertError } = await supabase
+            .from('guidance_records')
+            .insert({
+              scenario: scenario.trim(),
+              guidance: data.reply,
+              applied_rules: ruleTitles
+            })
+            .select('id')
+            .single();
+          
+          if (!insertError && insertedData) {
+            setCurrentGuidanceId(insertedData.id);
+            setRating(null); // Reset rating for new guidance
+          }
         } catch (dbError) {
           console.error('Error saving guidance record:', dbError);
           // Don't show error to user, just log it
@@ -171,6 +182,32 @@ const ScenarioHelper = () => {
       setAppliedRules([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRating = async (ratingValue: 'Liked' | 'Not Liked') => {
+    if (!currentGuidanceId) return;
+
+    try {
+      const { error } = await supabase
+        .from('guidance_records')
+        .update({ rating: ratingValue })
+        .eq('id', currentGuidanceId);
+
+      if (error) throw error;
+
+      setRating(ratingValue);
+      toast({
+        title: "Thank you!",
+        description: "Your feedback has been recorded"
+      });
+    } catch (error) {
+      console.error('Error saving rating:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save your rating",
+        variant: "destructive"
+      });
     }
   };
 
@@ -260,6 +297,32 @@ const ScenarioHelper = () => {
               <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border border-border">
                 <div className="text-foreground leading-relaxed whitespace-pre-wrap">
                   {response}
+                </div>
+              </div>
+              
+              <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border border-border">
+                <h3 className="text-xl font-semibold mb-4 text-foreground">
+                  How would you rate this response?
+                </h3>
+                <div className="flex gap-4 items-center">
+                  <Button
+                    onClick={() => handleRating('Liked')}
+                    variant={rating === 'Liked' ? 'default' : 'outline'}
+                    className="flex items-center gap-2"
+                    disabled={rating !== null}
+                  >
+                    <ThumbsUp className="h-5 w-5" />
+                    {rating === 'Liked' ? 'Liked' : 'Like'}
+                  </Button>
+                  <Button
+                    onClick={() => handleRating('Not Liked')}
+                    variant={rating === 'Not Liked' ? 'default' : 'outline'}
+                    className="flex items-center gap-2"
+                    disabled={rating !== null}
+                  >
+                    <ThumbsDown className="h-5 w-5" />
+                    {rating === 'Not Liked' ? 'Not Liked' : 'Dislike'}
+                  </Button>
                 </div>
               </div>
               
