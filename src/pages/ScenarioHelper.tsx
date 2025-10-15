@@ -16,7 +16,30 @@ const ScenarioHelper = () => {
   const [placeholderExample, setPlaceholderExample] = useState("I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?");
   const [currentGuidanceId, setCurrentGuidanceId] = useState<string | null>(null);
   const [rating, setRating] = useState<string | null>(null);
+  const [currentPerfecBullet, setCurrentPerfecBullet] = useState(0);
   const { toast } = useToast();
+
+  const perfecBullets = [
+    "the celebration of being one better than yesterday",
+    "the joy of mistakes as growth opportunities",
+    "the understanding that bad and better coexist",
+    "the feeling at home when things go \"boom\"",
+    "the belief that if you cannot change something then it's perfect",
+    "the acceptance of the human condition as our once in a lifetime opportunity to propel an infinite progression",
+    "the antidote for the insecurity behind perfectionism",
+    "the euphemism for our inescapable \"bounded rationality\"",
+    "the perception of a scratch on your phone screen as uniquely yours",
+    "not a typo"
+  ];
+
+  // Cycle through perfec bullets
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPerfecBullet((prev) => (prev + 1) % perfecBullets.length);
+    }, 3500);
+    
+    return () => clearInterval(interval);
+  }, [perfecBullets.length]);
 
   // Restore state when navigating back from rule browser
   useEffect(() => {
@@ -358,6 +381,27 @@ const ScenarioHelper = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Perfec™ Cycling Bullets */}
+        <div className="mt-8 bg-card/50 rounded-lg p-8 border border-border">
+          <h2 className="text-2xl font-bold mb-6 text-foreground text-center">
+            What is perfec™?
+          </h2>
+          <div className="relative h-20 flex items-center justify-center overflow-hidden">
+            {perfecBullets.map((bullet, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 flex items-center justify-center px-4 transition-opacity duration-1000 ${
+                  index === currentPerfecBullet ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                <p className="text-lg text-muted-foreground text-center italic">
+                  Perfec™ is {bullet}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground space-x-4">
