@@ -46,6 +46,7 @@ const About = () => {
               <li>the belief that if you cannot change something then it's perfect</li>
               <li>the acceptance of the human condition as our once in a lifetime opportunity to propel an infinite progression</li>
               <li>the antidote for the insecurity behind perfectionism</li>
+              <li>the euphemism for our inescapable "bounded rationality"</li>
               <li>the perception of a scratch on your phone screen as uniquely yours</li>
               <li>not a typo</li>
             </ul>
