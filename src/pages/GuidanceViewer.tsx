@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Home, BookOpen, RefreshCw, ArrowLeft, Calendar, MessageSquare, Info } from "lucide-react";
+import { Home, BookOpen, RefreshCw, ArrowLeft, Calendar, MessageSquare, Info, ThumbsUp, ThumbsDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +13,7 @@ interface GuidanceRecord {
   guidance: string;
   applied_rules: string[];
   created_at: string;
+  rating: string | null;
 }
 
 const GuidanceViewer = () => {
@@ -204,6 +205,29 @@ const GuidanceViewer = () => {
                       </div>
                     </div>
                   )}
+
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">User Rating</h3>
+                    <div className="bg-muted/50 rounded-lg p-4 border border-border">
+                      {record.rating ? (
+                        <div className="flex items-center gap-2">
+                          {record.rating === 'Liked' ? (
+                            <>
+                              <ThumbsUp className="h-5 w-5 text-green-600" />
+                              <span className="text-foreground font-medium">Liked</span>
+                            </>
+                          ) : (
+                            <>
+                              <ThumbsDown className="h-5 w-5 text-red-600" />
+                              <span className="text-foreground font-medium">Not Liked</span>
+                            </>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground italic">No rating provided</span>
+                      )}
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             ))}
