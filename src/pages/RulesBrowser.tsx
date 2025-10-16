@@ -83,9 +83,8 @@ const RulesBrowser = () => {
       const matchesSearch = !q || title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
 
       let matchesArea = selectedArea === 'All Areas';
-      if (!matchesArea && rule.area) {
-        const areas = rule.area.toLowerCase().split(';').map(a => a.trim());
-        matchesArea = areas.includes(selectedArea.toLowerCase());
+      if (!matchesArea && rule.area && rule.area.length > 0) {
+        matchesArea = rule.area.some(a => a.toLowerCase() === selectedArea.toLowerCase());
       }
 
       let matchesDiscipline = selectedDiscipline === 'All Disciplines';
@@ -242,7 +241,7 @@ const RulesBrowser = () => {
                   className="bg-card rounded-lg p-6 shadow-lg border border-border transition-all hover:shadow-xl flex flex-col"
                 >
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {rule.area && rule.area.split(';').map((area, idx) => (
+                    {rule.area && rule.area.map((area, idx) => (
                       <span 
                         key={idx} 
                         className="px-3 py-1 rounded-full text-xs font-semibold uppercase"
@@ -251,7 +250,7 @@ const RulesBrowser = () => {
                           color: 'hsl(var(--tag-area-foreground))' 
                         }}
                       >
-                        {area.trim()}
+                        {area}
                       </span>
                     ))}
                     {rule.discipline && (

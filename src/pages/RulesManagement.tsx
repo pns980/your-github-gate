@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -35,7 +36,7 @@ interface Rule {
   id: string;
   title: string;
   description: string;
-  area?: string;
+  area?: string[];
   discipline?: string;
   skill?: string;
 }
@@ -50,7 +51,7 @@ const RulesManagement = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    area: "",
+    area: [] as string[],
     discipline: "",
     skill: "",
   });
@@ -133,7 +134,7 @@ const RulesManagement = () => {
     setFormData({
       title: rule.title,
       description: rule.description,
-      area: rule.area || "",
+      area: rule.area || [],
       discipline: rule.discipline || "",
       skill: rule.skill || "",
     });
@@ -145,7 +146,7 @@ const RulesManagement = () => {
     setFormData({
       title: "",
       description: "",
-      area: "",
+      area: [],
       discipline: "",
       skill: "",
     });
@@ -231,7 +232,10 @@ const RulesManagement = () => {
           const value = values[index]?.trim() || '';
           if (header === "title") rule.title = value;
           if (header === "description") rule.description = value;
-          if (header === "area") rule.area = value;
+          if (header === "area") {
+            // Support both comma and semicolon separated areas
+            rule.area = value ? value.split(/[;,]/).map((a: string) => a.trim()).filter((a: string) => a) : [];
+          }
           if (header === "discipline") rule.discipline = value;
           if (header === "skill") rule.skill = value;
         });
@@ -315,15 +319,18 @@ const RulesManagement = () => {
 
       const normalizeText = (val: any) => typeof val === 'string' ? val.trim() : (val == null ? '' : String(val).trim());
 
-      const rules = data.map((r: any) => ({
-        title: normalizeText(r.title ?? r.Title ?? r.TITLE),
-        description: normalizeText(
-          r.description ?? r.fullDescription ?? r.FullDescription ?? r.FULLDESCRIPTION ?? r.Description ?? r.DESCRIPTION
-        ),
-        area: normalizeText(r.area ?? r.Area ?? r.AREA) || null,
-        discipline: normalizeText(r.discipline ?? r.Discipline ?? r.DISCIPLINE) || null,
-        skill: normalizeText(r.skill ?? r.Skill ?? r.SKILL) || null,
-      })).filter((rule: any) => rule.title && rule.description);
+      const rules = data.map((r: any) => {
+        const areaValue = normalizeText(r.area ?? r.Area ?? r.AREA);
+        return {
+          title: normalizeText(r.title ?? r.Title ?? r.TITLE),
+          description: normalizeText(
+            r.description ?? r.fullDescription ?? r.FullDescription ?? r.FULLDESCRIPTION ?? r.Description ?? r.DESCRIPTION
+          ),
+          area: areaValue ? areaValue.split(/[;,]/).map((a: string) => a.trim()).filter((a: string) => a) : null,
+          discipline: normalizeText(r.discipline ?? r.Discipline ?? r.DISCIPLINE) || null,
+          skill: normalizeText(r.skill ?? r.Skill ?? r.SKILL) || null,
+        };
+      }).filter((rule: any) => rule.title && rule.description);
 
       if (rules.length === 0) {
         throw new Error('No valid rules found in Google Sheets');
@@ -453,22 +460,36 @@ const RulesManagement = () => {
                   </div>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="area">Area</Label>
-                      <Select
-                        value={formData.area}
-                        onValueChange={(value) =>
-                          setFormData({ ...formData, area: value })
-                        }
-                      >
-                        <SelectTrigger id="area">
-                          <SelectValue placeholder="Select area" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="People">People</SelectItem>
-                          <SelectItem value="Self">Self</SelectItem>
-                          <SelectItem value="Business">Business</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label>Area (select multiple)</Label>
+                      <div className="space-y-2 mt-2">
+                        {["People", "Self", "Business"].map((areaOption) => (
+                          <div key={areaOption} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`area-${areaOption}`}
+                              checked={formData.area.includes(areaOption)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setFormData({
+                                    ...formData,
+                                    area: [...formData.area, areaOption],
+                                  });
+                                } else {
+                                  setFormData({
+                                    ...formData,
+                                    area: formData.area.filter((a) => a !== areaOption),
+                                  });
+                                }
+                              }}
+                            />
+                            <Label
+                              htmlFor={`area-${areaOption}`}
+                              className="text-sm font-normal cursor-pointer"
+                            >
+                              {areaOption}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                     <div>
                       <Label htmlFor="discipline">Discipline</Label>
@@ -560,7 +581,9 @@ const RulesManagement = () => {
                           {rule.description}
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm">{rule.area || "-"}</TableCell>
+                      <TableCell className="text-sm">
+                        {rule.area && rule.area.length > 0 ? rule.area.join(", ") : "-"}
+                      </TableCell>
                       <TableCell className="text-sm">{rule.discipline || "-"}</TableCell>
                       <TableCell className="text-sm">{rule.skill || "-"}</TableCell>
                       <TableCell>

@@ -118,7 +118,7 @@ export type Database = {
       }
       rules: {
         Row: {
-          area: string | null
+          area: string[] | null
           created_at: string
           description: string
           discipline: string | null
@@ -128,7 +128,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          area?: string | null
+          area?: string[] | null
           created_at?: string
           description: string
           discipline?: string | null
@@ -138,7 +138,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          area?: string | null
+          area?: string[] | null
           created_at?: string
           description?: string
           discipline?: string | null

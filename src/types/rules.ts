@@ -1,7 +1,7 @@
 export interface Rule {
   title: string;
   description: string;
-  area?: string;
+  area?: string[];
   skill?: string;
   discipline?: string;
 }
