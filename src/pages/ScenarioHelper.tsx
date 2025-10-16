@@ -28,7 +28,7 @@ const ScenarioHelper = () => {
     "the feeling at home when things go \"boom\"",
     "the belief that if you cannot change something then it's perfect",
     "the acceptance of the human condition as our once in a lifetime opportunity to propel an infinite progression",
-    "the antidote for the insecurity behind perfectionism",
+    "the gratification of pragmatism replacing the insecurity behind perfectionism",
     "the euphemism for our inescapable \"bounded rationality\"",
     "the perception of a scratch on your phone screen as uniquely yours",
     "not a typo"
