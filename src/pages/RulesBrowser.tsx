@@ -51,6 +51,18 @@ const RulesBrowser = () => {
     setSearchParams(params, { replace: true });
   }, [searchTerm, rulesData, selectedArea, selectedDiscipline, selectedSkill, setSearchParams]);
 
+  // Scroll to rules grid when search params are present
+  useEffect(() => {
+    if (searchParams.get('search')) {
+      const rulesGrid = document.getElementById('rules-grid');
+      if (rulesGrid) {
+        setTimeout(() => {
+          rulesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [searchParams]);
+
   const loadData = async () => {
     try {
       const { data, error } = await supabase
@@ -225,13 +237,14 @@ const RulesBrowser = () => {
         </div>
         
         {/* Rules Grid */}
-        {filteredRules.length === 0 ? (
-          <div className="text-center text-muted-foreground text-2xl mt-20 p-10 bg-card rounded-lg border border-border">
-            <h3 className="mb-2">No rules found matching your criteria.</h3>
-            <p className="text-lg">Try adjusting your search or filters.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div id="rules-grid">
+          {filteredRules.length === 0 ? (
+            <div className="text-center text-muted-foreground text-2xl mt-20 p-10 bg-card rounded-lg border border-border">
+              <h3 className="mb-2">No rules found matching your criteria.</h3>
+              <p className="text-lg">Try adjusting your search or filters.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredRules.map((rule, index) => {
               const cardKey = rule.title || `rule-${index}`;
               
@@ -301,8 +314,9 @@ const RulesBrowser = () => {
                 </div>
               );
             })}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
 
         {/* Rule Detail Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

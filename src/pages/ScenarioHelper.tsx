@@ -358,13 +358,7 @@ const ScenarioHelper = () => {
                     appliedRules.map((rule: any, index: number) => (
                       <div key={index} className="space-y-1">
                         <button
-                          onClick={() => navigate('/rules', { 
-                            state: { 
-                              openRuleTitle: rule.title,
-                              returnTo: 'scenario',
-                              scenarioState: { scenario, response, appliedRules }
-                            } 
-                          })}
+                          onClick={() => navigate(`/rules?search=${encodeURIComponent(rule.title)}`)}
                           className="font-bold text-primary hover:underline text-left"
                         >
                           • {rule.title}
