@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { BookOpen, RefreshCw, Lightbulb, Info, ThumbsUp, ThumbsDown } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Lightbulb, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 const ScenarioHelper = () => {
   const navigate = useNavigate();
@@ -237,27 +239,7 @@ const ScenarioHelper = () => {
   return (
     <div className="min-h-screen gradient-bg p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Navigation */}
-        <div className="flex flex-wrap gap-3 mb-8">
-          <Link to="/rules">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <BookOpen className="mr-2 h-4 w-4" />
-              Rules Browser
-            </Button>
-          </Link>
-          <Link to="/review">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Rule Review
-            </Button>
-          </Link>
-          <Link to="/about">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <Info className="mr-2 h-4 w-4" />
-              About
-            </Button>
-          </Link>
-        </div>
+        <Navigation currentPage="home" />
 
         {/* Page Title */}
         <div className="mb-8">
@@ -398,11 +380,7 @@ const ScenarioHelper = () => {
           </div>
         </div>
 
-        <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground space-x-4">
-          <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-          <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
-          <Link to="/contact" className="hover:text-primary">Contact</Link>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

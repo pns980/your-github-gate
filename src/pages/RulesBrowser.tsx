@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { Home, RefreshCw, Info } from "lucide-react";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { Rule } from "@/types/rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { supabase } from "@/integrations/supabase/client";
+import { useRules } from "@/hooks/useRules";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 const RulesBrowser = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [rulesData, setRulesData] = useState<Rule[]>([]);
+  const { data: rulesData } = useRules();
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [selectedArea, setSelectedArea] = useState(searchParams.get('area') || 'All Areas');
@@ -20,13 +21,9 @@ const RulesBrowser = () => {
   const [selectedRule, setSelectedRule] = useState<Rule | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
   // Handle opening specific rule from navigation state
   useEffect(() => {
-    if (location.state?.openRuleTitle && rulesData.length > 0) {
+    if (location.state?.openRuleTitle && rulesData && rulesData.length > 0) {
       const titleToFind = location.state.openRuleTitle.trim().toLowerCase();
       const ruleToOpen = rulesData.find(r => 
         r.title.trim().toLowerCase() === titleToFind
@@ -62,30 +59,6 @@ const RulesBrowser = () => {
       }
     }
   }, [searchParams]);
-
-  const loadData = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('rules')
-        .select('*')
-        .order('title');
-      
-      if (error) throw error;
-      
-      const rules: Rule[] = (data || []).map(r => ({
-        title: r.title,
-        description: r.description,
-        area: r.area || undefined,
-        discipline: r.discipline || undefined,
-        skill: r.skill || undefined,
-      }));
-      
-      setRulesData(rules);
-    } catch (error) {
-      console.error('Error loading rules:', error);
-      setRulesData([]);
-    }
-  };
 
   const applyFilters = () => {
     const filtered = rulesData.filter(rule => {
@@ -134,27 +107,7 @@ const RulesBrowser = () => {
   return (
     <div className="min-h-screen gradient-bg p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Navigation */}
-        <div className="flex gap-3 mb-8">
-          <Link to="/">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <Home className="mr-2 h-4 w-4" />
-              Scenario Helper
-            </Button>
-          </Link>
-          <Link to="/review">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Rule Review
-            </Button>
-          </Link>
-          <Link to="/about">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <Info className="mr-2 h-4 w-4" />
-              About
-            </Button>
-          </Link>
-        </div>
+        <Navigation currentPage="rules" />
 
         {/* Page Title */}
         <div className="mb-8">
@@ -361,11 +314,7 @@ const RulesBrowser = () => {
         </Dialog>
       </div>
 
-      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto space-x-4">
-        <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-        <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
-        <Link to="/contact" className="hover:text-primary">Contact</Link>
-      </footer>
+      <Footer />
     </div>
   );
 };

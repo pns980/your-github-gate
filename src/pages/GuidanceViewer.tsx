@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Home, BookOpen, RefreshCw, ArrowLeft, Calendar, MessageSquare, Info, ThumbsUp, ThumbsDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { RefreshCw, Calendar, MessageSquare, ThumbsUp, ThumbsDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 interface GuidanceRecord {
   id: string;
@@ -18,36 +19,15 @@ interface GuidanceRecord {
 
 const GuidanceViewer = () => {
   const navigate = useNavigate();
-  const [records, setRecords] = useState<GuidanceRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    loadRecords();
-  }, []);
-
-  const loadRecords = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
+  const { data: records, loading, refetch: loadRecords } = useSupabaseQuery<GuidanceRecord>({
+    queryFn: async () => {
+      const result = await supabase
         .from('guidance_records')
         .select('*')
         .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      setRecords(data || []);
-    } catch (error) {
-      console.error('Error loading guidance records:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load guidance records.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+      return result;
+    },
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this guidance record?')) {
@@ -62,19 +42,9 @@ const GuidanceViewer = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: "Guidance record deleted successfully.",
-      });
-
       loadRecords();
     } catch (error) {
       console.error('Error deleting record:', error);
-      toast({
-        title: "Error",
-        description: "Failed to delete guidance record.",
-        variant: "destructive",
-      });
     }
   };
 
@@ -93,33 +63,7 @@ const GuidanceViewer = () => {
       <AdminHeader />
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Navigation */}
-          <div className="flex gap-3 mb-8">
-            <Link to="/">
-              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-                <Home className="mr-2 h-4 w-4" />
-                Scenario Helper
-              </Button>
-            </Link>
-            <Link to="/rules">
-              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-                <BookOpen className="mr-2 h-4 w-4" />
-                Rules Browser
-              </Button>
-            </Link>
-            <Link to="/review">
-              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Rule Review
-              </Button>
-            </Link>
-            <Link to="/about">
-              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-                <Info className="mr-2 h-4 w-4" />
-                About
-              </Button>
-            </Link>
-          </div>
+          <Navigation />
 
           {/* Page Header */}
           <div className="flex justify-between items-center">
@@ -235,11 +179,7 @@ const GuidanceViewer = () => {
         )}
       </div>
 
-      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto space-x-4">
-        <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-        <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
-        <Link to="/contact" className="hover:text-primary">Contact</Link>
-      </footer>
+      <Footer />
     </div>
     </>
   );

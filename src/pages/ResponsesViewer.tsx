@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Table,
@@ -10,10 +8,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { Loader2, Trash2 } from "lucide-react";
 import { format } from "date-fns";
+import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
+import Footer from "@/components/Footer";
 
 interface RuleResponse {
   id: string;
@@ -26,35 +25,15 @@ interface RuleResponse {
 }
 
 const ResponsesViewer = () => {
-  const [responses, setResponses] = useState<RuleResponse[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
-
-  const loadResponses = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
+  const { data: responses, loading, refetch: loadResponses } = useSupabaseQuery<RuleResponse>({
+    queryFn: async () => {
+      const result = await supabase
         .from("rule_responses")
         .select("*")
         .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setResponses(data || []);
-    } catch (error) {
-      console.error("Error loading responses:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load responses.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadResponses();
-  }, []);
+      return result;
+    },
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this response?")) return;
@@ -67,18 +46,9 @@ const ResponsesViewer = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: "Response deleted successfully.",
-      });
       loadResponses();
     } catch (error) {
       console.error("Error deleting response:", error);
-      toast({
-        title: "Error",
-        description: "Failed to delete response.",
-        variant: "destructive",
-      });
     }
   };
 
@@ -156,11 +126,7 @@ const ResponsesViewer = () => {
         )}
       </div>
 
-      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto space-x-4">
-        <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-        <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
-        <Link to="/contact" className="hover:text-primary">Contact</Link>
-      </footer>
+      <Footer />
     </div>
     </>
   );

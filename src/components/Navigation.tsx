@@ -1,0 +1,33 @@
+import { Link } from "react-router-dom";
+import { Home, BookOpen, RefreshCw, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+interface NavigationProps {
+  currentPage?: 'home' | 'rules' | 'review' | 'about';
+}
+
+const Navigation = ({ currentPage }: NavigationProps) => {
+  const navItems = [
+    { to: "/", icon: Home, label: "Scenario Helper", page: 'home' },
+    { to: "/rules", icon: BookOpen, label: "Rules Browser", page: 'rules' },
+    { to: "/review", icon: RefreshCw, label: "Rule Review", page: 'review' },
+    { to: "/about", icon: Info, label: "About", page: 'about' },
+  ];
+
+  return (
+    <div className="flex flex-wrap gap-3 mb-8">
+      {navItems
+        .filter(item => item.page !== currentPage)
+        .map(({ to, icon: Icon, label }) => (
+          <Link key={to} to={to}>
+            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
+              <Icon className="mr-2 h-4 w-4" />
+              {label}
+            </Button>
+          </Link>
+        ))}
+    </div>
+  );
+};
+
+export default Navigation;

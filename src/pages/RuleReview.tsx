@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +7,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useRules } from "@/hooks/useRules";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 interface Rule {
   id: string;
@@ -17,6 +19,7 @@ interface Rule {
 
 const RuleReview = () => {
   const location = useLocation();
+  const { data: allRules, loading: rulesLoading } = useRules();
   const [currentRule, setCurrentRule] = useState<Rule | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -45,40 +48,22 @@ const RuleReview = () => {
     }
   }, [location.state]);
 
-  const loadRandomRule = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("rules")
-        .select("*")
-        .order("id");
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        const randomIndex = Math.floor(Math.random() * data.length);
-        setCurrentRule(data[randomIndex]);
-        setResonates("");
-        setApplicable("");
-        setLearnedNew("");
-        setThoughts("");
-      } else {
-        toast({
-          title: "No rules found",
-          description: "Please add some rules first.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error("Error loading rule:", error);
+  const loadRandomRule = () => {
+    if (!allRules || allRules.length === 0) {
       toast({
-        title: "Error",
-        description: "Failed to load rule.",
+        title: "No rules found",
+        description: "Please add some rules first.",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
+      return;
     }
+
+    const randomIndex = Math.floor(Math.random() * allRules.length);
+    setCurrentRule(allRules[randomIndex]);
+    setResonates("");
+    setApplicable("");
+    setLearnedNew("");
+    setThoughts("");
   };
 
   const handleSubmit = async () => {
@@ -127,27 +112,7 @@ const RuleReview = () => {
   return (
     <div className="min-h-screen gradient-bg p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Navigation */}
-        <div className="flex flex-wrap gap-3 mb-8">
-          <Link to="/">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <Home className="mr-2 h-4 w-4" />
-              Scenario Helper
-            </Button>
-          </Link>
-          <Link to="/rules">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <BookOpen className="mr-2 h-4 w-4" />
-              Rules Browser
-            </Button>
-          </Link>
-          <Link to="/about">
-            <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
-              <Info className="mr-2 h-4 w-4" />
-              About
-            </Button>
-          </Link>
-        </div>
+        <Navigation currentPage="review" />
 
         {/* Page Title */}
         <div className="mb-8">
@@ -156,10 +121,10 @@ const RuleReview = () => {
             <p className="text-xl text-muted-foreground">Leave your mark on a perfec™ #1 rule</p>
             <Button 
               onClick={loadRandomRule} 
-              disabled={loading}
+              disabled={rulesLoading}
               className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
             >
-              {loading ? "Loading..." : "Give Me Another"}
+              {rulesLoading ? "Loading..." : "Give Me Another"}
             </Button>
           </div>
         </div>
@@ -282,11 +247,7 @@ const RuleReview = () => {
         )}
       </div>
 
-      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground space-x-4">
-        <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-        <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
-        <Link to="/contact" className="hover:text-primary">Contact</Link>
-      </footer>
+      <Footer />
     </div>
   );
 };

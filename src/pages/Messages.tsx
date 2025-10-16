@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Home, Calendar, Mail, User, MessageSquare, Trash2 } from "lucide-react";
+import { Calendar, Mail, User, MessageSquare, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 interface ContactSubmission {
   id: string;
@@ -16,36 +17,16 @@ interface ContactSubmission {
 }
 
 const Messages = () => {
-  const [messages, setMessages] = useState<ContactSubmission[]>([]);
-  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-
-  useEffect(() => {
-    loadMessages();
-  }, []);
-
-  const loadMessages = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
+  const { data: messages, loading, refetch: loadMessages } = useSupabaseQuery<ContactSubmission>({
+    queryFn: async () => {
+      const result = await supabase
         .from('contact_submissions')
         .select('*')
         .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      setMessages(data || []);
-    } catch (error) {
-      console.error('Error loading messages:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load messages.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+      return result;
+    },
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this message?')) return;
@@ -58,7 +39,7 @@ const Messages = () => {
 
       if (error) throw error;
 
-      setMessages(messages.filter(msg => msg.id !== id));
+      loadMessages();
       toast({
         title: "Success",
         description: "Message deleted successfully.",
@@ -88,14 +69,7 @@ const Messages = () => {
       <AdminHeader />
       <div className="min-h-screen gradient-bg p-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 mb-8">
-            <Link to="/">
-              <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground">
-                <Home className="mr-2 h-4 w-4" />
-                Home
-              </Button>
-            </Link>
-          </div>
+          <Navigation />
 
           <div className="mb-8">
             <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>
@@ -171,11 +145,7 @@ const Messages = () => {
         )}
       </div>
 
-      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto space-x-4">
-        <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-        <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
-        <Link to="/contact" className="hover:text-primary">Contact</Link>
-      </footer>
+      <Footer />
     </div>
     </>
   );
