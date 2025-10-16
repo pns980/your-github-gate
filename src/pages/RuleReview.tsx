@@ -42,11 +42,15 @@ const RuleReview = () => {
       setApplicable("");
       setLearnedNew("");
       setThoughts("");
-    } else {
-      // Load a random rule on initial page load
-      loadRandomRule();
     }
   }, [location.state]);
+
+  // Load a random rule once rules are loaded and there's no current rule
+  useEffect(() => {
+    if (!rulesLoading && allRules && allRules.length > 0 && !currentRule && !location.state?.rule) {
+      loadRandomRule();
+    }
+  }, [rulesLoading, allRules, currentRule, location.state]);
 
   const loadRandomRule = () => {
     if (!allRules || allRules.length === 0) {
