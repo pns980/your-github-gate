@@ -464,7 +464,6 @@ const RulesManagement = () => {
                           <SelectValue placeholder="Select area" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">None</SelectItem>
                           <SelectItem value="People">People</SelectItem>
                           <SelectItem value="Self">Self</SelectItem>
                           <SelectItem value="Business">Business</SelectItem>
@@ -483,7 +482,6 @@ const RulesManagement = () => {
                           <SelectValue placeholder="Select discipline" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">None</SelectItem>
                           <SelectItem value="Perception">Perception</SelectItem>
                           <SelectItem value="Will">Will</SelectItem>
                           <SelectItem value="Action">Action</SelectItem>
@@ -502,7 +500,6 @@ const RulesManagement = () => {
                           <SelectValue placeholder="Select skill" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">None</SelectItem>
                           <SelectItem value="Communication">Communication</SelectItem>
                           <SelectItem value="Teamwork">Teamwork</SelectItem>
                           <SelectItem value="Analytical skills">Analytical skills</SelectItem>
