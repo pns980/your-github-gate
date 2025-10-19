@@ -273,14 +273,14 @@ const RulesBrowser = () => {
 
         {/* Rule Detail Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto w-[95vw] sm:w-full">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold pr-8">
+              <DialogTitle className="text-xl sm:text-2xl font-bold pr-8 break-words">
                 {selectedRule?.title || 'Untitled'}
               </DialogTitle>
             </DialogHeader>
             <div className="mt-4">
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">
                 {selectedRule?.description || 'No description available.'}
               </p>
             </div>
