@@ -149,6 +149,36 @@ export type Database = {
         }
         Relationships: []
       }
+      suggestions: {
+        Row: {
+          area: string[]
+          created_at: string
+          description: string
+          discipline: string
+          id: string
+          skill: string
+          title: string
+        }
+        Insert: {
+          area: string[]
+          created_at?: string
+          description: string
+          discipline: string
+          id?: string
+          skill: string
+          title: string
+        }
+        Update: {
+          area?: string[]
+          created_at?: string
+          description?: string
+          discipline?: string
+          id?: string
+          skill?: string
+          title?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null

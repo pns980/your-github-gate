@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { Home, BookOpen, RefreshCw, Info } from "lucide-react";
+import { Home, BookOpen, RefreshCw, Info, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface NavigationProps {
-  currentPage?: 'home' | 'rules' | 'review' | 'about';
+  currentPage?: 'home' | 'rules' | 'review' | 'about' | 'submit';
 }
 
 const Navigation = ({ currentPage }: NavigationProps) => {
@@ -11,6 +11,7 @@ const Navigation = ({ currentPage }: NavigationProps) => {
     { to: "/", icon: Home, label: "Scenario Helper", page: 'home' },
     { to: "/rules", icon: BookOpen, label: "Rules Browser", page: 'rules' },
     { to: "/review", icon: RefreshCw, label: "Rule Review", page: 'review' },
+    { to: "/submit-rule", icon: FilePlus, label: "Submit a Rule", page: 'submit' },
     { to: "/about", icon: Info, label: "About", page: 'about' },
   ];
 

@@ -18,6 +18,8 @@ import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SubmitRule from "./pages/SubmitRule";
+import SuggestionsManagement from "./pages/SuggestionsManagement";
 
 const queryClient = new QueryClient();
 
@@ -37,9 +39,11 @@ const App = () => (
           <Route path="/guidance" element={<ProtectedRoute><GuidanceViewer /></ProtectedRoute>} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/submit-rule" element={<SubmitRule />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+          <Route path="/suggestions" element={<ProtectedRoute><SuggestionsManagement /></ProtectedRoute>} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
