@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
+import AdminNavigation from "@/components/AdminNavigation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
@@ -61,9 +62,9 @@ const GuidanceViewer = () => {
   return (
     <>
       <AdminHeader />
+      <AdminNavigation />
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-6">
-          <Navigation />
 
           {/* Page Header */}
           <div className="flex justify-between items-center">

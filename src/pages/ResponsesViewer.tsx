@@ -12,6 +12,7 @@ import { Loader2, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
+import AdminNavigation from "@/components/AdminNavigation";
 import Footer from "@/components/Footer";
 
 interface RuleResponse {
@@ -63,6 +64,7 @@ const ResponsesViewer = () => {
   return (
     <>
       <AdminHeader />
+      <AdminNavigation />
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex justify-between items-center">

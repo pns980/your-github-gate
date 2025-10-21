@@ -20,6 +20,7 @@ import Terms from "./pages/Terms";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SubmitRule from "./pages/SubmitRule";
 import SuggestionsManagement from "./pages/SuggestionsManagement";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/" element={<ScenarioHelper />} />
           <Route path="/review" element={<RuleReview />} />
           <Route path="/rules" element={<RulesBrowser />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/rules/manage" element={<ProtectedRoute><RulesManagement /></ProtectedRoute>} />
           <Route path="/responses" element={<ProtectedRoute><ResponsesViewer /></ProtectedRoute>} />
           <Route path="/guidance" element={<ProtectedRoute><GuidanceViewer /></ProtectedRoute>} />

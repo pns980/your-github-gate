@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
+import AdminNavigation from "@/components/AdminNavigation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
@@ -67,9 +68,9 @@ const Messages = () => {
   return (
     <>
       <AdminHeader />
+      <AdminNavigation />
       <div className="min-h-screen gradient-bg p-8">
         <div className="max-w-6xl mx-auto">
-          <Navigation />
 
           <div className="mb-8">
             <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>

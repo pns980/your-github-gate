@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Trash2, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdminHeader from "@/components/AdminHeader";
+import AdminNavigation from "@/components/AdminNavigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import {
   AlertDialog,
@@ -70,6 +71,7 @@ const SuggestionsManagement = () => {
     <ProtectedRoute>
       <div className="min-h-screen bg-background">
         <AdminHeader />
+        <AdminNavigation />
         <main className="container mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-6">
             <div>
