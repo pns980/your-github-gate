@@ -105,18 +105,18 @@ const RulesBrowser = () => {
   };
 
   return (
-    <div className="min-h-screen gradient-bg p-8">
+    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <Navigation currentPage="rules" />
 
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 90%)' }}>Indulge your perfec™ism</h1>
-          <p className="text-xl text-muted-foreground">The complete list of almost all #1 rules.</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 90%)' }}>Indulge your perfec™ism</h1>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground">The complete list of almost all #1 rules.</p>
         </div>
         
         {/* Filters Card */}
-        <div className="bg-card rounded-lg p-8 mb-10 border border-border shadow-lg">
+        <div className="bg-card rounded-lg p-4 sm:p-6 md:p-8 mb-8 sm:mb-10 border border-border shadow-lg">
           <Input
             type="text"
             value={searchTerm}
@@ -125,16 +125,16 @@ const RulesBrowser = () => {
             className="max-w-2xl mx-auto mb-8"
           />
           
-          <div className="space-y-6">
+            <div className="space-y-6">
             <div>
-              <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Area</h3>
-              <div className="flex flex-wrap gap-3">
+              <h3 className="text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">Area</h3>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {['All Areas', 'People', 'Self', 'Business'].map((area) => (
                   <Button
                     key={area}
                     onClick={() => setSelectedArea(area)}
                     variant={selectedArea === area ? "default" : "outline"}
-                    className={selectedArea === area ? "bg-primary text-primary-foreground" : ""}
+                    className={`text-xs sm:text-sm ${selectedArea === area ? "bg-primary text-primary-foreground" : ""}`}
                   >
                     {area}
                   </Button>
@@ -143,14 +143,14 @@ const RulesBrowser = () => {
             </div>
 
             <div>
-              <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Discipline</h3>
-              <div className="flex flex-wrap gap-3">
+              <h3 className="text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">Discipline</h3>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {['All Disciplines', 'Perception', 'Will', 'Action'].map((discipline) => (
                   <Button
                     key={discipline}
                     onClick={() => setSelectedDiscipline(discipline)}
                     variant={selectedDiscipline === discipline ? "default" : "outline"}
-                    className={selectedDiscipline === discipline ? "bg-primary text-primary-foreground" : ""}
+                    className={`text-xs sm:text-sm ${selectedDiscipline === discipline ? "bg-primary text-primary-foreground" : ""}`}
                   >
                     {discipline}
                   </Button>
@@ -159,14 +159,14 @@ const RulesBrowser = () => {
             </div>
 
             <div>
-              <h3 className="text-foreground text-sm font-semibold uppercase tracking-wider mb-3">Skill</h3>
-              <div className="flex flex-wrap gap-3">
+              <h3 className="text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">Skill</h3>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {['All Skills', 'Communication', 'Teamwork', 'Analytical skills', 'Empathy', 'Work ethic', 'Leadership', 'Self-management'].map((skill) => (
                   <Button
                     key={skill}
                     onClick={() => setSelectedSkill(skill)}
                     variant={selectedSkill === skill ? "default" : "outline"}
-                    className={selectedSkill === skill ? "bg-primary text-primary-foreground" : ""}
+                    className={`text-xs sm:text-sm ${selectedSkill === skill ? "bg-primary text-primary-foreground" : ""}`}
                   >
                     {skill}
                   </Button>
@@ -178,13 +178,14 @@ const RulesBrowser = () => {
               <Button
                 onClick={resetFilters}
                 variant="outline"
+                className="text-xs sm:text-sm"
               >
                 Reset All Filters
               </Button>
             </div>
           </div>
           
-          <div className="mt-5 text-center text-muted-foreground text-sm">
+          <div className="mt-5 text-center text-muted-foreground text-xs sm:text-sm">
             Showing {filteredRules.length} of {rulesData.length} rules
           </div>
         </div>
@@ -192,21 +193,21 @@ const RulesBrowser = () => {
         {/* Rules Grid */}
         <div id="rules-grid">
           {filteredRules.length === 0 ? (
-            <div className="text-center text-muted-foreground text-2xl mt-20 p-10 bg-card rounded-lg border border-border">
+            <div className="text-center text-muted-foreground text-xl sm:text-2xl mt-10 sm:mt-20 p-6 sm:p-10 bg-card rounded-lg border border-border">
               <h3 className="mb-2">No rules found matching your criteria.</h3>
-              <p className="text-lg">Try adjusting your search or filters.</p>
+              <p className="text-base sm:text-lg">Try adjusting your search or filters.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {filteredRules.map((rule, index) => {
               const cardKey = rule.title || `rule-${index}`;
               
               return (
                 <div
                   key={index}
-                  className="bg-card rounded-lg p-6 shadow-lg border border-border transition-all hover:shadow-xl flex flex-col"
+                  className="bg-card rounded-lg p-4 sm:p-6 shadow-lg border border-border transition-all hover:shadow-xl flex flex-col"
                 >
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
                     {rule.area && rule.area.map((area, idx) => (
                       <span 
                         key={idx} 
@@ -243,11 +244,11 @@ const RulesBrowser = () => {
                     )}
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-foreground mb-4 leading-tight">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-3 sm:mb-4 leading-tight">
                     {rule.title || 'Untitled'}
                   </h3>
                   
-                  <div className="mt-auto flex gap-2">
+                  <div className="mt-auto flex flex-col xs:flex-row gap-2">
                     <Button
                       onClick={() => openRuleDialog(rule)}
                       className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1"

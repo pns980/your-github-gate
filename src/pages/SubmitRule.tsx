@@ -88,9 +88,9 @@ const SubmitRule = () => {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">Submit a Rule</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Submit a Rule</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Share your own rule suggestion with us. We review all submissions and may add them to our collection.
           </p>
         </div>

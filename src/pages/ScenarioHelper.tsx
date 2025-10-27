@@ -237,20 +237,20 @@ const ScenarioHelper = () => {
   };
 
   return (
-    <div className="min-h-screen gradient-bg p-8">
+    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <Navigation currentPage="home" />
 
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec™ baby step forward</h1>
-          <p className="text-xl text-muted-foreground">Then go one better and find a #1 rule for life</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec™ baby step forward</h1>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Then go one better and find a #1 rule for life</p>
         </div>
 
         {/* Main Content Card */}
-        <div className="bg-card rounded-lg shadow-lg p-8 border border-border">
-          <div className="mb-8">
-            <label className="block mb-4 font-semibold text-foreground text-lg">
+        <div className="bg-card rounded-lg shadow-lg p-4 sm:p-6 md:p-8 border border-border">
+          <div className="mb-6 sm:mb-8">
+            <label className="block mb-3 sm:mb-4 font-semibold text-foreground text-base sm:text-lg">
               Describe your scenario
             </label>
             <Textarea
@@ -264,75 +264,76 @@ const ScenarioHelper = () => {
             </div>
           </div>
           
-          <div className="text-center mb-8">
+          <div className="text-center mb-6 sm:mb-8">
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 h-auto"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 h-auto w-full sm:w-auto"
             >
-              {loading ? "Scanning #1 rules for perfec™ guidance..." : "Get perfec™ guidance"}
+              <span className="hidden sm:inline">{loading ? "Scanning #1 rules for perfec™ guidance..." : "Get perfec™ guidance"}</span>
+              <span className="sm:hidden">{loading ? "Scanning..." : "Get perfec™ guidance"}</span>
             </Button>
             
-            <div className="mt-3 px-4">
+            <div className="mt-3 px-2 sm:px-4">
               <Button
                 onClick={generateRandomScenario}
                 disabled={loading}
                 variant="ghost"
-                className="text-sm text-muted-foreground hover:text-foreground whitespace-normal h-auto py-2"
+                className="text-xs sm:text-sm text-muted-foreground hover:text-foreground whitespace-normal h-auto py-2"
               >
                 I'm too lazy to come up with a scenario, let AI replace me for a bit and generate one
               </Button>
             </div>
             
             {loading && (
-              <div className="mt-4 flex items-center justify-center gap-3 text-muted-foreground">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                <span>Scanning #1 rules for perfec™ guidance...</span>
+              <div className="mt-4 flex items-center justify-center gap-2 sm:gap-3 text-muted-foreground px-2">
+                <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-primary flex-shrink-0"></div>
+                <span className="text-sm sm:text-base text-center">Scanning #1 rules for perfec™ guidance...</span>
               </div>
             )}
           </div>
           
           {response && (
-            <div className="bg-muted/50 rounded-lg p-8 border border-border">
-              <h2 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-2">
-                <Lightbulb className="h-6 w-6 text-accent" />
+            <div className="bg-muted/50 rounded-lg p-4 sm:p-6 md:p-8 border border-border">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground flex items-center gap-2">
+                <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                 Perfec™ Guidance
               </h2>
               
-              <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border border-border">
+              <div className="bg-card rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm border border-border">
                 <div className="text-foreground leading-relaxed whitespace-pre-wrap">
                   {response}
                 </div>
               </div>
               
-              <div className="bg-card rounded-lg p-6 mb-6 shadow-sm border border-border">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">
+              <div className="bg-card rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm border border-border">
+                <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-foreground">
                   How would you rate this response?
                 </h3>
-                <div className="flex gap-4 items-center">
+                <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 items-stretch xs:items-center">
                   <Button
                     onClick={() => handleRating('Liked')}
                     variant={rating === 'Liked' ? 'default' : 'outline'}
-                    className="flex items-center gap-2"
+                    className="flex items-center justify-center gap-2 flex-1"
                     disabled={rating !== null}
                   >
-                    <ThumbsUp className="h-5 w-5" />
-                    {rating === 'Liked' ? 'Liked' : 'Like'}
+                    <ThumbsUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="text-sm sm:text-base">{rating === 'Liked' ? 'Liked' : 'Like'}</span>
                   </Button>
                   <Button
                     onClick={() => handleRating('Not Liked')}
                     variant={rating === 'Not Liked' ? 'default' : 'outline'}
-                    className="flex items-center gap-2"
+                    className="flex items-center justify-center gap-2 flex-1"
                     disabled={rating !== null}
                   >
-                    <ThumbsDown className="h-5 w-5" />
-                    {rating === 'Not Liked' ? 'Not Liked' : 'Dislike'}
+                    <ThumbsDown className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="text-sm sm:text-base">{rating === 'Not Liked' ? 'Not Liked' : 'Dislike'}</span>
                   </Button>
                 </div>
               </div>
               
-              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">
+              <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
+                <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-foreground">
                   #1 Rules Applied
                 </h3>
                 <div className="text-foreground leading-relaxed space-y-4">
@@ -360,19 +361,19 @@ const ScenarioHelper = () => {
         </div>
 
         {/* Perfec™ Cycling Bullets */}
-        <div className="mt-8 bg-white rounded-lg p-8 border border-border shadow-lg">
-          <h2 className="text-2xl font-bold mb-6 text-foreground text-center">
+        <div className="mt-6 sm:mt-8 bg-white rounded-lg p-4 sm:p-6 md:p-8 border border-border shadow-lg">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground text-center">
             What is perfec™?
           </h2>
-          <div className="relative h-20 flex items-center justify-center overflow-hidden">
+          <div className="relative min-h-[80px] sm:h-20 flex items-center justify-center overflow-hidden px-2">
             {perfecBullets.map((bullet, index) => (
               <div
                 key={index}
-                className={`absolute inset-0 flex items-center justify-center px-4 transition-opacity duration-1000 ${
+                className={`absolute inset-0 flex items-center justify-center px-2 sm:px-4 transition-opacity duration-1000 ${
                   index === currentPerfecBullet ? 'opacity-100' : 'opacity-0'
                 }`}
               >
-                <p className="text-lg text-muted-foreground text-center italic">
+                <p className="text-sm sm:text-base md:text-lg text-muted-foreground text-center italic">
                   Perfec™ is {bullet}
                 </p>
               </div>

@@ -114,19 +114,19 @@ const RuleReview = () => {
   };
 
   return (
-    <div className="min-h-screen gradient-bg p-8">
+    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <Navigation currentPage="review" />
 
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Wanna one better for a bit?</h1>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Wanna one better for a bit?</h1>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-            <p className="text-xl text-muted-foreground">Leave your mark on a perfec™ #1 rule</p>
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Leave your mark on a perfec™ #1 rule</p>
             <Button 
               onClick={loadRandomRule} 
               disabled={rulesLoading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base"
             >
               {rulesLoading ? "Loading..." : "Give Me Another"}
             </Button>
@@ -137,16 +137,16 @@ const RuleReview = () => {
         {currentRule ? (
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl">{currentRule.title}</CardTitle>
+              <CardTitle className="text-xl sm:text-2xl break-words">{currentRule.title}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+            <CardContent className="space-y-4 sm:space-y-6">
+              <p className="text-sm sm:text-base text-muted-foreground whitespace-pre-wrap leading-relaxed">
                 {currentRule.description}
               </p>
 
-              <div className="space-y-6 pt-4 border-t">
-                <div className="space-y-3">
-                  <Label className="text-base font-semibold">
+              <div className="space-y-4 sm:space-y-6 pt-4 border-t">
+                <div className="space-y-2 sm:space-y-3">
+                  <Label className="text-sm sm:text-base font-semibold">
                     Does it resonate?
                   </Label>
                   <RadioGroup value={resonates} onValueChange={setResonates}>
@@ -165,8 +165,8 @@ const RuleReview = () => {
                   </RadioGroup>
                 </div>
 
-                <div className="space-y-3">
-                  <Label className="text-base font-semibold">
+                <div className="space-y-2 sm:space-y-3">
+                  <Label className="text-sm sm:text-base font-semibold">
                     Do you find it applicable?
                   </Label>
                   <RadioGroup value={applicable} onValueChange={setApplicable}>
@@ -185,8 +185,8 @@ const RuleReview = () => {
                   </RadioGroup>
                 </div>
 
-                <div className="space-y-3">
-                  <Label className="text-base font-semibold">
+                <div className="space-y-2 sm:space-y-3">
+                  <Label className="text-sm sm:text-base font-semibold">
                     Did you learn anything new?
                   </Label>
                   <RadioGroup value={learnedNew} onValueChange={setLearnedNew}>
@@ -205,8 +205,8 @@ const RuleReview = () => {
                   </RadioGroup>
                 </div>
 
-                <div className="space-y-3">
-                  <Label htmlFor="thoughts" className="text-base font-semibold">
+                <div className="space-y-2 sm:space-y-3">
+                  <Label htmlFor="thoughts" className="text-sm sm:text-base font-semibold">
                     Share your thoughts, an example or an addition to the rule.
                   </Label>
                   <Textarea
@@ -218,11 +218,11 @@ const RuleReview = () => {
                   />
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col xs:flex-row gap-3">
                   <Link to="/rules" className="flex-1">
                     <Button
                       variant="outline"
-                      className="w-full"
+                      className="w-full text-sm sm:text-base"
                       size="lg"
                     >
                       Back to List
@@ -231,7 +231,7 @@ const RuleReview = () => {
                   <Button
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base"
                     size="lg"
                   >
                     {submitting ? "Submitting..." : "Submit"}

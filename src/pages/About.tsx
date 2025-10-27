@@ -5,19 +5,19 @@ import { ArrowLeft } from "lucide-react";
 const About = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
         <Link to="/">
-          <Button variant="ghost" className="mb-6">
+          <Button variant="ghost" className="mb-4 sm:mb-6 text-sm sm:text-base">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Button>
         </Link>
 
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <h1 className="text-4xl font-bold mb-8 text-foreground">About Number One Rules</h1>
+        <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 text-foreground">About Number One Rules</h1>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">Why start writing down "Number One Rules"?</h2>
+          <section className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">Why start writing down "Number One Rules"?</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
               I loved the idea Marcus Aurelius followed - keeping a journal that would help him become a better parent, friend, stoic and emperor. He never meant to publish it. Yet here we are almost two thousands year later still finding pragmatic and overarching truths as we read it. I'm nowhere near thinking the "Number One Rules" would have a similar depth, weight and impact. I'm simply in love with the idea of putting thoughts "to paper", sharing them and letting things take shape. The main audience I kept in mind was my family, friends and self. The name "Number One Rules" comes from a running joke we had with the team at work. Whenever someone would make a mistake, the comment would usually be: "How could you forget the No. 1 Rule? Always ask for a discount!" or something of the sort.
             </p>
@@ -35,8 +35,8 @@ const About = () => {
             </p>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">What's perfec™?</h2>
+          <section className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">What's perfec™?</h2>
             <p className="text-muted-foreground leading-relaxed mb-2">Perfec™ is:</p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>the celebration of being one better than yesterday</li>
@@ -52,22 +52,22 @@ const About = () => {
             </ul>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">Why format the rules this way?</h2>
+          <section className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">Why format the rules this way?</h2>
             <p className="text-muted-foreground leading-relaxed">
               The short title is for reference, but also to hopefully inspire a rhyming thought or sentiment with the reader. The description is meant to be long enough to provide the essence of a personal interpretation of a rule paired with anecdotal examples and/or stories to back it up. The categories I used refer to the three stoic disciplines (will, action, perception), three areas one person should professionally develop (self-, people and business/process management) and the contemporary, for the lack of a better word "corporate"-sounding skills used only to help organize the content in a manner slightly more intuitive than a randomly numbered list.
             </p>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">Why do I believe "Number One Rules" hold any water?</h2>
+          <section className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">Why do I believe "Number One Rules" hold any water?</h2>
             <p className="text-muted-foreground leading-relaxed">
               Because they helped me or those around me move forward. Most tangibly this happened in the context of a company which I was lucky to be part of building. It was called Melon and got acquired around its 20th birthday. The name lost, but the spirit and values certainly not. In its prime it was often referred to as the "hidden gem". A cause for many locals to reignite their belief that there's an alternative to the "kiss up, kick down" attitude traditionally and lazily perceived the only possibility in a Balkan company. And a cause for many non-Balkan clients and partners to rediscover value and humanity where perhaps they'd not expect it. From beginning to end, I'm willing to argue it was living proof that a strong moral compass doesn't come at a cost of success. Which, I guess, would depend on any single person's definition, but this is exactly the type of discussion I would enjoy having.
             </p>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4 text-foreground">The AI factor</h2>
+          <section className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">The AI factor</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
               As I started writing these a parallel phenomenon was developing in the wider ether of reality. Artificial intelligence broke out from an abstract computer science term sporadically mentioned. and much less frequently understood, into anything from a life-changing, career-threatening tech to the final omen of our species' self-destructive tragicomic exit from meaningful existence. While I certainly joined following the news and the possibilities accompanying AI tools, the main question I kept asking was how the hell will this influence us sense of being human, mostly with each other. Drawing an analogy between the AI revolution and, say, industrial or internet revolution I don't think does it justice. The shift will be faster, deeper and broader.
             </p>

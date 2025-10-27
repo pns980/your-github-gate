@@ -49,14 +49,14 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-8">
+    <div className="min-h-screen bg-background p-4 sm:p-6 md:p-8">
       <div className="max-w-2xl mx-auto">
-        <Link to="/" className="text-primary hover:underline mb-6 inline-block">
+        <Link to="/" className="text-primary hover:underline mb-4 sm:mb-6 inline-block text-sm sm:text-base">
           ← Back to Home
         </Link>
         
-        <h1 className="text-4xl font-bold mb-2">Contact Us</h1>
-        <p className="text-muted-foreground mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">Contact Us</h1>
+        <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
           Have a question or feedback? Send us a message.
         </p>
 
