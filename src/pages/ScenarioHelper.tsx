@@ -243,7 +243,7 @@ const ScenarioHelper = () => {
 
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec™ baby step forward</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec™ step forward in a personal, team- or business-related conundrum</h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Then go one better and find a #1 rule for life</p>
         </div>
 
