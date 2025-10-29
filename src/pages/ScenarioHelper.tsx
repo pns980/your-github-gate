@@ -73,26 +73,51 @@ const ScenarioHelper = () => {
 
   const generateRandomScenario = () => {
     const randomScenarios = [
-      "I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?",
-      "My colleague takes credit for my ideas in meetings. What's the best way to handle this?",
-      "I'm struggling to balance multiple priorities at work. How can I manage my time better?",
+      // Personal scenarios
+      "I'm struggling to maintain a healthy work-life balance and feeling burned out. What steps should I take?",
       "A close friend always cancels plans at the last minute. How should I address this without damaging our friendship?",
       "I want to start exercising regularly but can't seem to stick to a routine. What approach should I take?",
       "I've been procrastinating on an important personal project for months. How do I overcome this?",
       "My friend is going through a tough time, but I don't know how to help. What's the best way to support them?",
       "I spend too much time on social media and it's affecting my productivity. How can I break this habit?",
-      "I want to learn a new skill but feel overwhelmed by where to start. What should I do?",
       "A family member constantly criticizes my life choices. How should I set boundaries?",
       "I'm feeling stuck in my personal growth and unsure of my next steps. How do I move forward?",
-      "I started a new hobby but I'm not progressing as fast as I'd like. Should I keep going or try something else?",
       "My sleep schedule is a mess and it's affecting everything. How can I fix this?",
       "I have a hard time saying no to people and end up overcommitted. How do I change this pattern?",
       "I want to be more consistent with reading but always end up choosing TV instead. What can I do?",
       "A friend borrowed money and hasn't paid me back. How should I bring this up?",
       "I'm trying to eat healthier but keep falling back into old habits. What's a sustainable approach?",
       "I feel like I'm not making meaningful connections with people. How can I build deeper friendships?",
-      "I made a significant mistake on a project. How do I own up to it?",
-      "I'm comparing myself to others on social media and feeling inadequate. How do I stop this?"
+      "I'm comparing myself to others on social media and feeling inadequate. How do I stop this?",
+      
+      // Team scenarios
+      "I have a team member who consistently misses deadlines and it's affecting our project deliverables. How should I address this situation professionally?",
+      "My colleague takes credit for my ideas in meetings. What's the best way to handle this?",
+      "There's tension between two team members that's affecting group dynamics. How should I intervene?",
+      "Our team meetings feel unproductive and people seem disengaged. How can we improve them?",
+      "I need to delegate tasks but I'm worried about quality control. How do I let go effectively?",
+      "A team member is resistant to feedback and becomes defensive. How should I approach this?",
+      "Our team is struggling with remote collaboration and communication. What systems should we put in place?",
+      "I'm the newest member of the team and feel like an outsider. How can I integrate better?",
+      "There's a lack of accountability on our team for following through on commitments. How do we fix this?",
+      "My team is experiencing high turnover and morale is low. What steps can we take?",
+      
+      // Business scenarios
+      "I'm struggling to prioritize between multiple urgent client requests. How should I make these decisions?",
+      "A client is being unreasonable with their demands and timeline. How should I set boundaries?",
+      "I need to give critical feedback to my manager about our department's direction. What's the best approach?",
+      "Our company is going through organizational changes and employees are anxious. How should leadership communicate?",
+      "I want to propose a new initiative but I'm not sure how to build support. What's the best strategy?",
+      "A key stakeholder keeps changing project requirements midstream. How do I manage this?",
+      "I'm considering a career change but worried about the financial risk. How should I evaluate this decision?",
+      "Our department is over budget and I need to cut costs. How do I make these difficult choices?",
+      "I have an idea for improving our business process but it challenges the status quo. How do I present it?",
+      "We're losing market share to competitors. What framework should we use to analyze and respond?",
+      "I need to have a difficult conversation about performance with a long-term employee. How should I prepare?",
+      "Our business is growing rapidly but systems aren't keeping up. How do we scale effectively?",
+      "I'm being asked to compromise on quality to meet a deadline. How do I handle this ethical dilemma?",
+      "There's a toxic culture in our organization that leadership isn't addressing. What can I do?",
+      "I want to negotiate a raise but don't know how to make my case. What approach should I take?"
     ];
     
     const randomIndex = Math.floor(Math.random() * randomScenarios.length);
@@ -243,7 +268,7 @@ const ScenarioHelper = () => {
 
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec™ step forward in a personal, team- or business-related conundrum</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Find the perfec™ step forward in a personal, team or business conundrum</h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Then go one better and find a #1 rule for life</p>
         </div>
 
