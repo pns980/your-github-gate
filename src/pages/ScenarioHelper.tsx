@@ -249,9 +249,7 @@ const ScenarioHelper = () => {
               color: "hsl(0 0% 85%)",
             }}
           >
-            Find the next step forward <br />
-            ...and then a #1 rule for
-            life                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+            Find a #1 Rule for life
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
             Resolve a personal, team or business conundrum                               
