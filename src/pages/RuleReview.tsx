@@ -10,16 +10,17 @@ import { useToast } from "@/hooks/use-toast";
 import { useRules } from "@/hooks/useRules";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-
 interface Rule {
   id: string;
   title: string;
   description: string;
 }
-
 const RuleReview = () => {
   const location = useLocation();
-  const { data: allRules, loading: rulesLoading } = useRules();
+  const {
+    data: allRules,
+    loading: rulesLoading
+  } = useRules();
   const [currentRule, setCurrentRule] = useState<Rule | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -27,8 +28,9 @@ const RuleReview = () => {
   const [applicable, setApplicable] = useState<string>("");
   const [learnedNew, setLearnedNew] = useState<string>("");
   const [thoughts, setThoughts] = useState("");
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     // Check if a rule was passed via navigation state
     if (location.state?.rule) {
@@ -51,17 +53,15 @@ const RuleReview = () => {
       loadRandomRule();
     }
   }, [rulesLoading, allRules, currentRule, location.state]);
-
   const loadRandomRule = () => {
     if (!allRules || allRules.length === 0) {
       toast({
         title: "No rules found",
         description: "Please add some rules first.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-
     const randomIndex = Math.floor(Math.random() * allRules.length);
     setCurrentRule(allRules[randomIndex]);
     setResonates("");
@@ -69,73 +69,67 @@ const RuleReview = () => {
     setLearnedNew("");
     setThoughts("");
   };
-
   const handleSubmit = async () => {
     if (!currentRule) return;
-
     if (!resonates || !applicable || !learnedNew) {
       toast({
         title: "Please answer all questions",
         description: "All yes/no questions are required.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("rule_responses").insert({
+      const {
+        error
+      } = await supabase.from("rule_responses").insert({
         rule_title: currentRule.title,
         resonates: resonates === "yes",
         applicable: applicable === "yes",
         learned_new: learnedNew === "yes",
-        thoughts: thoughts.trim(),
+        thoughts: thoughts.trim()
       });
-
       if (error) throw error;
-
       toast({
         title: "Response submitted",
-        description: "Thank you for your feedback!",
+        description: "Thank you for your feedback!"
       });
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
       loadRandomRule();
     } catch (error) {
       console.error("Error submitting response:", error);
       toast({
         title: "Error",
         description: "Failed to submit response.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setSubmitting(false);
     }
   };
-
-  return (
-    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
+  return <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <Navigation currentPage="review" />
 
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Wanna one better for a bit?</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{
+          color: 'hsl(0 0% 85%)'
+        }}>Leave your mark on a #1 rule</h1>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Leave your mark on a perfec™ #1 rule</p>
-            <Button 
-              onClick={loadRandomRule} 
-              disabled={rulesLoading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base"
-            >
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Become a part of the perfec™ movement                </p>
+            <Button onClick={loadRandomRule} disabled={rulesLoading} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base">
               {rulesLoading ? "Loading..." : "Give Me Another"}
             </Button>
           </div>
         </div>
 
         {/* Rule Card */}
-        {currentRule ? (
-          <Card className="shadow-lg">
+        {currentRule ? <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl sm:text-2xl break-words">{currentRule.title}</CardTitle>
             </CardHeader>
@@ -209,51 +203,31 @@ const RuleReview = () => {
                   <Label htmlFor="thoughts" className="text-sm sm:text-base font-semibold">
                     Share your thoughts, an example or an addition to the rule.
                   </Label>
-                  <Textarea
-                    id="thoughts"
-                    placeholder="Your thoughts..."
-                    value={thoughts}
-                    onChange={(e) => setThoughts(e.target.value)}
-                    rows={4}
-                  />
+                  <Textarea id="thoughts" placeholder="Your thoughts..." value={thoughts} onChange={e => setThoughts(e.target.value)} rows={4} />
                 </div>
 
                 <div className="flex flex-col xs:flex-row gap-3">
                   <Link to="/rules" className="flex-1">
-                    <Button
-                      variant="outline"
-                      className="w-full text-sm sm:text-base"
-                      size="lg"
-                    >
+                    <Button variant="outline" className="w-full text-sm sm:text-base" size="lg">
                       Back to List
                     </Button>
                   </Link>
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={submitting}
-                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base"
-                    size="lg"
-                  >
+                  <Button onClick={handleSubmit} disabled={submitting} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base" size="lg">
                     {submitting ? "Submitting..." : "Submit"}
                   </Button>
                 </div>
               </div>
             </CardContent>
-          </Card>
-        ) : (
-          <Card className="shadow-lg">
+          </Card> : <Card className="shadow-lg">
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground mb-4">
                 Click "Give Me Another" to start reviewing rules
               </p>
             </CardContent>
-          </Card>
-        )}
+          </Card>}
       </div>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default RuleReview;
