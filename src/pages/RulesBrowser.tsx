@@ -7,12 +7,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useRules } from "@/hooks/useRules";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-
 const RulesBrowser = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { data: rulesData } = useRules();
+  const {
+    data: rulesData
+  } = useRules();
   const [filteredRules, setFilteredRules] = useState<Rule[]>([]);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [selectedArea, setSelectedArea] = useState(searchParams.get('area') || 'All Areas');
@@ -25,9 +26,7 @@ const RulesBrowser = () => {
   useEffect(() => {
     if (location.state?.openRuleTitle && rulesData && rulesData.length > 0) {
       const titleToFind = location.state.openRuleTitle.trim().toLowerCase();
-      const ruleToOpen = rulesData.find(r => 
-        r.title.trim().toLowerCase() === titleToFind
-      );
+      const ruleToOpen = rulesData.find(r => r.title.trim().toLowerCase() === titleToFind);
       if (ruleToOpen) {
         setSelectedRule(ruleToOpen);
         setIsDialogOpen(true);
@@ -36,7 +35,6 @@ const RulesBrowser = () => {
       }
     }
   }, [location.state, rulesData]);
-
   useEffect(() => {
     applyFilters();
     // Update URL with current filter state
@@ -45,7 +43,9 @@ const RulesBrowser = () => {
     if (selectedArea !== 'All Areas') params.set('area', selectedArea);
     if (selectedDiscipline !== 'All Disciplines') params.set('discipline', selectedDiscipline);
     if (selectedSkill !== 'All Skills') params.set('skill', selectedSkill);
-    setSearchParams(params, { replace: true });
+    setSearchParams(params, {
+      replace: true
+    });
   }, [searchTerm, rulesData, selectedArea, selectedDiscipline, selectedSkill, setSearchParams]);
 
   // Scroll to rules grid when search params are present
@@ -54,132 +54,105 @@ const RulesBrowser = () => {
       const rulesGrid = document.getElementById('rules-grid');
       if (rulesGrid) {
         setTimeout(() => {
-          rulesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          rulesGrid.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
         }, 100);
       }
     }
   }, [searchParams]);
-
   const applyFilters = () => {
     const filtered = rulesData.filter(rule => {
       const title = rule.title || '';
       const description = rule.description || '';
       const q = searchTerm.toLowerCase();
       const matchesSearch = !q || title.toLowerCase().includes(q) || description.toLowerCase().includes(q);
-
       let matchesArea = selectedArea === 'All Areas';
       if (!matchesArea && rule.area && rule.area.length > 0) {
         matchesArea = rule.area.some(a => a.toLowerCase() === selectedArea.toLowerCase());
       }
-
       let matchesDiscipline = selectedDiscipline === 'All Disciplines';
       if (!matchesDiscipline && rule.discipline) {
         matchesDiscipline = rule.discipline.toLowerCase().trim() === selectedDiscipline.toLowerCase();
       }
-
       let matchesSkill = selectedSkill === 'All Skills';
       if (!matchesSkill && rule.skill) {
         matchesSkill = rule.skill.toLowerCase().trim() === selectedSkill.toLowerCase();
       }
-
       return matchesSearch && matchesArea && matchesDiscipline && matchesSkill;
     });
-    
     setFilteredRules(filtered);
   };
-
   const resetFilters = () => {
     setSearchTerm('');
     setSelectedArea('All Areas');
     setSelectedDiscipline('All Disciplines');
     setSelectedSkill('All Skills');
   };
-
   const openRuleDialog = (rule: Rule) => {
     setSelectedRule(rule);
     setIsDialogOpen(true);
   };
-
   const handlePerfecIt = (rule: Rule) => {
-    navigate('/review', { state: { rule } });
+    navigate('/review', {
+      state: {
+        rule
+      }
+    });
   };
-
-  return (
-    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
+  return <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <Navigation currentPage="rules" />
 
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 90%)' }}>Indulge your perfec™ism</h1>
-          <p className="text-base sm:text-lg md:text-xl text-muted-foreground">The complete list of almost all #1 rules.</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{
+          color: 'hsl(0 0% 90%)'
+        }}>The complete list of almost all #1 rules
+
+
+
+
+
+        </h1>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Indulge your perfec™ism</p>
         </div>
         
         {/* Filters Card */}
         <div className="bg-card rounded-lg p-4 sm:p-6 md:p-8 mb-8 sm:mb-10 border border-border shadow-lg">
-          <Input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Enter any keyword and find a related #1 rule..."
-            className="max-w-2xl mx-auto mb-8"
-          />
+          <Input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Enter any keyword and find a related #1 rule..." className="max-w-2xl mx-auto mb-8" />
           
             <div className="space-y-6">
             <div>
               <h3 className="text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">Area</h3>
               <div className="flex flex-wrap gap-2 sm:gap-3">
-                {['All Areas', 'People', 'Self', 'Business'].map((area) => (
-                  <Button
-                    key={area}
-                    onClick={() => setSelectedArea(area)}
-                    variant={selectedArea === area ? "default" : "outline"}
-                    className={`text-xs sm:text-sm ${selectedArea === area ? "bg-primary text-primary-foreground" : ""}`}
-                  >
+                {['All Areas', 'People', 'Self', 'Business'].map(area => <Button key={area} onClick={() => setSelectedArea(area)} variant={selectedArea === area ? "default" : "outline"} className={`text-xs sm:text-sm ${selectedArea === area ? "bg-primary text-primary-foreground" : ""}`}>
                     {area}
-                  </Button>
-                ))}
+                  </Button>)}
               </div>
             </div>
 
             <div>
               <h3 className="text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">Discipline</h3>
               <div className="flex flex-wrap gap-2 sm:gap-3">
-                {['All Disciplines', 'Perception', 'Will', 'Action'].map((discipline) => (
-                  <Button
-                    key={discipline}
-                    onClick={() => setSelectedDiscipline(discipline)}
-                    variant={selectedDiscipline === discipline ? "default" : "outline"}
-                    className={`text-xs sm:text-sm ${selectedDiscipline === discipline ? "bg-primary text-primary-foreground" : ""}`}
-                  >
+                {['All Disciplines', 'Perception', 'Will', 'Action'].map(discipline => <Button key={discipline} onClick={() => setSelectedDiscipline(discipline)} variant={selectedDiscipline === discipline ? "default" : "outline"} className={`text-xs sm:text-sm ${selectedDiscipline === discipline ? "bg-primary text-primary-foreground" : ""}`}>
                     {discipline}
-                  </Button>
-                ))}
+                  </Button>)}
               </div>
             </div>
 
             <div>
               <h3 className="text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">Skill</h3>
               <div className="flex flex-wrap gap-2 sm:gap-3">
-                {['All Skills', 'Communication', 'Teamwork', 'Analytical skills', 'Empathy', 'Work ethic', 'Leadership', 'Self-management'].map((skill) => (
-                  <Button
-                    key={skill}
-                    onClick={() => setSelectedSkill(skill)}
-                    variant={selectedSkill === skill ? "default" : "outline"}
-                    className={`text-xs sm:text-sm ${selectedSkill === skill ? "bg-primary text-primary-foreground" : ""}`}
-                  >
+                {['All Skills', 'Communication', 'Teamwork', 'Analytical skills', 'Empathy', 'Work ethic', 'Leadership', 'Self-management'].map(skill => <Button key={skill} onClick={() => setSelectedSkill(skill)} variant={selectedSkill === skill ? "default" : "outline"} className={`text-xs sm:text-sm ${selectedSkill === skill ? "bg-primary text-primary-foreground" : ""}`}>
                     {skill}
-                  </Button>
-                ))}
+                  </Button>)}
               </div>
             </div>
 
             <div className="text-center">
-              <Button
-                onClick={resetFilters}
-                variant="outline"
-                className="text-xs sm:text-sm"
-              >
+              <Button onClick={resetFilters} variant="outline" className="text-xs sm:text-sm">
                 Reset All Filters
               </Button>
             </div>
@@ -192,56 +165,32 @@ const RulesBrowser = () => {
         
         {/* Rules Grid */}
         <div id="rules-grid">
-          {filteredRules.length === 0 ? (
-            <div className="text-center text-muted-foreground text-xl sm:text-2xl mt-10 sm:mt-20 p-6 sm:p-10 bg-card rounded-lg border border-border">
+          {filteredRules.length === 0 ? <div className="text-center text-muted-foreground text-xl sm:text-2xl mt-10 sm:mt-20 p-6 sm:p-10 bg-card rounded-lg border border-border">
               <h3 className="mb-2">No rules found matching your criteria.</h3>
               <p className="text-base sm:text-lg">Try adjusting your search or filters.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            </div> : <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {filteredRules.map((rule, index) => {
-              const cardKey = rule.title || `rule-${index}`;
-              
-              return (
-                <div
-                  key={index}
-                  className="bg-card rounded-lg p-4 sm:p-6 shadow-lg border border-border transition-all hover:shadow-xl flex flex-col"
-                >
+            const cardKey = rule.title || `rule-${index}`;
+            return <div key={index} className="bg-card rounded-lg p-4 sm:p-6 shadow-lg border border-border transition-all hover:shadow-xl flex flex-col">
                   <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-                    {rule.area && rule.area.map((area, idx) => (
-                      <span 
-                        key={idx} 
-                        className="px-3 py-1 rounded-full text-xs font-semibold uppercase"
-                        style={{ 
-                          backgroundColor: 'hsl(var(--tag-area))', 
-                          color: 'hsl(var(--tag-area-foreground))' 
-                        }}
-                      >
+                    {rule.area && rule.area.map((area, idx) => <span key={idx} className="px-3 py-1 rounded-full text-xs font-semibold uppercase" style={{
+                  backgroundColor: 'hsl(var(--tag-area))',
+                  color: 'hsl(var(--tag-area-foreground))'
+                }}>
                         {area}
-                      </span>
-                    ))}
-                    {rule.discipline && (
-                      <span 
-                        className="px-3 py-1 rounded-full text-xs font-semibold uppercase"
-                        style={{ 
-                          backgroundColor: 'hsl(var(--tag-discipline))', 
-                          color: 'hsl(var(--tag-discipline-foreground))' 
-                        }}
-                      >
+                      </span>)}
+                    {rule.discipline && <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase" style={{
+                  backgroundColor: 'hsl(var(--tag-discipline))',
+                  color: 'hsl(var(--tag-discipline-foreground))'
+                }}>
                         {rule.discipline}
-                      </span>
-                    )}
-                    {rule.skill && (
-                      <span 
-                        className="px-3 py-1 rounded-full text-xs font-semibold uppercase"
-                        style={{ 
-                          backgroundColor: 'hsl(var(--tag-skill))', 
-                          color: 'hsl(var(--tag-skill-foreground))' 
-                        }}
-                      >
+                      </span>}
+                    {rule.skill && <span className="px-3 py-1 rounded-full text-xs font-semibold uppercase" style={{
+                  backgroundColor: 'hsl(var(--tag-skill))',
+                  color: 'hsl(var(--tag-skill-foreground))'
+                }}>
                         {rule.skill}
-                      </span>
-                    )}
+                      </span>}
                   </div>
                   
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-3 sm:mb-4 leading-tight">
@@ -249,27 +198,16 @@ const RulesBrowser = () => {
                   </h3>
                   
                   <div className="mt-auto flex flex-col xs:flex-row gap-2">
-                    <Button
-                      onClick={() => openRuleDialog(rule)}
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1"
-                      size="sm"
-                    >
+                    <Button onClick={() => openRuleDialog(rule)} className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1" size="sm">
                       Read More
                     </Button>
-                    <Button
-                      onClick={() => handlePerfecIt(rule)}
-                      variant="outline"
-                      className="flex-1"
-                      size="sm"
-                    >
+                    <Button onClick={() => handlePerfecIt(rule)} variant="outline" className="flex-1" size="sm">
                       Perfec™ it
                     </Button>
                   </div>
-                </div>
-              );
-            })}
-            </div>
-          )}
+                </div>;
+          })}
+            </div>}
         </div>
 
         {/* Rule Detail Dialog */}
@@ -286,28 +224,23 @@ const RulesBrowser = () => {
               </p>
             </div>
             <div className="flex gap-2 mt-6">
-              <Button
-                onClick={() => {
-                  setIsDialogOpen(false);
-                  // If we came from scenario helper, navigate back with state
-                  if (location.state?.returnTo === 'scenario' && location.state?.scenarioState) {
-                    navigate('/', { state: location.state.scenarioState });
-                  }
-                }}
-                variant="outline"
-                className="flex-1"
-              >
+              <Button onClick={() => {
+              setIsDialogOpen(false);
+              // If we came from scenario helper, navigate back with state
+              if (location.state?.returnTo === 'scenario' && location.state?.scenarioState) {
+                navigate('/', {
+                  state: location.state.scenarioState
+                });
+              }
+            }} variant="outline" className="flex-1">
                 {location.state?.returnTo === 'scenario' ? 'Back to Guidance' : 'Back to List'}
               </Button>
-              <Button
-                onClick={() => {
-                  if (selectedRule) {
-                    setIsDialogOpen(false);
-                    handlePerfecIt(selectedRule);
-                  }
-                }}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1"
-              >
+              <Button onClick={() => {
+              if (selectedRule) {
+                setIsDialogOpen(false);
+                handlePerfecIt(selectedRule);
+              }
+            }} className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1">
                 Perfec™ it
               </Button>
             </div>
@@ -316,8 +249,6 @@ const RulesBrowser = () => {
       </div>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default RulesBrowser;
