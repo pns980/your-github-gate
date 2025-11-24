@@ -186,8 +186,8 @@ const ScenarioHelper = () => {
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{
           color: 'hsl(0 0% 85%)'
-        }}>Find the next step forward 
-...and then a #1 rule for life                                          </h1>
+        }}>Find the next step forward
+...and then a #1 rule for life                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Resolve a personal, team or business conundrum                               </p>
         </div>
 
