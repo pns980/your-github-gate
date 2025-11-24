@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-
 const About = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
       <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
         <Link to="/">
           <Button variant="ghost" className="mb-4 sm:mb-6 text-sm sm:text-base">
@@ -22,7 +20,7 @@ const About = () => {
               I loved the idea Marcus Aurelius followed - keeping a journal that would help him become a better parent, friend, stoic and emperor. He never meant to publish it. Yet here we are almost two thousands year later still finding pragmatic and overarching truths as we read it. I'm nowhere near thinking the "Number One Rules" would have a similar depth, weight and impact. I'm simply in love with the idea of putting thoughts "to paper", sharing them and letting things take shape. The main audience I kept in mind was my family, friends and self. The name "Number One Rules" comes from a running joke we had with the team at work. Whenever someone would make a mistake, the comment would usually be: "How could you forget the No. 1 Rule? Always ask for a discount!" or something of the sort.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Not because it's an invaluable resource, but I can't escape the feeling that it could be a waste not to share any of the insights. Each of these at some point resonated deeply, helping make sense of a situation and hinting to a practical next step. If the same happens to a reader - fantastic! If not - nothing is lost. I would be absolutely delighted to see the rules of every person I've collaborated with in any capacity. Wouldn't it be like having a magical window into a person's way of thinking? You can also think of it as a "Working with..." doc on steroids.
+              Not because it's an invaluable resource, but I can't escape the feeling that it could be a waste not to share any of the insights. Each of these at some point resonated deeply, helping make sense of a situation and hinting to a practical next step. If the same happens to a reader - fantastic! If not - nothing is lost. I would be absolutely delighted to see the rules of every person I've collaborated with in any capacity. Wouldn't it be like having a magical window into a person's way of thinking? You can also think of it as a &quot;Working with...&quot; doc on steroids. The plan is to openly invite friends and colleagues to review and contribute. No great deeds can be accomplished on your own after all.                               
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
               These are not necessarily eternal truths. Just claims I believe, but also just as willing to doubt at the exact same time. When applied or instantiated in a practical scenario - absolutely, one must make a choice what is true and live with the consequences. But in abstract context they're absolutely up for debate and, hopefully, improvement. What was true yesterday, needn't be true today. And vice versa. The contradictions are probably numerous, the wording imperfect, the advertised pragmatism hidden, but it beats an empty page or thoughts lost the next morning. Yet, the sense of some fundamental principles or a system of thought is present, e.g. a call for compassion, a belief in common human decency, and yes - welcoming of contradictions, mistakes and disagreements, even if its just an internal monologue. I totally expect to apply changes myself on a regular basis and keep this as a live document. I'm positive there's beautiful rules to be recorded, disproved and re-discovered. Last thing we need is another bible.
@@ -89,8 +87,6 @@ const About = () => {
           <Link to="/contact" className="hover:text-primary">Contact</Link>
         </footer>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default About;
