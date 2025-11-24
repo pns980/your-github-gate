@@ -183,7 +183,7 @@ const ScenarioHelper = () => {
         <Navigation currentPage="home" />
 
         {/* Page Title */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-4 sm:mb-6">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{
           color: "hsl(0 0% 85%)"
         }}>
