@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, FileText, MessageSquare, Mail, BookOpen, Lightbulb } from "lucide-react";
+import { LayoutDashboard, FileText, MessageSquare, Mail, BookOpen, Lightbulb, FileEdit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const AdminNavigation = () => {
@@ -12,6 +12,7 @@ const AdminNavigation = () => {
     { to: "/guidance", icon: Lightbulb, label: "Guidance" },
     { to: "/messages", icon: Mail, label: "Messages" },
     { to: "/suggestions", icon: MessageSquare, label: "Suggestions" },
+    { to: "/pages", icon: FileEdit, label: "Pages" },
   ];
 
   return (
