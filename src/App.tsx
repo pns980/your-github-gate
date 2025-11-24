@@ -20,7 +20,6 @@ import Terms from "./pages/Terms";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SubmitRule from "./pages/SubmitRule";
 import SuggestionsManagement from "./pages/SuggestionsManagement";
-import PagesManagement from "./pages/PagesManagement";
 import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
@@ -47,7 +46,6 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
           <Route path="/suggestions" element={<ProtectedRoute><SuggestionsManagement /></ProtectedRoute>} />
-          <Route path="/pages" element={<ProtectedRoute><PagesManagement /></ProtectedRoute>} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
