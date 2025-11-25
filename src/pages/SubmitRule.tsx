@@ -90,8 +90,8 @@ const SubmitRule = () => {
         <Navigation currentPage="submit" />
         <div className="max-w-2xl mx-auto">
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Submit a Rule</h1>
-          <p className="text-sm sm:text-base text-muted-foreground">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Submit a Rule</h1>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
             Share your own rule suggestion with us. We review all submissions and may add them to our collection.
           </p>
         </div>

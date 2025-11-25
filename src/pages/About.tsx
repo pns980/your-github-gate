@@ -8,7 +8,7 @@ const About = () => {
         <Navigation currentPage="about" />
 
         <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 text-foreground">About Number One Rules</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8" style={{ color: 'hsl(0 0% 85%)' }}>About Number One Rules</h1>
 
           <section className="mb-6 sm:mb-8">
             <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
