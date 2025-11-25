@@ -103,7 +103,7 @@ const SubmitRule = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title *</FormLabel>
+                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Title *</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter rule title" {...field} />
                   </FormControl>
@@ -117,7 +117,7 @@ const SubmitRule = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description *</FormLabel>
+                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Description *</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Describe your rule in detail"
@@ -135,7 +135,7 @@ const SubmitRule = () => {
               name="area"
               render={() => (
                 <FormItem>
-                  <FormLabel>Area * (select all that apply)</FormLabel>
+                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Area * (select all that apply)</FormLabel>
                   <FormDescription>
                     Choose the areas where this rule applies
                   </FormDescription>
@@ -182,7 +182,7 @@ const SubmitRule = () => {
               name="discipline"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Discipline *</FormLabel>
+                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Discipline *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -207,7 +207,7 @@ const SubmitRule = () => {
               name="skill"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Skill *</FormLabel>
+                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Skill *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
