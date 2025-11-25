@@ -123,7 +123,7 @@ const RuleReview = () => {
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Become a part of the perfec™ movement                </p>
             <Button onClick={loadRandomRule} disabled={rulesLoading} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base">
-              {rulesLoading ? "Loading..." : "Give Me Another"}
+              {rulesLoading ? "Loading..." : "Not feeling it, give me another"}
             </Button>
           </div>
         </div>
@@ -207,12 +207,7 @@ const RuleReview = () => {
                 </div>
 
                 <div className="flex flex-col xs:flex-row gap-3">
-                  <Link to="/rules" className="flex-1">
-                    <Button variant="outline" className="w-full text-sm sm:text-base" size="lg">
-                      Back to List
-                    </Button>
-                  </Link>
-                  <Button onClick={handleSubmit} disabled={submitting} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base" size="lg">
+                  <Button onClick={handleSubmit} disabled={submitting} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base" size="lg">
                     {submitting ? "Submitting..." : "Submit"}
                   </Button>
                 </div>
@@ -221,7 +216,7 @@ const RuleReview = () => {
           </Card> : <Card className="shadow-lg">
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground mb-4">
-                Click "Give Me Another" to start reviewing rules
+                Click "Not feeling it, give me another" to start reviewing rules
               </p>
             </CardContent>
           </Card>}
