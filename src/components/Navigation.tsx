@@ -25,8 +25,7 @@ const Navigation = ({ currentPage }: NavigationProps) => {
             <Button 
               key={to}
               variant="outline" 
-              className="bg-primary text-primary-foreground border-primary cursor-default pointer-events-none"
-              disabled
+              className="bg-primary text-primary-foreground border-primary cursor-default pointer-events-none opacity-100"
             >
               <Icon className="mr-2 h-4 w-4" />
               {label}
