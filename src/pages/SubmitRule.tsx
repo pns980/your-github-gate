@@ -163,7 +163,7 @@ const SubmitRule = () => {
                                   }}
                                 />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer">
+                              <FormLabel className="font-normal cursor-pointer" style={{ color: 'hsl(0 0% 85%)' }}>
                                 {area}
                               </FormLabel>
                             </FormItem>
