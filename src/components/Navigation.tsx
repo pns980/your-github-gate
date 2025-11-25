@@ -17,16 +17,32 @@ const Navigation = ({ currentPage }: NavigationProps) => {
 
   return (
     <div className="flex flex-wrap gap-3 mb-8">
-      {navItems
-        .filter(item => item.page !== currentPage)
-        .map(({ to, icon: Icon, label }) => (
+      {navItems.map(({ to, icon: Icon, label, page }) => {
+        const isCurrentPage = page === currentPage;
+        
+        if (isCurrentPage) {
+          return (
+            <Button 
+              key={to}
+              variant="outline" 
+              className="bg-primary text-primary-foreground border-primary cursor-default pointer-events-none"
+              disabled
+            >
+              <Icon className="mr-2 h-4 w-4" />
+              {label}
+            </Button>
+          );
+        }
+        
+        return (
           <Link key={to} to={to}>
             <Button variant="outline" className="bg-white/90 hover:bg-primary hover:text-primary-foreground hover:border-primary border-border">
               <Icon className="mr-2 h-4 w-4" />
               {label}
             </Button>
           </Link>
-        ))}
+        );
+      })}
     </div>
   );
 };

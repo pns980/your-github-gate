@@ -85,9 +85,10 @@ const SubmitRule = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navigation />
-      <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
+    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <Navigation currentPage="submit" />
+        <div className="max-w-2xl mx-auto">
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Submit a Rule</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
@@ -231,7 +232,8 @@ const SubmitRule = () => {
             </Button>
           </form>
         </Form>
-      </main>
+        </div>
+      </div>
       <Footer />
     </div>
   );

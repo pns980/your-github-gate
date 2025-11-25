@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 const About = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
-      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-4xl">
-        <Link to="/">
-          <Button variant="ghost" className="mb-4 sm:mb-6 text-sm sm:text-base">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Button>
-        </Link>
+    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <Navigation currentPage="about" />
 
         <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none">
           <h1 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 text-foreground">About Number One Rules</h1>
@@ -166,19 +161,9 @@ const About = () => {
             </p>
           </section>
         </article>
-
-        <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground space-x-4">
-          <Link to="/privacy" className="hover:text-primary">
-            Privacy Policy
-          </Link>
-          <Link to="/terms" className="hover:text-primary">
-            Terms & Conditions
-          </Link>
-          <Link to="/contact" className="hover:text-primary">
-            Contact
-          </Link>
-        </footer>
       </div>
+
+      <Footer />
     </div>
   );
 };
