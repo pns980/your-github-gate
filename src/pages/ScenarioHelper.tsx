@@ -130,7 +130,7 @@ const ScenarioHelper = () => {
     setResponse("");
     setAppliedRules([]);
     try {
-      const url = `https://script.google.com/macros/s/AKfycbw_hi1rb9vbduQ0dLqKIquUI1o4qkXLK8wmgYKZQUf_dGxWnqeXfBzaJwsql6b2FWPJtA/exec?scenario=${encodeURIComponent(scenario)}`;
+      const url = `https://script.google.com/macros/s/AKfycbxXcUo6Nl4ngToIDxuAiCpM5OXnhULBGJUtl4oHXq1GNYfzlKfjyH3SE6GqbrMG9P6TRQ/exec?scenario=${encodeURIComponent(scenario)}`;
       const fetchResponse = await fetch(url);
       const textResponse = await fetchResponse.text();
       let data;
