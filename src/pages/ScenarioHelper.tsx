@@ -32,6 +32,7 @@ const ScenarioHelper = () => {
     'the euphemism for our inescapable "bounded rationality"',
     "the perception of a scratch on your phone screen as uniquely yours",
     "the embracing of uncertainty, pain and constant work as life's only guarantees",
+    "the best effort without worrying about the result or comparison with others",
     "not a typo",
   ];
 
