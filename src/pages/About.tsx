@@ -8,10 +8,12 @@ const About = () => {
         <Navigation currentPage="about" />
 
         <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert max-w-none">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8" style={{ color: 'hsl(0 0% 85%)' }}>About Number One Rules</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8" style={{ color: "hsl(0 0% 85%)" }}>
+            About Number One Rules
+          </h1>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: 'hsl(0 0% 85%)' }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
               Why start writing down "Number One Rules"?
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
@@ -69,7 +71,9 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: 'hsl(0 0% 85%)' }}>What's perfec™?</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+              What's perfec™?
+            </h2>
             <p className="text-muted-foreground leading-relaxed mb-2">Perfec™ is:</p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2">
               <li>the celebration of being one better than yesterday</li>
@@ -85,12 +89,13 @@ const About = () => {
               <li>the euphemism for our inescapable "bounded rationality"</li>
               <li>the perception of a scratch on your phone screen as uniquely yours</li>
               <li>the embracing of uncertainty, pain and constant work as life's only guarantees</li>
+              <li>the best effort without worrying about the result or comparison with others</li>
               <li>not a typo</li>
             </ul>
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: 'hsl(0 0% 85%)' }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
               Why format the rules this way?
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -105,7 +110,7 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: 'hsl(0 0% 85%)' }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
               Why do I believe "Number One Rules" hold any water?
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -122,7 +127,9 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: 'hsl(0 0% 85%)' }}>The AI factor</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+              The AI factor
+            </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
               As I started writing these a parallel phenomenon was developing in the wider ether of reality. Artificial
               intelligence broke out from an abstract computer science term sporadically mentioned. and much less
