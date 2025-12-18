@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ConsentBanner } from "@/components/ConsentBanner";
+import AuthRecoveryRedirect from "@/components/AuthRecoveryRedirect";
 import ScenarioHelper from "./pages/ScenarioHelper";
 import RulesBrowser from "./pages/RulesBrowser";
 import RulesManagement from "./pages/RulesManagement";
@@ -31,21 +32,64 @@ const App = () => (
       <Sonner />
       <ConsentBanner />
       <BrowserRouter>
+        <AuthRecoveryRedirect />
         <Routes>
           <Route path="/" element={<ScenarioHelper />} />
           <Route path="/review" element={<RuleReview />} />
           <Route path="/rules" element={<RulesBrowser />} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/rules/manage" element={<ProtectedRoute><RulesManagement /></ProtectedRoute>} />
-          <Route path="/responses" element={<ProtectedRoute><ResponsesViewer /></ProtectedRoute>} />
-          <Route path="/guidance" element={<ProtectedRoute><GuidanceViewer /></ProtectedRoute>} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rules/manage"
+            element={
+              <ProtectedRoute>
+                <RulesManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/responses"
+            element={
+              <ProtectedRoute>
+                <ResponsesViewer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/guidance"
+            element={
+              <ProtectedRoute>
+                <GuidanceViewer />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/submit-rule" element={<SubmitRule />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
-          <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
-          <Route path="/suggestions" element={<ProtectedRoute><SuggestionsManagement /></ProtectedRoute>} />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute>
+                <Messages />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/suggestions"
+            element={
+              <ProtectedRoute>
+                <SuggestionsManagement />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
