@@ -22,7 +22,7 @@ function buildRecoveryRedirect(href: string) {
   if (!search.get("type")) search.set("type", "recovery");
 
   return {
-    pathname: "/auth",
+    pathname: "/reset-password",
     search: `?${search.toString()}`,
     hash: url.hash,
   };
@@ -35,7 +35,7 @@ export default function AuthRecoveryRedirect() {
   // Catch recovery tokens in the URL (some providers land on the wrong route).
   useEffect(() => {
     if (!isRecoveryUrl(window.location.href)) return;
-    if (location.pathname === "/auth") return;
+    if (location.pathname === "/reset-password") return;
 
     navigate(buildRecoveryRedirect(window.location.href), { replace: true });
   }, [location.pathname, navigate]);
@@ -46,7 +46,7 @@ export default function AuthRecoveryRedirect() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") {
-        navigate({ pathname: "/auth", search: "?type=recovery" }, { replace: true });
+        navigate({ pathname: "/reset-password" }, { replace: true });
       }
     });
 
