@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Table,
@@ -8,7 +9,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Loader2, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Loader2, Trash2, Eye } from "lucide-react";
 import { format } from "date-fns";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
@@ -26,6 +33,8 @@ interface RuleResponse {
 }
 
 const ResponsesViewer = () => {
+  const [selectedResponse, setSelectedResponse] = useState<RuleResponse | null>(null);
+  
   const { data: responses, loading, refetch: loadResponses } = useSupabaseQuery<RuleResponse>({
     queryFn: async () => {
       const result = await supabase
@@ -106,7 +115,18 @@ const ResponsesViewer = () => {
                       {response.learned_new ? "✓ Yes" : "✗ No"}
                     </TableCell>
                     <TableCell className="max-w-md">
-                      <div className="line-clamp-2">{response.thoughts}</div>
+                      <div className="flex items-center gap-2">
+                        <div className="line-clamp-2 flex-1">{response.thoughts}</div>
+                        {response.thoughts && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setSelectedResponse(response)}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       {format(new Date(response.created_at), "MMM d, yyyy HH:mm")}
@@ -129,6 +149,44 @@ const ResponsesViewer = () => {
       </div>
 
       <Footer />
+      
+      <Dialog open={!!selectedResponse} onOpenChange={() => setSelectedResponse(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Response Details</DialogTitle>
+          </DialogHeader>
+          {selectedResponse && (
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-sm text-muted-foreground">Rule Title</h4>
+                <p>{selectedResponse.rule_title}</p>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">Resonates</h4>
+                  <p>{selectedResponse.resonates ? "✓ Yes" : "✗ No"}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">Applicable</h4>
+                  <p>{selectedResponse.applicable ? "✓ Yes" : "✗ No"}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">Learned New</h4>
+                  <p>{selectedResponse.learned_new ? "✓ Yes" : "✗ No"}</p>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-sm text-muted-foreground">Full Thoughts</h4>
+                <p className="whitespace-pre-wrap">{selectedResponse.thoughts || "No thoughts provided"}</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-sm text-muted-foreground">Date</h4>
+                <p>{format(new Date(selectedResponse.created_at), "MMM d, yyyy HH:mm")}</p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
     </>
   );
