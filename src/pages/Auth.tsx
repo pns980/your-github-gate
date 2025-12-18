@@ -20,9 +20,19 @@ const Auth = () => {
 
   // Check if this is a password reset callback
   useEffect(() => {
+    const url = new URL(window.location.href);
+
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const type = hashParams.get("type");
-    if (type === "recovery") {
+    const type = url.searchParams.get("type") ?? hashParams.get("type");
+
+    // Password recovery links may arrive as either query params (PKCE) or hash params (implicit)
+    const isRecovery =
+      type === "recovery" ||
+      url.searchParams.has("code") ||
+      url.searchParams.has("token") ||
+      hashParams.has("access_token");
+
+    if (isRecovery) {
       setMode("reset");
       return; // Don't redirect if in recovery mode
     }
@@ -70,7 +80,7 @@ const Auth = () => {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth`,
+        redirectTo: `${window.location.origin}/auth?type=recovery`,
       });
 
       if (error) throw error;
