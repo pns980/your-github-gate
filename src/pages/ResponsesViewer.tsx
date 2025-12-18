@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Trash2, Eye } from "lucide-react";
+import { Loader2, Trash2, Eye, Download } from "lucide-react";
 import { format } from "date-fns";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
@@ -62,6 +62,32 @@ const ResponsesViewer = () => {
     }
   };
 
+  const exportToCSV = () => {
+    if (responses.length === 0) return;
+
+    const headers = ["Rule Title", "Resonates", "Applicable", "Learned New", "Thoughts", "Date"];
+    const csvRows = [
+      headers.join(","),
+      ...responses.map((response) => [
+        `"${response.rule_title.replace(/"/g, '""')}"`,
+        response.resonates ? "Yes" : "No",
+        response.applicable ? "Yes" : "No",
+        response.learned_new ? "Yes" : "No",
+        `"${(response.thoughts || "").replace(/"/g, '""')}"`,
+        format(new Date(response.created_at), "yyyy-MM-dd HH:mm"),
+      ].join(","))
+    ];
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `rule-responses-${format(new Date(), "yyyy-MM-dd")}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -78,7 +104,13 @@ const ResponsesViewer = () => {
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex justify-between items-center">
             <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Rule Responses</h1>
-            <Button onClick={loadResponses}>Refresh</Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={exportToCSV} disabled={responses.length === 0}>
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
+              <Button onClick={loadResponses}>Refresh</Button>
+            </div>
           </div>
 
         {responses.length === 0 ? (
