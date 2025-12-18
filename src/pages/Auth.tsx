@@ -24,11 +24,10 @@ const Auth = () => {
     const type = hashParams.get("type");
     if (type === "recovery") {
       setMode("reset");
+      return; // Don't redirect if in recovery mode
     }
-  }, []);
 
-  useEffect(() => {
-    // Check if user is already logged in
+    // Only check for existing session if not in recovery mode
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         navigate("/");
