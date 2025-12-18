@@ -20,6 +20,18 @@ const Auth = () => {
 
   // Check if this is a password reset callback
   useEffect(() => {
+    let cancelled = false;
+
+    // If the auth SDK detects a recovery link, it may clean the URL quickly.
+    // This event is the most reliable signal to show the reset form.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setMode("reset");
+      }
+    });
+
     const url = new URL(window.location.href);
 
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -30,19 +42,25 @@ const Auth = () => {
       type === "recovery" ||
       url.searchParams.has("code") ||
       url.searchParams.has("token") ||
-      hashParams.has("access_token");
+      hashParams.has("access_token") ||
+      hashParams.has("refresh_token");
 
     if (isRecovery) {
       setMode("reset");
-      return; // Don't redirect if in recovery mode
+    } else {
+      // Only check for existing session if not in recovery mode
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (cancelled) return;
+        if (session) {
+          navigate("/");
+        }
+      });
     }
 
-    // Only check for existing session if not in recovery mode
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate("/");
-      }
-    });
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   const handleSignIn = async (e: React.FormEvent) => {
