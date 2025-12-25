@@ -121,6 +121,7 @@ const RuleReview = () => {
     setSubmitting(true);
     try {
       const { error } = await supabase.from("rule_responses").insert({
+        rule_id: currentRule.id || null,
         rule_title: currentRule.title,
         resonates: resonates === "yes",
         applicable: applicable === "yes",

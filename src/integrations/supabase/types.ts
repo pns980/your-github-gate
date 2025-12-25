@@ -152,6 +152,7 @@ export type Database = {
           id: string
           learned_new: boolean
           resonates: boolean
+          rule_id: string | null
           rule_title: string
           thoughts: string | null
         }
@@ -161,6 +162,7 @@ export type Database = {
           id?: string
           learned_new: boolean
           resonates: boolean
+          rule_id?: string | null
           rule_title: string
           thoughts?: string | null
         }
@@ -170,10 +172,19 @@ export type Database = {
           id?: string
           learned_new?: boolean
           resonates?: boolean
+          rule_id?: string | null
           rule_title?: string
           thoughts?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "rule_responses_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "rules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rules: {
         Row: {
