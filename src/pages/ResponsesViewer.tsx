@@ -20,7 +20,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Loader2, Trash2, Eye, Download, MessageSquare } from "lucide-react";
+import { Loader2, Trash2, Eye, Download, MessageSquare, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
@@ -183,6 +183,11 @@ const ResponsesViewer = () => {
     return ruleStats.filter(stats => stats.rule_id && activeRuleIds.has(stats.rule_id));
   }, [ruleStats, showActiveOnly, activeRuleIds]);
 
+  // Find orphaned responses (no rule_id or rule_id doesn't exist in active rules)
+  const orphanedResponses = useMemo(() => {
+    return responses.filter(r => !r.rule_id || !activeRuleIds.has(r.rule_id));
+  }, [responses, activeRuleIds]);
+
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this response?")) return;
 
@@ -197,6 +202,26 @@ const ResponsesViewer = () => {
       loadResponses();
     } catch (error) {
       console.error("Error deleting response:", error);
+    }
+  };
+
+  const handleBulkDeleteOrphaned = async () => {
+    if (orphanedResponses.length === 0) return;
+    
+    if (!confirm(`Are you sure you want to delete ${orphanedResponses.length} orphaned response(s)? This cannot be undone.`)) return;
+
+    try {
+      const orphanedIds = orphanedResponses.map(r => r.id);
+      const { error } = await supabase
+        .from("rule_responses")
+        .delete()
+        .in("id", orphanedIds);
+
+      if (error) throw error;
+
+      loadResponses();
+    } catch (error) {
+      console.error("Error deleting orphaned responses:", error);
     }
   };
 
@@ -259,6 +284,33 @@ const ResponsesViewer = () => {
             </div>
           </div>
 
+          {orphanedResponses.length > 0 && (
+            <Card className="border-orange-500/50 bg-orange-500/10">
+              <CardContent className="py-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <AlertTriangle className="h-5 w-5 text-orange-500" />
+                    <div>
+                      <p className="font-medium text-orange-500">
+                        {orphanedResponses.length} orphaned response{orphanedResponses.length !== 1 ? 's' : ''} found
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        These responses are for rules that no longer exist in the database.
+                      </p>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="destructive" 
+                    size="sm"
+                    onClick={handleBulkDeleteOrphaned}
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete All Orphaned
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           {responses.length === 0 && impressions.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
               No responses yet.
