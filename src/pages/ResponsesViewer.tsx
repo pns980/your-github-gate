@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Table,
@@ -15,7 +15,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Trash2, Eye, Download } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Loader2, Trash2, Eye, Download, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
 import AdminHeader from "@/components/AdminHeader";
@@ -32,8 +35,21 @@ interface RuleResponse {
   created_at: string;
 }
 
+interface RuleStats {
+  rule_title: string;
+  total_reviews: number;
+  resonates_yes: number;
+  resonates_no: number;
+  applicable_yes: number;
+  applicable_no: number;
+  learned_new_yes: number;
+  learned_new_no: number;
+  comments: RuleResponse[];
+}
+
 const ResponsesViewer = () => {
   const [selectedResponse, setSelectedResponse] = useState<RuleResponse | null>(null);
+  const [selectedRuleComments, setSelectedRuleComments] = useState<RuleStats | null>(null);
   
   const { data: responses, loading, refetch: loadResponses } = useSupabaseQuery<RuleResponse>({
     queryFn: async () => {
@@ -44,6 +60,42 @@ const ResponsesViewer = () => {
       return result;
     },
   });
+
+  // Aggregate statistics per rule
+  const ruleStats = useMemo(() => {
+    const statsMap = new Map<string, RuleStats>();
+    
+    responses.forEach((response) => {
+      const existing = statsMap.get(response.rule_title);
+      
+      if (existing) {
+        existing.total_reviews++;
+        if (response.resonates) existing.resonates_yes++;
+        else existing.resonates_no++;
+        if (response.applicable) existing.applicable_yes++;
+        else existing.applicable_no++;
+        if (response.learned_new) existing.learned_new_yes++;
+        else existing.learned_new_no++;
+        if (response.thoughts?.trim()) {
+          existing.comments.push(response);
+        }
+      } else {
+        statsMap.set(response.rule_title, {
+          rule_title: response.rule_title,
+          total_reviews: 1,
+          resonates_yes: response.resonates ? 1 : 0,
+          resonates_no: response.resonates ? 0 : 1,
+          applicable_yes: response.applicable ? 1 : 0,
+          applicable_no: response.applicable ? 0 : 1,
+          learned_new_yes: response.learned_new ? 1 : 0,
+          learned_new_no: response.learned_new ? 0 : 1,
+          comments: response.thoughts?.trim() ? [response] : [],
+        });
+      }
+    });
+    
+    return Array.from(statsMap.values()).sort((a, b) => b.total_reviews - a.total_reviews);
+  }, [responses]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this response?")) return;
@@ -88,6 +140,11 @@ const ResponsesViewer = () => {
     URL.revokeObjectURL(url);
   };
 
+  const getPercentage = (value: number, total: number) => {
+    if (total === 0) return 0;
+    return Math.round((value / total) * 100);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -113,113 +170,228 @@ const ResponsesViewer = () => {
             </div>
           </div>
 
-        {responses.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">
-            No responses yet.
-          </div>
-        ) : (
-          <div className="border rounded-lg">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Rule Title</TableHead>
-                  <TableHead>Resonates</TableHead>
-                  <TableHead>Applicable</TableHead>
-                  <TableHead>Learned New</TableHead>
-                  <TableHead>Thoughts</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {responses.map((response) => (
-                  <TableRow key={response.id}>
-                    <TableCell className="font-medium">
-                      {response.rule_title}
-                    </TableCell>
-                    <TableCell>
-                      {response.resonates ? "✓ Yes" : "✗ No"}
-                    </TableCell>
-                    <TableCell>
-                      {response.applicable ? "✓ Yes" : "✗ No"}
-                    </TableCell>
-                    <TableCell>
-                      {response.learned_new ? "✓ Yes" : "✗ No"}
-                    </TableCell>
-                    <TableCell className="max-w-md">
-                      <div className="flex items-center gap-2">
-                        <div className="line-clamp-2 flex-1">{response.thoughts}</div>
-                        {response.thoughts && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setSelectedResponse(response)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(response.created_at), "MMM d, yyyy HH:mm")}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(response.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        )}
-      </div>
-
-      <Footer />
-      
-      <Dialog open={!!selectedResponse} onOpenChange={() => setSelectedResponse(null)}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Response Details</DialogTitle>
-          </DialogHeader>
-          {selectedResponse && (
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-sm text-muted-foreground">Rule Title</h4>
-                <p>{selectedResponse.rule_title}</p>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <h4 className="font-semibold text-sm text-muted-foreground">Resonates</h4>
-                  <p>{selectedResponse.resonates ? "✓ Yes" : "✗ No"}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-muted-foreground">Applicable</h4>
-                  <p>{selectedResponse.applicable ? "✓ Yes" : "✗ No"}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-muted-foreground">Learned New</h4>
-                  <p>{selectedResponse.learned_new ? "✓ Yes" : "✗ No"}</p>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm text-muted-foreground">Full Thoughts</h4>
-                <p className="whitespace-pre-wrap">{selectedResponse.thoughts || "No thoughts provided"}</p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm text-muted-foreground">Date</h4>
-                <p>{format(new Date(selectedResponse.created_at), "MMM d, yyyy HH:mm")}</p>
-              </div>
+          {responses.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              No responses yet.
             </div>
+          ) : (
+            <Tabs defaultValue="summary" className="w-full">
+              <TabsList>
+                <TabsTrigger value="summary">Summary by Rule</TabsTrigger>
+                <TabsTrigger value="raw">Raw Data</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="summary" className="space-y-4 mt-4">
+                <div className="text-sm text-muted-foreground mb-4">
+                  {ruleStats.length} rules reviewed • {responses.length} total responses
+                </div>
+                
+                <div className="border rounded-lg">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[300px]">Rule Title</TableHead>
+                        <TableHead className="text-center">Reviews</TableHead>
+                        <TableHead>Resonates</TableHead>
+                        <TableHead>Applicable</TableHead>
+                        <TableHead>Learned New</TableHead>
+                        <TableHead className="text-center">Comments</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {ruleStats.map((stats) => (
+                        <TableRow key={stats.rule_title}>
+                          <TableCell className="font-medium">
+                            {stats.rule_title}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <span className="font-semibold">{stats.total_reviews}</span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-green-500">Yes: {stats.resonates_yes} ({getPercentage(stats.resonates_yes, stats.total_reviews)}%)</span>
+                                <span className="text-red-500">No: {stats.resonates_no} ({getPercentage(stats.resonates_no, stats.total_reviews)}%)</span>
+                              </div>
+                              <Progress value={getPercentage(stats.resonates_yes, stats.total_reviews)} className="h-2" />
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-green-500">Yes: {stats.applicable_yes} ({getPercentage(stats.applicable_yes, stats.total_reviews)}%)</span>
+                                <span className="text-red-500">No: {stats.applicable_no} ({getPercentage(stats.applicable_no, stats.total_reviews)}%)</span>
+                              </div>
+                              <Progress value={getPercentage(stats.applicable_yes, stats.total_reviews)} className="h-2" />
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-green-500">Yes: {stats.learned_new_yes} ({getPercentage(stats.learned_new_yes, stats.total_reviews)}%)</span>
+                                <span className="text-red-500">No: {stats.learned_new_no} ({getPercentage(stats.learned_new_no, stats.total_reviews)}%)</span>
+                              </div>
+                              <Progress value={getPercentage(stats.learned_new_yes, stats.total_reviews)} className="h-2" />
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {stats.comments.length > 0 ? (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setSelectedRuleComments(stats)}
+                              >
+                                <MessageSquare className="h-4 w-4 mr-1" />
+                                {stats.comments.length}
+                              </Button>
+                            ) : (
+                              <span className="text-muted-foreground">0</span>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="raw" className="mt-4">
+                <div className="border rounded-lg">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Rule Title</TableHead>
+                        <TableHead>Resonates</TableHead>
+                        <TableHead>Applicable</TableHead>
+                        <TableHead>Learned New</TableHead>
+                        <TableHead>Thoughts</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead className="w-[100px]">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {responses.map((response) => (
+                        <TableRow key={response.id}>
+                          <TableCell className="font-medium">
+                            {response.rule_title}
+                          </TableCell>
+                          <TableCell>
+                            {response.resonates ? "✓ Yes" : "✗ No"}
+                          </TableCell>
+                          <TableCell>
+                            {response.applicable ? "✓ Yes" : "✗ No"}
+                          </TableCell>
+                          <TableCell>
+                            {response.learned_new ? "✓ Yes" : "✗ No"}
+                          </TableCell>
+                          <TableCell className="max-w-md">
+                            <div className="flex items-center gap-2">
+                              <div className="line-clamp-2 flex-1">{response.thoughts}</div>
+                              {response.thoughts && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setSelectedResponse(response)}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {format(new Date(response.created_at), "MMM d, yyyy HH:mm")}
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDelete(response.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TabsContent>
+            </Tabs>
           )}
-        </DialogContent>
-      </Dialog>
-    </div>
+        </div>
+
+        <Footer />
+        
+        {/* Single Response Detail Dialog */}
+        <Dialog open={!!selectedResponse} onOpenChange={() => setSelectedResponse(null)}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Response Details</DialogTitle>
+            </DialogHeader>
+            {selectedResponse && (
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">Rule Title</h4>
+                  <p>{selectedResponse.rule_title}</p>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <h4 className="font-semibold text-sm text-muted-foreground">Resonates</h4>
+                    <p>{selectedResponse.resonates ? "✓ Yes" : "✗ No"}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-muted-foreground">Applicable</h4>
+                    <p>{selectedResponse.applicable ? "✓ Yes" : "✗ No"}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-muted-foreground">Learned New</h4>
+                    <p>{selectedResponse.learned_new ? "✓ Yes" : "✗ No"}</p>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">Full Thoughts</h4>
+                  <p className="whitespace-pre-wrap">{selectedResponse.thoughts || "No thoughts provided"}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">Date</h4>
+                  <p>{format(new Date(selectedResponse.created_at), "MMM d, yyyy HH:mm")}</p>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Comments for Rule Dialog */}
+        <Dialog open={!!selectedRuleComments} onOpenChange={() => setSelectedRuleComments(null)}>
+          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Comments for: {selectedRuleComments?.rule_title}</DialogTitle>
+            </DialogHeader>
+            {selectedRuleComments && (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  {selectedRuleComments.comments.length} comment{selectedRuleComments.comments.length !== 1 ? 's' : ''} out of {selectedRuleComments.total_reviews} reviews
+                </p>
+                <div className="space-y-3">
+                  {selectedRuleComments.comments.map((comment) => (
+                    <Card key={comment.id}>
+                      <CardContent className="pt-4">
+                        <p className="whitespace-pre-wrap">{comment.thoughts}</p>
+                        <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+                          <span>{format(new Date(comment.created_at), "MMM d, yyyy HH:mm")}</span>
+                          <span>Resonates: {comment.resonates ? "Yes" : "No"}</span>
+                          <span>Applicable: {comment.applicable ? "Yes" : "No"}</span>
+                          <span>Learned New: {comment.learned_new ? "Yes" : "No"}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
     </>
   );
 };
