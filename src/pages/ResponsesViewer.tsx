@@ -27,6 +27,7 @@ import Footer from "@/components/Footer";
 
 interface RuleResponse {
   id: string;
+  rule_id: string | null;
   rule_title: string;
   resonates: boolean;
   applicable: boolean;
@@ -90,12 +91,15 @@ const ResponsesViewer = () => {
   };
 
   // Aggregate statistics per rule combining impressions and responses
+  // Use rule_id as the key when available, fall back to rule_title for legacy data
   const ruleStats = useMemo(() => {
     const statsMap = new Map<string, RuleStats>();
     
+    const getKey = (ruleId: string | null, ruleTitle: string) => ruleId || `title:${ruleTitle}`;
+    
     // First, process impressions to get view/skip counts
     impressions.forEach((impression) => {
-      const key = impression.rule_title;
+      const key = getKey(impression.rule_id, impression.rule_title);
       const existing = statsMap.get(key);
       
       if (existing) {
@@ -122,7 +126,7 @@ const ResponsesViewer = () => {
     
     // Then, process responses for review stats
     responses.forEach((response) => {
-      const key = response.rule_title;
+      const key = getKey(response.rule_id, response.rule_title);
       const existing = statsMap.get(key);
       
       if (existing) {
@@ -140,7 +144,7 @@ const ResponsesViewer = () => {
         // Rule has responses but no impressions (legacy data)
         statsMap.set(key, {
           rule_title: response.rule_title,
-          rule_id: null,
+          rule_id: response.rule_id,
           total_views: 0,
           total_skips: 0,
           total_reviews: 1,
