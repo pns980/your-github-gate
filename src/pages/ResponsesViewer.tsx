@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Trash2, Eye, Download, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
@@ -35,8 +35,19 @@ interface RuleResponse {
   created_at: string;
 }
 
+interface RuleImpression {
+  id: string;
+  rule_id: string;
+  rule_title: string;
+  action: string;
+  created_at: string;
+}
+
 interface RuleStats {
   rule_title: string;
+  rule_id: string | null;
+  total_views: number;
+  total_skips: number;
   total_reviews: number;
   resonates_yes: number;
   resonates_no: number;
@@ -51,7 +62,7 @@ const ResponsesViewer = () => {
   const [selectedResponse, setSelectedResponse] = useState<RuleResponse | null>(null);
   const [selectedRuleComments, setSelectedRuleComments] = useState<RuleStats | null>(null);
   
-  const { data: responses, loading, refetch: loadResponses } = useSupabaseQuery<RuleResponse>({
+  const { data: responses, loading: responsesLoading, refetch: loadResponses } = useSupabaseQuery<RuleResponse>({
     queryFn: async () => {
       const result = await supabase
         .from("rule_responses")
@@ -61,12 +72,58 @@ const ResponsesViewer = () => {
     },
   });
 
-  // Aggregate statistics per rule
+  const { data: impressions, loading: impressionsLoading, refetch: loadImpressions } = useSupabaseQuery<RuleImpression>({
+    queryFn: async () => {
+      const result = await supabase
+        .from("rule_impressions")
+        .select("*")
+        .order("created_at", { ascending: false });
+      return result;
+    },
+  });
+
+  const loading = responsesLoading || impressionsLoading;
+
+  const refetchAll = () => {
+    loadResponses();
+    loadImpressions();
+  };
+
+  // Aggregate statistics per rule combining impressions and responses
   const ruleStats = useMemo(() => {
     const statsMap = new Map<string, RuleStats>();
     
+    // First, process impressions to get view/skip counts
+    impressions.forEach((impression) => {
+      const key = impression.rule_title;
+      const existing = statsMap.get(key);
+      
+      if (existing) {
+        if (impression.action === 'viewed') existing.total_views++;
+        else if (impression.action === 'skipped') existing.total_skips++;
+        // 'reviewed' impressions are counted via responses
+      } else {
+        statsMap.set(key, {
+          rule_title: impression.rule_title,
+          rule_id: impression.rule_id,
+          total_views: impression.action === 'viewed' ? 1 : 0,
+          total_skips: impression.action === 'skipped' ? 1 : 0,
+          total_reviews: 0,
+          resonates_yes: 0,
+          resonates_no: 0,
+          applicable_yes: 0,
+          applicable_no: 0,
+          learned_new_yes: 0,
+          learned_new_no: 0,
+          comments: [],
+        });
+      }
+    });
+    
+    // Then, process responses for review stats
     responses.forEach((response) => {
-      const existing = statsMap.get(response.rule_title);
+      const key = response.rule_title;
+      const existing = statsMap.get(key);
       
       if (existing) {
         existing.total_reviews++;
@@ -80,8 +137,12 @@ const ResponsesViewer = () => {
           existing.comments.push(response);
         }
       } else {
-        statsMap.set(response.rule_title, {
+        // Rule has responses but no impressions (legacy data)
+        statsMap.set(key, {
           rule_title: response.rule_title,
+          rule_id: null,
+          total_views: 0,
+          total_skips: 0,
           total_reviews: 1,
           resonates_yes: response.resonates ? 1 : 0,
           resonates_no: response.resonates ? 0 : 1,
@@ -94,8 +155,8 @@ const ResponsesViewer = () => {
       }
     });
     
-    return Array.from(statsMap.values()).sort((a, b) => b.total_reviews - a.total_reviews);
-  }, [responses]);
+    return Array.from(statsMap.values()).sort((a, b) => b.total_views - a.total_views);
+  }, [responses, impressions]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this response?")) return;
@@ -153,6 +214,9 @@ const ResponsesViewer = () => {
     );
   }
 
+  const totalViews = impressions.filter(i => i.action === 'viewed').length;
+  const totalSkips = impressions.filter(i => i.action === 'skipped').length;
+
   return (
     <>
       <AdminHeader />
@@ -166,11 +230,11 @@ const ResponsesViewer = () => {
                 <Download className="h-4 w-4 mr-2" />
                 Export CSV
               </Button>
-              <Button onClick={loadResponses}>Refresh</Button>
+              <Button onClick={refetchAll}>Refresh</Button>
             </div>
           </div>
 
-          {responses.length === 0 ? (
+          {responses.length === 0 && impressions.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
               No responses yet.
             </div>
@@ -182,19 +246,27 @@ const ResponsesViewer = () => {
               </TabsList>
 
               <TabsContent value="summary" className="space-y-4 mt-4">
-                <div className="text-sm text-muted-foreground mb-4">
-                  {ruleStats.length} rules reviewed • {responses.length} total responses
+                <div className="text-sm text-muted-foreground mb-4 flex flex-wrap gap-4">
+                  <span>{ruleStats.length} rules tracked</span>
+                  <span>•</span>
+                  <span>{totalViews} total views</span>
+                  <span>•</span>
+                  <span>{totalSkips} skips</span>
+                  <span>•</span>
+                  <span>{responses.length} reviews submitted</span>
                 </div>
                 
-                <div className="border rounded-lg">
+                <div className="border rounded-lg overflow-x-auto">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-[300px]">Rule Title</TableHead>
+                        <TableHead className="w-[250px]">Rule Title</TableHead>
+                        <TableHead className="text-center">Views</TableHead>
+                        <TableHead className="text-center">Skips</TableHead>
                         <TableHead className="text-center">Reviews</TableHead>
-                        <TableHead>Resonates</TableHead>
-                        <TableHead>Applicable</TableHead>
-                        <TableHead>Learned New</TableHead>
+                        <TableHead className="min-w-[150px]">Resonates</TableHead>
+                        <TableHead className="min-w-[150px]">Applicable</TableHead>
+                        <TableHead className="min-w-[150px]">Learned New</TableHead>
                         <TableHead className="text-center">Comments</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -205,34 +277,52 @@ const ResponsesViewer = () => {
                             {stats.rule_title}
                           </TableCell>
                           <TableCell className="text-center">
-                            <span className="font-semibold">{stats.total_reviews}</span>
+                            <span className="font-semibold">{stats.total_views}</span>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <span className="text-orange-500 font-semibold">{stats.total_skips}</span>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <span className="text-green-500 font-semibold">{stats.total_reviews}</span>
                           </TableCell>
                           <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center justify-between text-xs">
-                                <span className="text-green-500">Yes: {stats.resonates_yes} ({getPercentage(stats.resonates_yes, stats.total_reviews)}%)</span>
-                                <span className="text-red-500">No: {stats.resonates_no} ({getPercentage(stats.resonates_no, stats.total_reviews)}%)</span>
+                            {stats.total_reviews > 0 ? (
+                              <div className="space-y-1">
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="text-green-500">Yes: {stats.resonates_yes} ({getPercentage(stats.resonates_yes, stats.total_reviews)}%)</span>
+                                  <span className="text-red-500">No: {stats.resonates_no}</span>
+                                </div>
+                                <Progress value={getPercentage(stats.resonates_yes, stats.total_reviews)} className="h-2" />
                               </div>
-                              <Progress value={getPercentage(stats.resonates_yes, stats.total_reviews)} className="h-2" />
-                            </div>
+                            ) : (
+                              <span className="text-muted-foreground text-xs">No reviews</span>
+                            )}
                           </TableCell>
                           <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center justify-between text-xs">
-                                <span className="text-green-500">Yes: {stats.applicable_yes} ({getPercentage(stats.applicable_yes, stats.total_reviews)}%)</span>
-                                <span className="text-red-500">No: {stats.applicable_no} ({getPercentage(stats.applicable_no, stats.total_reviews)}%)</span>
+                            {stats.total_reviews > 0 ? (
+                              <div className="space-y-1">
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="text-green-500">Yes: {stats.applicable_yes} ({getPercentage(stats.applicable_yes, stats.total_reviews)}%)</span>
+                                  <span className="text-red-500">No: {stats.applicable_no}</span>
+                                </div>
+                                <Progress value={getPercentage(stats.applicable_yes, stats.total_reviews)} className="h-2" />
                               </div>
-                              <Progress value={getPercentage(stats.applicable_yes, stats.total_reviews)} className="h-2" />
-                            </div>
+                            ) : (
+                              <span className="text-muted-foreground text-xs">No reviews</span>
+                            )}
                           </TableCell>
                           <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center justify-between text-xs">
-                                <span className="text-green-500">Yes: {stats.learned_new_yes} ({getPercentage(stats.learned_new_yes, stats.total_reviews)}%)</span>
-                                <span className="text-red-500">No: {stats.learned_new_no} ({getPercentage(stats.learned_new_no, stats.total_reviews)}%)</span>
+                            {stats.total_reviews > 0 ? (
+                              <div className="space-y-1">
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="text-green-500">Yes: {stats.learned_new_yes} ({getPercentage(stats.learned_new_yes, stats.total_reviews)}%)</span>
+                                  <span className="text-red-500">No: {stats.learned_new_no}</span>
+                                </div>
+                                <Progress value={getPercentage(stats.learned_new_yes, stats.total_reviews)} className="h-2" />
                               </div>
-                              <Progress value={getPercentage(stats.learned_new_yes, stats.total_reviews)} className="h-2" />
-                            </div>
+                            ) : (
+                              <span className="text-muted-foreground text-xs">No reviews</span>
+                            )}
                           </TableCell>
                           <TableCell className="text-center">
                             {stats.comments.length > 0 ? (

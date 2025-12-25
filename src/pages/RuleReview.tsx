@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,13 @@ import { useToast } from "@/hooks/use-toast";
 import { useRules } from "@/hooks/useRules";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+
 interface Rule {
   id: string;
   title: string;
   description: string;
 }
+
 const RuleReview = () => {
   const location = useLocation();
   const {
@@ -28,22 +30,44 @@ const RuleReview = () => {
   const [applicable, setApplicable] = useState<string>("");
   const [learnedNew, setLearnedNew] = useState<string>("");
   const [thoughts, setThoughts] = useState("");
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  
+  // Track which rule has been logged as viewed to avoid duplicate impressions
+  const viewedRuleIdRef = useRef<string | null>(null);
+
+  // Log impression when a rule is shown
+  const logImpression = async (rule: Rule, action: 'viewed' | 'skipped' | 'reviewed') => {
+    try {
+      await supabase.from("rule_impressions").insert({
+        rule_id: rule.id,
+        rule_title: rule.title,
+        action
+      });
+    } catch (error) {
+      console.error("Error logging impression:", error);
+    }
+  };
+
   useEffect(() => {
     // Check if a rule was passed via navigation state
     if (location.state?.rule) {
       const passedRule = location.state.rule;
-      setCurrentRule({
+      const newRule = {
         id: passedRule.id || '',
         title: passedRule.title,
         description: passedRule.description
-      });
+      };
+      setCurrentRule(newRule);
       setResonates("");
       setApplicable("");
       setLearnedNew("");
       setThoughts("");
+      
+      // Log view for passed rule
+      if (newRule.id && newRule.id !== viewedRuleIdRef.current) {
+        viewedRuleIdRef.current = newRule.id;
+        logImpression(newRule, 'viewed');
+      }
     }
   }, [location.state]);
 
@@ -53,7 +77,8 @@ const RuleReview = () => {
       loadRandomRule();
     }
   }, [rulesLoading, allRules, currentRule, location.state]);
-  const loadRandomRule = () => {
+
+  const loadRandomRule = async (isSkip = false) => {
     if (!allRules || allRules.length === 0) {
       toast({
         title: "No rules found",
@@ -62,13 +87,27 @@ const RuleReview = () => {
       });
       return;
     }
+    
+    // Log skip for the current rule before loading a new one
+    if (isSkip && currentRule && currentRule.id) {
+      await logImpression(currentRule, 'skipped');
+    }
+    
     const randomIndex = Math.floor(Math.random() * allRules.length);
-    setCurrentRule(allRules[randomIndex]);
+    const newRule = allRules[randomIndex];
+    setCurrentRule(newRule);
     setResonates("");
     setApplicable("");
     setLearnedNew("");
     setThoughts("");
+    
+    // Log view for new rule
+    if (newRule.id && newRule.id !== viewedRuleIdRef.current) {
+      viewedRuleIdRef.current = newRule.id;
+      logImpression(newRule, 'viewed');
+    }
   };
+
   const handleSubmit = async () => {
     if (!currentRule) return;
     if (!resonates || !applicable || !learnedNew) {
@@ -81,9 +120,7 @@ const RuleReview = () => {
     }
     setSubmitting(true);
     try {
-      const {
-        error
-      } = await supabase.from("rule_responses").insert({
+      const { error } = await supabase.from("rule_responses").insert({
         rule_title: currentRule.title,
         resonates: resonates === "yes",
         applicable: applicable === "yes",
@@ -91,6 +128,12 @@ const RuleReview = () => {
         thoughts: thoughts.trim()
       });
       if (error) throw error;
+      
+      // Log reviewed impression
+      if (currentRule.id) {
+        await logImpression(currentRule, 'reviewed');
+      }
+      
       toast({
         title: "Response submitted",
         description: "Thank you for your feedback!"
@@ -99,6 +142,9 @@ const RuleReview = () => {
         top: 0,
         behavior: 'smooth'
       });
+      
+      // Reset viewed ref so the next rule gets logged
+      viewedRuleIdRef.current = null;
       loadRandomRule();
     } catch (error) {
       console.error("Error submitting response:", error);
@@ -111,25 +157,28 @@ const RuleReview = () => {
       setSubmitting(false);
     }
   };
-  return <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
+
+  return (
+    <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
       <div className="max-w-4xl mx-auto">
         <Navigation currentPage="review" />
 
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{
-          color: 'hsl(0 0% 85%)'
-        }}>Leave your mark on a #1 rule</h1>
+            color: 'hsl(0 0% 85%)'
+          }}>Leave your mark on a #1 rule</h1>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Become a part of the perfec™ movement                </p>
-            <Button onClick={loadRandomRule} disabled={rulesLoading} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Become a part of the perfec™ movement</p>
+            <Button onClick={() => loadRandomRule(true)} disabled={rulesLoading} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base">
               {rulesLoading ? "Loading..." : "Not feeling it, give me another"}
             </Button>
           </div>
         </div>
 
         {/* Rule Card */}
-        {currentRule ? <Card className="shadow-lg">
+        {currentRule ? (
+          <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl sm:text-2xl break-words">{currentRule.title}</CardTitle>
             </CardHeader>
@@ -213,16 +262,21 @@ const RuleReview = () => {
                 </div>
               </div>
             </CardContent>
-          </Card> : <Card className="shadow-lg">
+          </Card>
+        ) : (
+          <Card className="shadow-lg">
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground mb-4">
                 Click "Not feeling it, give me another" to start reviewing rules
               </p>
             </CardContent>
-          </Card>}
+          </Card>
+        )}
       </div>
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default RuleReview;
