@@ -113,6 +113,38 @@ export type Database = {
         }
         Relationships: []
       }
+      rule_impressions: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          rule_id: string
+          rule_title: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          rule_id: string
+          rule_title: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          rule_id?: string
+          rule_title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rule_impressions_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rule_responses: {
         Row: {
           applicable: boolean
