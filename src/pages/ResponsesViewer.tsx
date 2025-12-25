@@ -18,6 +18,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Loader2, Trash2, Eye, Download, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 import { useSupabaseQuery } from "@/hooks/useSupabaseQuery";
@@ -62,6 +64,7 @@ interface RuleStats {
 const ResponsesViewer = () => {
   const [selectedResponse, setSelectedResponse] = useState<RuleResponse | null>(null);
   const [selectedRuleComments, setSelectedRuleComments] = useState<RuleStats | null>(null);
+  const [showActiveOnly, setShowActiveOnly] = useState(false);
   
   const { data: responses, loading: responsesLoading, refetch: loadResponses } = useSupabaseQuery<RuleResponse>({
     queryFn: async () => {
@@ -83,11 +86,23 @@ const ResponsesViewer = () => {
     },
   });
 
-  const loading = responsesLoading || impressionsLoading;
+  // Fetch current rules to know which ones still exist
+  const { data: activeRules, loading: rulesLoading, refetch: loadRules } = useSupabaseQuery<{ id: string }>({
+    queryFn: async () => {
+      const result = await supabase
+        .from("rules")
+        .select("id");
+      return result;
+    },
+  });
+
+  const loading = responsesLoading || impressionsLoading || rulesLoading;
+  const activeRuleIds = useMemo(() => new Set(activeRules.map(r => r.id)), [activeRules]);
 
   const refetchAll = () => {
     loadResponses();
     loadImpressions();
+    loadRules();
   };
 
   // Aggregate statistics per rule combining impressions and responses
@@ -161,6 +176,12 @@ const ResponsesViewer = () => {
     
     return Array.from(statsMap.values()).sort((a, b) => b.total_views - a.total_views);
   }, [responses, impressions]);
+
+  // Filter stats to show only active rules when toggle is on
+  const filteredRuleStats = useMemo(() => {
+    if (!showActiveOnly) return ruleStats;
+    return ruleStats.filter(stats => stats.rule_id && activeRuleIds.has(stats.rule_id));
+  }, [ruleStats, showActiveOnly, activeRuleIds]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this response?")) return;
@@ -250,14 +271,26 @@ const ResponsesViewer = () => {
               </TabsList>
 
               <TabsContent value="summary" className="space-y-4 mt-4">
-                <div className="text-sm text-muted-foreground mb-4 flex flex-wrap gap-4">
-                  <span>{ruleStats.length} rules tracked</span>
-                  <span>•</span>
-                  <span>{totalViews} total views</span>
-                  <span>•</span>
-                  <span>{totalSkips} skips</span>
-                  <span>•</span>
-                  <span>{responses.length} reviews submitted</span>
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                  <div className="text-sm text-muted-foreground flex flex-wrap gap-4">
+                    <span>{filteredRuleStats.length} rules {showActiveOnly ? '(active only)' : 'tracked'}</span>
+                    <span>•</span>
+                    <span>{totalViews} total views</span>
+                    <span>•</span>
+                    <span>{totalSkips} skips</span>
+                    <span>•</span>
+                    <span>{responses.length} reviews submitted</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="active-only"
+                      checked={showActiveOnly}
+                      onCheckedChange={setShowActiveOnly}
+                    />
+                    <Label htmlFor="active-only" className="text-sm cursor-pointer">
+                      Active rules only
+                    </Label>
+                  </div>
                 </div>
                 
                 <div className="border rounded-lg overflow-x-auto">
@@ -275,8 +308,8 @@ const ResponsesViewer = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {ruleStats.map((stats) => (
-                        <TableRow key={stats.rule_title}>
+                      {filteredRuleStats.map((stats) => (
+                        <TableRow key={stats.rule_id || stats.rule_title}>
                           <TableCell className="font-medium">
                             {stats.rule_title}
                           </TableCell>
