@@ -17,14 +17,10 @@ const About = () => {
               Why start writing down "Number One Rules"?
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              I loved the idea Marcus Aurelius followed - keeping a journal that would help him become a better parent,
-              friend, stoic and emperor. He never meant to publish it. Yet here we are almost two thousands year later
-              still finding pragmatic and overarching truths as we read it. I'm nowhere near thinking the "Number One
-              Rules" would have a similar depth, weight and impact. I'm simply in love with the idea of putting thoughts
-              "to paper", sharing them and letting things take shape. The main audience I kept in mind was my family,
-              friends and self. The name "Number One Rules" comes from a running joke we had with the team at work.
-              Whenever someone would make a mistake, the comment would usually be: "How could you forget the No. 1 Rule?
-              Always ask for a discount!" or something of the sort.
+              I can be quite stupid at times. Mostly harmlessly, but you never know. Top of mind highlights include
+              getting a brand new car stuck in knee-deep mud, letting my daughter drop on her head as a baby, and
+              burning out into a short-fused asshole at home and the office. To minimize potential damage, I tried to
+              understand and prevent suboptimal decisions paired with appropriate consequences. Little by little.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
               Not because it's an invaluable resource, but I can't escape the feeling that it could be a waste not to
