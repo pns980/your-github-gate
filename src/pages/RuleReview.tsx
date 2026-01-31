@@ -166,9 +166,9 @@ const RuleReview = () => {
 
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{
-            color: 'hsl(0 0% 85%)'
-          }}>Leave your mark on a #1 rule</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 text-foreground">
+            Leave your mark on a #1 rule
+          </h1>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Become a part of the perfec™ movement</p>
             <Button onClick={() => loadRandomRule(true)} disabled={rulesLoading} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base">
