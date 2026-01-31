@@ -107,15 +107,9 @@ const RulesBrowser = () => {
 
         {/* Page Title */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{
-          color: 'hsl(0 0% 90%)'
-        }}>The complete list of almost all #1 rules
-
-
-
-
-
-        </h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 text-foreground">
+            The complete list of almost all #1 rules
+          </h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">Indulge your perfec™ism</p>
         </div>
         

@@ -71,28 +71,24 @@ const Dashboard = () => {
       value: stats.guidance,
       description: "Generated this week",
       icon: Lightbulb,
-      color: "text-blue-500",
     },
     {
       title: "Rule Responses",
       value: stats.responses,
       description: "Submitted this week",
       icon: FileText,
-      color: "text-green-500",
     },
     {
       title: "Contact Messages",
       value: stats.messages,
       description: "Received this week",
       icon: Mail,
-      color: "text-orange-500",
     },
     {
       title: "Rule Suggestions",
       value: stats.suggestions,
       description: "Submitted this week",
       icon: MessageSquare,
-      color: "text-purple-500",
     },
   ];
 
@@ -123,7 +119,7 @@ const Dashboard = () => {
                       <CardTitle className="text-sm font-medium">
                         {card.title}
                       </CardTitle>
-                      <Icon className={`h-4 w-4 ${card.color}`} />
+                      <Icon className="h-4 w-4 text-primary" />
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">{card.value}</div>
