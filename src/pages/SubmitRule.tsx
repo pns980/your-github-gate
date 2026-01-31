@@ -90,7 +90,7 @@ const SubmitRule = () => {
         <Navigation currentPage="submit" />
         <div className="max-w-2xl mx-auto">
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3" style={{ color: 'hsl(0 0% 85%)' }}>Submit a Rule</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 text-foreground">Submit a Rule</h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
             Share your own rule suggestion with us. We review all submissions and may add them to our collection.
           </p>
@@ -103,7 +103,7 @@ const SubmitRule = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Title *</FormLabel>
+                  <FormLabel className="text-foreground">Title *</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter rule title" {...field} />
                   </FormControl>
@@ -117,7 +117,7 @@ const SubmitRule = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Description *</FormLabel>
+                  <FormLabel className="text-foreground">Description *</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Describe your rule in detail"
@@ -135,7 +135,7 @@ const SubmitRule = () => {
               name="area"
               render={() => (
                 <FormItem>
-                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Area * (select all that apply)</FormLabel>
+                  <FormLabel className="text-foreground">Area * (select all that apply)</FormLabel>
                   <FormDescription>
                     Choose the areas where this rule applies
                   </FormDescription>
@@ -163,7 +163,7 @@ const SubmitRule = () => {
                                   }}
                                 />
                               </FormControl>
-                              <FormLabel className="font-normal cursor-pointer" style={{ color: 'hsl(0 0% 85%)' }}>
+                              <FormLabel className="font-normal cursor-pointer text-foreground">
                                 {area}
                               </FormLabel>
                             </FormItem>
@@ -182,7 +182,7 @@ const SubmitRule = () => {
               name="discipline"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Discipline *</FormLabel>
+                  <FormLabel className="text-foreground">Discipline *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -207,7 +207,7 @@ const SubmitRule = () => {
               name="skill"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel style={{ color: 'hsl(0 0% 85%)' }}>Skill *</FormLabel>
+                  <FormLabel className="text-foreground">Skill *</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>

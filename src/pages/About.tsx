@@ -9,15 +9,15 @@ const About = () => {
         <Navigation currentPage="about" />
 
         <article className="prose prose-base sm:prose-lg lg:prose-xl dark:prose-invert max-w-none">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8" style={{ color: "hsl(0 0% 85%)" }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-foreground">
             About Number One Rules
           </h1>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
               What are the "Number One Rules"?
             </h2>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               These are not meant to be eternal truths. Just claims I believe but also question. When applied to a
               practical scenario - we make a choice about what is true and live with the consequences. At the abstract
               level they're up for debate. And, hopefully, improvement. What was true yesterday, needn't be true today.
@@ -25,7 +25,7 @@ const About = () => {
               more complex scenarios. Even if we cannot quote or necessarily apply a set of rules, systemic thinking
               provides a certain calm. A starting point and a direction.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose text-foreground">
               The contradictions are numerous, the wording imperfect, the pragmatism hidden, but it beats an empty page,
               or thoughts lost the next morning. Yet, the sense of some fundamental principles or a system of thought is
               present, e.g. a call for compassion, a belief in common human decency, and yes - welcoming of
@@ -36,16 +36,16 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
               Why start writing down "Number One Rules"?
             </h2>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               I can be quite stupid at times. Mostly harmlessly, but you never know. Top of mind highlights include
               getting a brand-new car stuck in knee-deep mud, letting my daughter drop on her head as a baby, and
               burning out into a short-fused asshole at home and the office. To minimize potential damage, I tried to
               understand and prevent suboptimal decisions paired with appropriate consequences. Little by little.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               I loved the idea Marcus Aurelius followed - keeping a journal that would help him become a better parent,
               friend, stoic and emperor. He never meant to publish it. Yet here we are almost two thousands year later
               still finding pragmatic and overarching truths as we read it. I'm nowhere near thinking the "Number One
@@ -56,7 +56,7 @@ const About = () => {
               would usually be: "How could you forget the No. 1 Rule? Always ask for a discount!" or something of the
               sort.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               Not because it's an invaluable resource, but I can't escape the feeling that it could be a waste not
               sharing any of the insights. Each of these at some point resonated deeply, helping make sense of a
               situation and hinting to a practical next step. If the same happens to a reader - fantastic! If not -
@@ -64,7 +64,7 @@ const About = () => {
               in any capacity. Wouldn't it be like having a magical window into a person's way of thinking? You can also
               think of it as a "Working with..." doc on steroids.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               Many claims were born out of research studies I read, mature schools of thought that intrigued or
               resonated with my own understanding of the world, or approaches that happened to repeatedly prove
               themselves in practice. However, I haven't tested all the hypothesis or respected the scientific method in
@@ -77,7 +77,7 @@ const About = () => {
               Others you'll forget and hopefully come back to later when their time comes. This is why I tried to filter
               them, because I'm convinced a time for each of these will come. And we'll never know when.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose text-foreground">
               Going over the list too many and never enough times I always catch myself thinking just how cliché some of
               the rules are. This can certainly cause some to stop reading or skipping with increased confidence they
               could afford to. At the same time, clichés are often just simple truths that we're willing to keep at the
@@ -88,10 +88,10 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
               Why format the rules this way?
             </h2>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose text-foreground">
               The short title is for reference, but also to hopefully inspire a rhyming thought or sentiment with the
               reader. The description is meant to be long enough to provide the essence of a personal interpretation of
               a rule paired with anecdotal examples and/or stories to back it up. The categories I used refer to the
@@ -103,10 +103,10 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
               Why do I believe "Number One Rules" hold any water?
             </h2>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose text-foreground">
               Because of many situations and context where they helped me or those around me move forward. Quite
               possibly this happened in the context of a company which I was lucky to be part of building. It was called
               Melon and got acquired around its 20th birthday. The name lost, but the spirit and values still live on.
@@ -121,10 +121,10 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
               The AI factor
             </h2>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               As I started writing these a parallel phenomenon was developing in the wider ether of reality. Artificial
               intelligence broke out from an abstract computer science term sporadically mentioned. and much less
               frequently understood, in anything from a life-changing, career-threatening tech to the final omen of our
@@ -134,7 +134,7 @@ const About = () => {
               revolution and, say, industrial or internet revolution, I don't think does it justice. The shift will be
               faster, deeper and broader.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               What happens when in a matter of several years hundreds of millions lose their jobs and more often than
               we'd like to think - their sense of purpose? Yet, I've been (willfully, at that) unemployed for a while
               and the struggle to find purpose and everything that comes with it is very real. And this is just the
@@ -144,7 +144,7 @@ const About = () => {
               parents? What do we do as friends and community members? What do we do as a species and, as far as we can
               tell, only self-aware inhabitants of Earth already barely managing the rapid changes around us?
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-4 text-foreground">
               As the willful suspension of disbelief kicks in, I started finding solace in truths that permeated across
               the ages as its the best I can come up with despite the claimed unprecedented impact I expect. I'm open to
               other suggestions (giving up on humanity is not on the menu). What I think we will need to do is to
@@ -154,7 +154,7 @@ const About = () => {
               could be bits and pieces we can find in these rules that could be just enough to assemble a life-worthy
               puzzle.
             </p>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose text-foreground">
               Introducing an AI element to the website became a necessity or a welcome shortcut rather because relevance
               is an inseparable part of where our attention is drawn. AI is a tool which can uniquely connect where your
               current thoughts and concerns are with the pragmatic applicability of the rules. Hence, bringing us close
@@ -168,11 +168,11 @@ const About = () => {
           </section>
 
           <section className="mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4" style={{ color: "hsl(0 0% 85%)" }}>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-foreground">
               What's perfec™?
             </h2>
-            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-2" style={{ color: "hsl(0 0% 85%)" }}>Perfec™ is:</p>
-            <ul className="list-disc pl-6 text-base sm:text-lg leading-relaxed sm:leading-loose space-y-2" style={{ color: "hsl(0 0% 85%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed sm:leading-loose mb-2 text-foreground">Perfec™ is:</p>
+            <ul className="list-disc pl-6 text-base sm:text-lg leading-relaxed sm:leading-loose space-y-2 text-foreground">
               <li>the celebration of being one better than yesterday</li>
               <li>the joy of mistakes as growth opportunities</li>
               <li>the understanding that bad and better coexist</li>

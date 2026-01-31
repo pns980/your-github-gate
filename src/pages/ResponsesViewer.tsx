@@ -274,7 +274,7 @@ const ResponsesViewer = () => {
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Rule Responses</h1>
+            <h1 className="text-4xl font-bold text-foreground">Rule Responses</h1>
             <div className="flex gap-2">
               <Button variant="outline" onClick={exportToCSV} disabled={responses.length === 0}>
                 <Download className="h-4 w-4 mr-2" />

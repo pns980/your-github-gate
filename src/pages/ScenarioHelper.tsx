@@ -245,12 +245,7 @@ const ScenarioHelper = () => {
 
         {/* Page Title */}
         <div className="mb-4 sm:mb-6">
-          <h1
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3"
-            style={{
-              color: "hsl(0 0% 85%)",
-            }}
-          >
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 text-foreground">
             Find a #1 rule for life
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
