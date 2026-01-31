@@ -68,7 +68,7 @@ const GuidanceViewer = () => {
 
           {/* Page Header */}
           <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Guidance Records</h1>
+            <h1 className="text-4xl font-bold text-foreground">Guidance Records</h1>
             <Button onClick={loadRecords} disabled={loading}>
               <RefreshCw className="mr-2 h-4 w-4" />
               Refresh

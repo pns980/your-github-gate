@@ -392,7 +392,7 @@ const RulesManagement = () => {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-4xl font-bold" style={{ color: 'hsl(0 0% 85%)' }}>Rules Management</h1>
+              <h1 className="text-4xl font-bold text-foreground">Rules Management</h1>
             </div>
             <div className="flex gap-2">
               <Button variant="destructive" onClick={handleDeleteAll}>

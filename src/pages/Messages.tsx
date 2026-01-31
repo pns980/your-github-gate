@@ -73,7 +73,7 @@ const Messages = () => {
         <div className="max-w-6xl mx-auto">
 
           <div className="mb-8">
-            <h1 className="text-5xl font-bold mb-3" style={{ color: 'hsl(0 0% 85%)' }}>
+            <h1 className="text-5xl font-bold mb-3 text-foreground">
               Contact Messages
             </h1>
             <p className="text-xl text-muted-foreground">
