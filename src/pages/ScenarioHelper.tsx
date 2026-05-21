@@ -167,9 +167,15 @@ const ScenarioHelper = () => {
         throw new Error(`Server error: ${data.error || "Unknown error"}`);
       }
       if (data.reply) {
-        setResponse(data.reply);
-        const rulesUsed =
+        // Defense-in-depth: validate and sanitize external API response before rendering
+        const rawReply = typeof data.reply === "string" ? data.reply : String(data.reply ?? "");
+        const safeReply = rawReply.slice(0, 10000).replace(/<\/?[a-zA-Z][^>]*>/g, "");
+        setResponse(safeReply);
+        const rulesUsedRaw =
           data.rules_used && Array.isArray(data.rules_used) && data.rules_used.length > 0 ? data.rules_used : [];
+        const rulesUsed = rulesUsedRaw
+          .filter((r: any) => r && typeof r.title === "string")
+          .map((r: any) => ({ ...r, title: r.title.slice(0, 200).replace(/<\/?[a-zA-Z][^>]*>/g, "") }));
         setAppliedRules(rulesUsed);
 
         // Save guidance record to database
