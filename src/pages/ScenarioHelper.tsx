@@ -131,40 +131,12 @@ const ScenarioHelper = () => {
     setResponse("");
     setAppliedRules([]);
     try {
-      const url = `https://script.google.com/macros/s/AKfycbyEY3lUkVQDwdPFGd6PpHCxJHWOLGUEzHgsynGVljMCacgACEcj49vi1Jke7L3itfKM9A/exec?scenario=${encodeURIComponent(scenario)}`;
-      const fetchResponse = await fetch(url);
-      const textResponse = await fetchResponse.text();
-      let data;
-      try {
-        data = JSON.parse(textResponse);
-      } catch {
-        const jsonMatch = textResponse.match(/callback\((.*)\)/);
-        if (jsonMatch) {
-          try {
-            data = JSON.parse(jsonMatch[1]);
-          } catch {
-            throw new Error(textResponse);
-          }
-        } else {
-          throw new Error(textResponse);
-        }
-      }
-      if (data.success === false && data.error === "AI response parsing failed" && data.raw_response) {
-        try {
-          const rawResponse = data.raw_response.trim();
-          const cleanedResponse = rawResponse.replace(/```json\s*/g, "").replace(/```\s*/g, "");
-          const parsedAiResponse = JSON.parse(cleanedResponse);
-          data = {
-            success: true,
-            reply: parsedAiResponse.reply,
-            rulesUsed: parsedAiResponse.rules_used,
-          };
-        } catch (clientParseError) {
-          throw new Error(`Server error: ${data.error || "Unknown error"}`);
-        }
-      }
-      if (data.success === false) {
-        throw new Error(`Server error: ${data.error || "Unknown error"}`);
+      const { data, error: fnError } = await supabase.functions.invoke("generate-guidance", {
+        body: { scenario: scenario.trim() },
+      });
+      if (fnError) throw new Error(fnError.message);
+      if (!data || data.success === false) {
+        throw new Error(data?.error || "Failed to generate guidance");
       }
       if (data.reply) {
         // Defense-in-depth: validate and sanitize external API response before rendering
