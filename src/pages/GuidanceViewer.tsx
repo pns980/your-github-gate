@@ -120,9 +120,14 @@ const GuidanceViewer = () => {
                   <div>
                     <h3 className="font-semibold text-lg mb-2">Guidance</h3>
                     <div className="bg-muted/50 rounded-lg p-4 border border-border">
-                      <p className="text-foreground whitespace-pre-wrap leading-relaxed">
-                        {record.guidance}
-                      </p>
+                      <p
+                        className="text-foreground whitespace-pre-wrap leading-relaxed"
+                        dangerouslySetInnerHTML={{
+                          __html: record.guidance
+                            .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+                            .replace(/\*(.+?)\*/g, "<strong>$1</strong>"),
+                        }}
+                      />
                     </div>
                   </div>
 

@@ -285,7 +285,14 @@ const ScenarioHelper = () => {
               </h2>
 
               <div className="bg-card rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm border border-border">
-                <div className="text-foreground leading-relaxed whitespace-pre-wrap">{response}</div>
+                <div
+                  className="text-foreground leading-relaxed whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{
+                    __html: response
+                      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+                      .replace(/\*(.+?)\*/g, "<strong>$1</strong>"),
+                  }}
+                />
               </div>
 
               <div className="bg-card rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm border border-border">
