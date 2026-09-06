@@ -53,7 +53,7 @@ export function ConsentBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6">
-      <Card className="mx-auto max-w-4xl bg-card/95 backdrop-blur-sm border-2 shadow-lg">
+      <Card className="mx-auto max-w-[1200px] bg-card/95 backdrop-blur-sm border shadow-lift">
         <div className="p-4 md:p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">

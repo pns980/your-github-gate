@@ -88,10 +88,11 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-surface-dark p-4">
+      <Card className="w-full max-w-md border-primary/30">
         <CardHeader>
-          <CardTitle>Set New Password</CardTitle>
+          <p className="eyebrow">Number One Rules</p>
+          <CardTitle className="text-4xl">Set New Password</CardTitle>
           <CardDescription>
             {isValidSession 
               ? "Enter your new password below" 

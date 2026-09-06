@@ -161,12 +161,13 @@ const RuleReview = () => {
 
   return (
     <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-[1200px] mx-auto">
         <Navigation currentPage="review" />
 
         {/* Page Title */}
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 text-foreground">
+        <div className="mb-6 border-b border-border pb-5 sm:mb-8">
+          <p className="eyebrow mb-2">Reflection workspace</p>
+          <h1 className="workspace-title mb-2">
             Leave your mark on a #1 rule
           </h1>
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
@@ -179,7 +180,7 @@ const RuleReview = () => {
 
         {/* Rule Card */}
         {currentRule ? (
-          <Card className="shadow-lg">
+          <Card className="shadow-soft">
             <CardHeader>
               <CardTitle className="text-xl sm:text-2xl break-words">{currentRule.title}</CardTitle>
             </CardHeader>
@@ -265,7 +266,7 @@ const RuleReview = () => {
             </CardContent>
           </Card>
         ) : (
-          <Card className="shadow-lg">
+          <Card className="shadow-soft">
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground mb-4">
                 Click "Not feeling it, give me another" to start reviewing rules

@@ -218,12 +218,13 @@ const ScenarioHelper = () => {
   };
   return (
     <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-[1200px] mx-auto">
         <Navigation currentPage="home" />
 
         {/* Page Title */}
-        <div className="mb-4 sm:mb-6">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 text-foreground">
+        <div className="mb-4 border-b border-border pb-5 sm:mb-6">
+          <p className="eyebrow mb-2">Decision workspace</p>
+          <h1 className="workspace-title mb-2">
             Find a #1 rule for life
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
@@ -232,7 +233,8 @@ const ScenarioHelper = () => {
         </div>
 
         {/* Main Content Card */}
-        <div className="bg-card rounded-lg shadow-lg p-4 sm:p-6 md:p-8 border border-border">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_14rem]">
+        <div className="workspace-panel p-4 sm:p-6 md:p-8 border border-border">
           <div className="mb-6 sm:mb-8">
             <label className="block mb-3 sm:mb-4 font-semibold text-foreground text-base sm:text-lg">
               Describe your scenario
@@ -278,13 +280,13 @@ const ScenarioHelper = () => {
           </div>
 
           {response && (
-            <div className="bg-muted/50 rounded-lg p-4 sm:p-6 md:p-8 border border-border">
+            <div className="bg-surface-muted rounded-sm p-4 sm:p-6 md:p-8 border border-border">
               <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                 Perfec™ Guidance
               </h2>
 
-              <div className="bg-card rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm border border-border">
+              <div className="bg-card rounded-sm p-4 sm:p-6 mb-4 sm:mb-6  border border-border">
                 <div
                   className="text-foreground leading-relaxed whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{
@@ -295,7 +297,7 @@ const ScenarioHelper = () => {
                 />
               </div>
 
-              <div className="bg-card rounded-lg p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm border border-border">
+              <div className="bg-card rounded-sm p-4 sm:p-6 mb-4 sm:mb-6  border border-border">
                 <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-foreground">
                   How would you rate this response?
                 </h3>
@@ -321,7 +323,7 @@ const ScenarioHelper = () => {
                 </div>
               </div>
 
-              <div className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border">
+              <div className="bg-card rounded-sm p-4 sm:p-6  border border-border">
                 <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-foreground">#1 Rules Applied</h3>
                 <div className="text-foreground leading-relaxed space-y-4">
                   {appliedRules.length > 0 ? (
@@ -345,8 +347,18 @@ const ScenarioHelper = () => {
           )}
         </div>
 
+        <aside className="hidden border-l border-border pl-6 lg:block">
+          <p className="eyebrow mb-4">Working method</p>
+          <ol className="space-y-5 text-sm text-muted-foreground">
+            <li><span className="mb-1 block font-display text-3xl text-primary">01</span>Describe the situation in your own words.</li>
+            <li><span className="mb-1 block font-display text-3xl text-primary">02</span>Review guidance grounded in the full rule set.</li>
+            <li><span className="mb-1 block font-display text-3xl text-primary">03</span>Use your judgment and choose the next step.</li>
+          </ol>
+        </aside>
+        </div>
+
         {/* Perfec™ Cycling Bullets */}
-        <div className="mt-6 sm:mt-8 bg-white rounded-lg p-4 sm:p-6 md:p-8 border border-border shadow-lg">
+        <div className="mt-6 border-t border-border bg-card p-4 sm:mt-8 sm:p-6 md:p-8">
           <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground text-center">What is perfec™?</h2>
           <div className="relative min-h-[80px] sm:h-20 flex items-center justify-center overflow-hidden px-2">
             {perfecBullets.map((bullet, index) => (

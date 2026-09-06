@@ -70,10 +70,10 @@ const Messages = () => {
       <AdminHeader />
       <AdminNavigation />
       <div className="min-h-screen gradient-bg p-8">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1200px] mx-auto">
 
           <div className="mb-8">
-            <h1 className="text-5xl font-bold mb-3 text-foreground">
+            <h1 className="workspace-title mb-3">
               Contact Messages
             </h1>
             <p className="text-xl text-muted-foreground">
@@ -86,7 +86,7 @@ const Messages = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
         ) : messages.length === 0 ? (
-          <Card className="shadow-lg bg-card">
+          <Card className="shadow-soft bg-card">
             <CardContent className="py-12 text-center">
               <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground">No messages yet.</p>
@@ -95,7 +95,7 @@ const Messages = () => {
         ) : (
           <div className="space-y-6">
             {messages.map((message) => (
-              <Card key={message.id} className="shadow-lg bg-card border-border">
+              <Card key={message.id} className="shadow-soft bg-card border-border">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-2 flex-1">
@@ -133,7 +133,7 @@ const Messages = () => {
                       <MessageSquare className="h-5 w-5 text-primary" />
                       Message
                     </h3>
-                    <div className="bg-muted/50 rounded-lg p-4 border border-border">
+                    <div className="bg-muted/50 rounded-sm p-4 border border-border">
                       <p className="text-foreground whitespace-pre-wrap leading-relaxed">
                         {message.message}
                       </p>

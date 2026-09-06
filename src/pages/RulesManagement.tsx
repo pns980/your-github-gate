@@ -382,7 +382,7 @@ const RulesManagement = () => {
       <AdminHeader />
       <AdminNavigation />
       <div className="min-h-screen bg-background p-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1200px] mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
               <Button
@@ -392,7 +392,7 @@ const RulesManagement = () => {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-4xl font-bold text-foreground">Rules Management</h1>
+              <h1 className="workspace-title">Rules Management</h1>
             </div>
             <div className="flex gap-2">
               <Button variant="destructive" onClick={handleDeleteAll}>
@@ -555,7 +555,7 @@ const RulesManagement = () => {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <div className="border rounded-lg">
+          <div className="border rounded-sm">
             <Table>
               <TableHeader>
               <TableRow>
@@ -615,7 +615,7 @@ const RulesManagement = () => {
         )}
       </div>
 
-      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto space-x-4">
+      <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground max-w-[1200px] mx-auto space-x-4">
         <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
         <Link to="/terms" className="hover:text-primary">Terms & Conditions</Link>
         <Link to="/contact" className="hover:text-primary">Contact</Link>

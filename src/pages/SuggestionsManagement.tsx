@@ -72,10 +72,10 @@ const SuggestionsManagement = () => {
       <div className="min-h-screen bg-background">
         <AdminHeader />
         <AdminNavigation />
-        <main className="container mx-auto px-4 py-8">
+        <main className="max-w-[1200px] mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-3xl font-bold">Suggestions Management</h1>
+              <h1 className="workspace-title">Suggestions Management</h1>
               <p className="text-muted-foreground mt-2">
                 Review and manage rule suggestions submitted by users
               </p>
