@@ -270,80 +270,19 @@ const RulesManagement = () => {
     e.target.value = "";
   };
 
-  const loadDataWithJSONP = (): Promise<any[]> => {
-    return new Promise((resolve, reject) => {
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6qXXzzJj-5ulyAqOBxL33j8CyUc9CiVxl3sD15ItgbHRhF-z5FLFxsY7Ue8b1Gd2t/exec';
-      const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-      const timestamp = Date.now();
-      
-      const timeoutId = setTimeout(() => {
-        cleanup();
-        reject(new Error('Request timeout'));
-      }, 15000);
-      
-      (window as any)[callbackName] = function(data: any[]) {
-        cleanup();
-        resolve(data);
-      };
-      
-      function cleanup() {
-        clearTimeout(timeoutId);
-        if (script && script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-        if ((window as any)[callbackName]) {
-          delete (window as any)[callbackName];
-        }
-      }
-      
-      const script = document.createElement('script');
-      script.onerror = function() {
-        cleanup();
-        reject(new Error('Failed to load data'));
-      };
-      
-      script.src = `${SCRIPT_URL}?callback=${callbackName}&_=${timestamp}`;
-      document.head.appendChild(script);
-    });
-  };
-
   const handleGoogleSheetsImport = async () => {
     if (!confirm("This will import all rules from Google Sheets. Continue?")) return;
-    
+
     setImporting(true);
     try {
-      const data = await loadDataWithJSONP();
-      
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('No data received from Google Sheets');
-      }
+      const { data, error } = await supabase.functions.invoke("import-google-sheets-rules");
 
-      const normalizeText = (val: any) => typeof val === 'string' ? val.trim() : (val == null ? '' : String(val).trim());
+      if (error) throw new Error("Import failed. Please try again.");
+      if (!data?.success) throw new Error(data?.error ?? "Import failed. Please try again.");
 
-      const rules = data.map((r: any) => {
-        const areaValue = normalizeText(r.area ?? r.Area ?? r.AREA);
-        return {
-          title: normalizeText(r.title ?? r.Title ?? r.TITLE),
-          description: normalizeText(
-            r.description ?? r.fullDescription ?? r.FullDescription ?? r.FULLDESCRIPTION ?? r.Description ?? r.DESCRIPTION
-          ),
-          area: areaValue ? areaValue.split(/[;,]/).map((a: string) => a.trim()).filter((a: string) => a) : null,
-          discipline: normalizeText(r.discipline ?? r.Discipline ?? r.DISCIPLINE) || null,
-          skill: normalizeText(r.skill ?? r.Skill ?? r.SKILL) || null,
-        };
-      }).filter((rule: any) => rule.title && rule.description);
-
-      if (rules.length === 0) {
-        throw new Error('No valid rules found in Google Sheets');
-      }
-
-      const { error } = await supabase.from("rules").insert(rules);
-
-      if (error) throw error;
-      
       toast({
         title: "Success",
-        description: `Imported ${rules.length} rules from Google Sheets`,
+        description: `Imported ${data.imported} rules from Google Sheets`,
       });
       fetchRules();
     } catch (error: any) {
