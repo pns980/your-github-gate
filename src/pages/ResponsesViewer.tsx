@@ -272,9 +272,9 @@ const ResponsesViewer = () => {
       <AdminHeader />
       <AdminNavigation />
       <div className="min-h-screen bg-background p-8">
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="max-w-[1200px] mx-auto space-y-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-bold text-foreground">Rule Responses</h1>
+            <h1 className="workspace-title">Rule Responses</h1>
             <div className="flex gap-2">
               <Button variant="outline" onClick={exportToCSV} disabled={responses.length === 0}>
                 <Download className="h-4 w-4 mr-2" />
@@ -345,7 +345,7 @@ const ResponsesViewer = () => {
                   </div>
                 </div>
                 
-                <div className="border rounded-lg overflow-x-auto">
+                <div className="border rounded-sm overflow-x-auto">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -435,7 +435,7 @@ const ResponsesViewer = () => {
               </TabsContent>
 
               <TabsContent value="raw" className="mt-4">
-                <div className="border rounded-lg">
+                <div className="border rounded-sm">
                   <Table>
                     <TableHeader>
                       <TableRow>

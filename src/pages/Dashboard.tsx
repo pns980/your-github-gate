@@ -97,9 +97,9 @@ const Dashboard = () => {
       <div className="min-h-screen bg-background">
         <AdminHeader />
         <AdminNavigation />
-        <main className="container mx-auto px-4 py-8">
+        <main className="max-w-[1200px] mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <h1 className="workspace-title">Dashboard</h1>
             <p className="text-muted-foreground mt-2">
               Overview of activity from the last 7 days
             </p>

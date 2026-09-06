@@ -55,7 +55,7 @@ const Contact = () => {
           ← Back to Home
         </Link>
         
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">Contact Us</h1>
+        <h1 className="workspace-title mb-2">Contact Us</h1>
         <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
           Have a question or feedback? Send us a message.
         </p>

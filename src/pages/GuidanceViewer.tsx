@@ -64,11 +64,11 @@ const GuidanceViewer = () => {
       <AdminHeader />
       <AdminNavigation />
       <div className="min-h-screen bg-background p-8">
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="max-w-[1200px] mx-auto space-y-6">
 
           {/* Page Header */}
           <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-bold text-foreground">Guidance Records</h1>
+            <h1 className="workspace-title">Guidance Records</h1>
             <Button onClick={loadRecords} disabled={loading}>
               <RefreshCw className="mr-2 h-4 w-4" />
               Refresh
@@ -91,7 +91,7 @@ const GuidanceViewer = () => {
         ) : (
           <div className="space-y-6">
             {records.map((record) => (
-              <Card key={record.id} className="shadow-lg">
+              <Card key={record.id} className="shadow-soft">
                 <CardHeader>
                   <div className="flex justify-between items-start gap-4">
                     <div className="flex-1">
@@ -119,7 +119,7 @@ const GuidanceViewer = () => {
 
                   <div>
                     <h3 className="font-semibold text-lg mb-2">Guidance</h3>
-                    <div className="bg-muted/50 rounded-lg p-4 border border-border">
+                    <div className="bg-muted/50 rounded-sm p-4 border border-border">
                       <p
                         className="text-foreground whitespace-pre-wrap leading-relaxed"
                         dangerouslySetInnerHTML={{
@@ -134,7 +134,7 @@ const GuidanceViewer = () => {
                   {record.applied_rules && record.applied_rules.length > 0 && (
                     <div>
                       <h3 className="font-semibold text-lg mb-2">#1 Rules Applied</h3>
-                      <div className="bg-muted/50 rounded-lg p-4 border border-border">
+                      <div className="bg-muted/50 rounded-sm p-4 border border-border">
                         <ul className="space-y-2">
                           {record.applied_rules.map((ruleTitle, index) => (
                             <li key={index} className="flex items-start gap-2">
@@ -158,7 +158,7 @@ const GuidanceViewer = () => {
 
                   <div>
                     <h3 className="font-semibold text-lg mb-2">User Rating</h3>
-                    <div className="bg-muted/50 rounded-lg p-4 border border-border">
+                    <div className="bg-muted/50 rounded-sm p-4 border border-border">
                       {record.rating ? (
                         <div className="flex items-center gap-2">
                           {record.rating === 'Liked' ? (

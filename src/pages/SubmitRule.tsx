@@ -86,11 +86,11 @@ const SubmitRule = () => {
 
   return (
     <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-[1200px] mx-auto">
         <Navigation currentPage="submit" />
         <div className="max-w-2xl mx-auto">
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-3 text-foreground">Submit a Rule</h1>
+          <h1 className="workspace-title mb-2">Submit a Rule</h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
             Share your own rule suggestion with us. We review all submissions and may add them to our collection.
           </p>
