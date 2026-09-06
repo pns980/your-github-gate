@@ -1,131 +1,140 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Perfec™ Design System
-   Typography: Playfair Display (serif) for headings, Source Sans 3 for body
-   Colors: Black/white with olive green accents
-*/
+@font-face {
+  font-family: "Muller Next Narrow";
+  src: url("/__l5e/assets-v1/77f16c77-5f40-498e-bc78-24f07d21681b/MullerNextNarrow-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/__l5e/assets-v1/d02f1eae-829a-412e-b801-11c62739aab8/Montserrat-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/__l5e/assets-v1/0fe5cbae-b504-4a61-a1dd-09cb9c44a10a/Montserrat-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/__l5e/assets-v1/eb11b3fa-9ac2-45e9-aa97-3fad91402d12/Montserrat-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/__l5e/assets-v1/56c9cfc4-1361-4141-af22-29f64bc66f3e/Montserrat-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 8%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 8%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 8%;
-
-    /* Olive/forest green accent */
-    --primary: 82 35% 30%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 60 10% 96%;
-    --secondary-foreground: 0 0% 8%;
-
-    --muted: 60 10% 96%;
-    --muted-foreground: 0 0% 45%;
-
-    --accent: 82 35% 30%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 82 35% 30%;
-
-    --radius: 0.25rem;
-
-    --gradient-start: 0 0% 100%;
-    --gradient-end: 60 10% 96%;
-
-    --sidebar-background: 60 10% 98%;
-    --sidebar-foreground: 0 0% 8%;
-    --sidebar-primary: 82 35% 30%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 60 10% 95%;
-    --sidebar-accent-foreground: 0 0% 8%;
-    --sidebar-border: 0 0% 88%;
-    --sidebar-ring: 82 35% 30%;
-    
-    --tag-area: 82 35% 90%;
-    --tag-area-foreground: 82 35% 25%;
-    --tag-discipline: 210 30% 90%;
-    --tag-discipline-foreground: 210 30% 25%;
-    --tag-skill: 30 30% 90%;
-    --tag-skill-foreground: 30 30% 25%;
+    --background: 53 50% 94%;
+    --foreground: 167 100% 11%;
+    --card: 53 55% 97%;
+    --card-foreground: 167 100% 11%;
+    --popover: 53 55% 97%;
+    --popover-foreground: 167 100% 11%;
+    --primary: 134 55% 52%;
+    --primary-foreground: 167 100% 11%;
+    --secondary: 53 35% 90%;
+    --secondary-foreground: 167 100% 11%;
+    --muted: 53 30% 90%;
+    --muted-foreground: 167 22% 32%;
+    --accent: 134 55% 52%;
+    --accent-foreground: 167 100% 11%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 53 50% 94%;
+    --border: 167 15% 78%;
+    --input: 167 15% 72%;
+    --ring: 134 55% 42%;
+    --radius: 0.125rem;
+    --surface-dark: 167 100% 11%;
+    --surface-dark-foreground: 53 50% 94%;
+    --surface-muted: 53 40% 91%;
+    --shadow-soft: 0 12px 40px -18px hsl(167 100% 11% / 0.28);
+    --shadow-lift: 0 20px 50px -20px hsl(167 100% 11% / 0.4);
+    --sidebar-background: 167 100% 11%;
+    --sidebar-foreground: 53 50% 94%;
+    --sidebar-primary: 134 55% 52%;
+    --sidebar-primary-foreground: 167 100% 11%;
+    --sidebar-accent: 167 60% 16%;
+    --sidebar-accent-foreground: 53 50% 94%;
+    --sidebar-border: 167 38% 24%;
+    --sidebar-ring: 134 55% 52%;
+    --tag-area: 134 55% 88%;
+    --tag-area-foreground: 167 100% 11%;
+    --tag-discipline: 53 35% 86%;
+    --tag-discipline-foreground: 167 100% 11%;
+    --tag-skill: 167 24% 84%;
+    --tag-skill-foreground: 167 100% 11%;
   }
 
   .dark {
-    --background: 0 0% 6%;
-    --foreground: 0 0% 95%;
+    --background: 167 100% 11%;
+    --foreground: 53 50% 94%;
+    --card: 167 60% 14%;
+    --card-foreground: 53 50% 94%;
+    --popover: 167 60% 14%;
+    --popover-foreground: 53 50% 94%;
+    --primary: 134 55% 52%;
+    --primary-foreground: 167 100% 11%;
+    --secondary: 167 45% 18%;
+    --secondary-foreground: 53 50% 94%;
+    --muted: 167 45% 18%;
+    --muted-foreground: 53 20% 78%;
+    --accent: 134 55% 52%;
+    --accent-foreground: 167 100% 11%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 53 50% 94%;
+    --border: 167 35% 24%;
+    --input: 167 35% 24%;
+    --ring: 134 55% 52%;
+  }
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 95%;
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  h1, h2, h3, h4, h5, h6 { @apply font-display uppercase; letter-spacing: 0; }
+  ::selection { @apply bg-primary text-primary-foreground; }
+}
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
+@layer components {
+  .gradient-bg { background: hsl(var(--background)); }
+  .display-heading { @apply font-display uppercase leading-[0.94]; word-spacing: 0.16em; letter-spacing: 0; }
+  .eyebrow { @apply text-xs font-bold uppercase text-primary; letter-spacing: 0.12em; }
+  .workspace-panel { @apply border border-border bg-card shadow-soft; }
+  .workspace-title { @apply display-heading text-4xl sm:text-5xl lg:text-6xl text-foreground; }
+  .workspace-subtitle { @apply mt-2 max-w-2xl text-sm sm:text-base text-muted-foreground; }
+}
 
-    --primary: 82 35% 45%;
-    --primary-foreground: 0 0% 8%;
-
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 95%;
-
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
-
-    --accent: 82 35% 45%;
-    --accent-foreground: 0 0% 8%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 95%;
-
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 82 35% 45%;
-    
-    --gradient-start: 0 0% 8%;
-    --gradient-end: 0 0% 6%;
-
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 82 35% 45%;
-    --sidebar-primary-foreground: 0 0% 8%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 82 35% 45%;
-    
-    --tag-area: 82 35% 25%;
-    --tag-area-foreground: 82 35% 85%;
-    --tag-discipline: 210 30% 25%;
-    --tag-discipline-foreground: 210 30% 85%;
-    --tag-skill: 30 30% 25%;
-    --tag-skill-foreground: 30 30% 85%;
+@media (min-width: 1024px) {
+  body:has([data-workspace-nav]) #root > div,
+  body:has([data-admin-header]) #root > div {
+    padding-left: 17rem;
   }
 }
 
-.gradient-bg {
-  background: linear-gradient(135deg, hsl(var(--gradient-start)) 0%, hsl(var(--gradient-end)) 100%);
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

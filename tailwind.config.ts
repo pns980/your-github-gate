@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        serif: ["'Playfair Display'", "Georgia", "serif"],
-        sans: ["'Source Sans 3'", "system-ui", "sans-serif"],
+        display: ["'Muller Next Narrow'", "'Montserrat'", "system-ui", "sans-serif"],
+        serif: ["'Muller Next Narrow'", "'Montserrat'", "system-ui", "sans-serif"],
+        sans: ["'Montserrat'", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -61,6 +62,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        surface: {
+          dark: "hsl(var(--surface-dark))",
+          "dark-foreground": "hsl(var(--surface-dark-foreground))",
+          muted: "hsl(var(--surface-muted))",
+        },
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        lift: "var(--shadow-lift)",
       },
       borderRadius: {
         lg: "var(--radius)",
