@@ -346,7 +346,7 @@ const ScenarioHelper = () => {
         </div>
 
         {/* Perfec™ Cycling Bullets */}
-        <div className="mt-6 sm:mt-8 bg-card rounded-sm p-4 sm:p-6 md:p-8 border border-border shadow-lg">
+        <div className="mt-6 border-t border-border bg-card p-4 sm:mt-8 sm:p-6 md:p-8">
           <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground text-center">What is perfec™?</h2>
           <div className="relative min-h-[80px] sm:h-20 flex items-center justify-center overflow-hidden px-2">
             {perfecBullets.map((bullet, index) => (

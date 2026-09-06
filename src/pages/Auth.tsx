@@ -259,10 +259,11 @@ const Auth = () => {
   const cardContent = getCardContent();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-surface-dark p-4">
+      <Card className="w-full max-w-md border-primary/30">
         <CardHeader>
-          <CardTitle>{cardContent.title}</CardTitle>
+          <p className="eyebrow">Number One Rules</p>
+          <CardTitle className="text-4xl">{cardContent.title}</CardTitle>
           <CardDescription>{cardContent.description}</CardDescription>
         </CardHeader>
         <CardContent>{cardContent.form}</CardContent>

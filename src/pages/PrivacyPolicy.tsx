@@ -2,16 +2,17 @@ import { Link } from "react-router-dom";
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background p-4 sm:p-8">
+      <div className="max-w-[1200px] mx-auto">
         <Link to="/" className="text-primary hover:underline mb-6 inline-block">
           ← Back to Home
         </Link>
         
-        <h1 className="text-4xl font-bold mb-2">Privacy Policy</h1>
+        <p className="eyebrow">Number One Rules</p>
+        <h1 className="workspace-title mb-2">Privacy Policy</h1>
         <p className="text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString()}</p>
 
-        <div className="prose prose-slate dark:prose-invert max-w-none space-y-6">
+        <div className="prose prose-slate dark:prose-invert max-w-4xl space-y-6">
           <section>
             <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
             <p className="text-muted-foreground">

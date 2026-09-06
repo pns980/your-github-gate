@@ -22,7 +22,7 @@ const AdminHeader = () => {
   };
 
   return (
-    <header data-admin-header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background/95 px-4 backdrop-blur lg:ml-64 lg:px-8">
+    <header data-admin-header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background/95 px-4 backdrop-blur lg:px-8">
       <Link to="/dashboard" className="flex items-center gap-3 lg:hidden">
         <PerfecLogotype className="h-6" />
         <span className="text-xs font-semibold uppercase">Admin</span>
