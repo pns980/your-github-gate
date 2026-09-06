@@ -106,7 +106,8 @@ const RulesBrowser = () => {
         <Navigation currentPage="rules" />
 
         {/* Page Title */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-6 border-b border-border pb-5 sm:mb-8">
+          <p className="eyebrow mb-2">Rules library</p>
           <h1 className="workspace-title mb-2">
             The complete list of almost all #1 rules
           </h1>

@@ -222,7 +222,8 @@ const ScenarioHelper = () => {
         <Navigation currentPage="home" />
 
         {/* Page Title */}
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-4 border-b border-border pb-5 sm:mb-6">
+          <p className="eyebrow mb-2">Decision workspace</p>
           <h1 className="workspace-title mb-2">
             Find a #1 rule for life
           </h1>
@@ -232,6 +233,7 @@ const ScenarioHelper = () => {
         </div>
 
         {/* Main Content Card */}
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="workspace-panel p-4 sm:p-6 md:p-8 border border-border">
           <div className="mb-6 sm:mb-8">
             <label className="block mb-3 sm:mb-4 font-semibold text-foreground text-base sm:text-lg">
@@ -343,6 +345,16 @@ const ScenarioHelper = () => {
               </div>
             </div>
           )}
+        </div>
+
+        <aside className="hidden border-l border-border pl-6 lg:block">
+          <p className="eyebrow mb-4">Working method</p>
+          <ol className="space-y-5 text-sm text-muted-foreground">
+            <li><span className="mb-1 block font-display text-3xl text-primary">01</span>Describe the situation in your own words.</li>
+            <li><span className="mb-1 block font-display text-3xl text-primary">02</span>Review guidance grounded in the full rule set.</li>
+            <li><span className="mb-1 block font-display text-3xl text-primary">03</span>Use your judgment and choose the next step.</li>
+          </ol>
+        </aside>
         </div>
 
         {/* Perfec™ Cycling Bullets */}

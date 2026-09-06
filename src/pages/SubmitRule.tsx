@@ -89,7 +89,8 @@ const SubmitRule = () => {
       <div className="max-w-[1200px] mx-auto">
         <Navigation currentPage="submit" />
         <div className="max-w-2xl mx-auto">
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-6 border-b border-border pb-5 sm:mb-8">
+          <p className="eyebrow mb-2">Community input</p>
           <h1 className="workspace-title mb-2">Submit a Rule</h1>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
             Share your own rule suggestion with us. We review all submissions and may add them to our collection.

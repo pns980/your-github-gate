@@ -165,7 +165,8 @@ const RuleReview = () => {
         <Navigation currentPage="review" />
 
         {/* Page Title */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-6 border-b border-border pb-5 sm:mb-8">
+          <p className="eyebrow mb-2">Reflection workspace</p>
           <h1 className="workspace-title mb-2">
             Leave your mark on a #1 rule
           </h1>

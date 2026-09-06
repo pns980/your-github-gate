@@ -13,7 +13,7 @@ const PerfecLogotype = ({ variant = "forest", className }: PerfecLogotypeProps) 
     alt="Perfec™"
     width={1890}
     height={730}
-    className={cn("h-7 w-auto", className)}
+    className={cn("h-9 w-auto object-contain", className)}
   />
 );
 
