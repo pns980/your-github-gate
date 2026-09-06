@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Muller Next Narrow";
-  src: url("/__l5e/assets-v1/77f16c77-5f40-498e-bc78-24f07d21681b/MullerNextNarrow-ExtraBold.woff2") format("woff2");
+  src: url("./assets/brand/MullerNextNarrow-ExtraBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -12,7 +12,7 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/__l5e/assets-v1/d02f1eae-829a-412e-b801-11c62739aab8/Montserrat-Regular.woff2") format("woff2");
+  src: url("./assets/brand/Montserrat-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -20,7 +20,7 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/__l5e/assets-v1/0fe5cbae-b504-4a61-a1dd-09cb9c44a10a/Montserrat-Medium.woff2") format("woff2");
+  src: url("./assets/brand/Montserrat-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -28,7 +28,7 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/__l5e/assets-v1/eb11b3fa-9ac2-45e9-aa97-3fad91402d12/Montserrat-SemiBold.woff2") format("woff2");
+  src: url("./assets/brand/Montserrat-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -36,7 +36,7 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/__l5e/assets-v1/56c9cfc4-1361-4141-af22-29f64bc66f3e/Montserrat-Bold.woff2") format("woff2");
+  src: url("./assets/brand/Montserrat-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

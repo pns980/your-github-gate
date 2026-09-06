@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import forestLogo from "@/assets/brand/perfec-logotype-forest.svg.asset.json";
-import creamLogo from "@/assets/brand/perfec-logotype-cream.svg.asset.json";
+import forestLogo from "@/assets/brand/perfec-logotype-forest.svg";
+import creamLogo from "@/assets/brand/perfec-logotype-cream.svg";
 
 interface PerfecLogotypeProps {
   variant?: "forest" | "cream";
@@ -9,7 +9,7 @@ interface PerfecLogotypeProps {
 
 const PerfecLogotype = ({ variant = "forest", className }: PerfecLogotypeProps) => (
   <img
-    src={variant === "forest" ? forestLogo.url : creamLogo.url}
+    src={variant === "forest" ? forestLogo : creamLogo}
     alt="Perfec™"
     width={1890}
     height={730}
