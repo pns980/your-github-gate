@@ -1,90 +1,33 @@
-# Replace Google Apps Script with native Claude-powered guidance
+# Rebrand Number One Rules with the current Perfec™ identity
 
-Replace the external Google Apps Script call in `ScenarioHelper` with a new Supabase edge function that:
-1. Fetches all rules directly from the `rules` table in the database
-2. Calls Anthropic's Claude Sonnet API with the same system context + scenario + rules
-3. Returns guidance text + the list of rules applied (title + reason) in the exact shape the frontend already expects
+Apply the selected precision-system workspace direction across the public tools and protected admin pages while preserving every workflow and all existing content.
 
-User-facing behavior, input, output, rating flow, and UI stay identical.
+## Design foundation
+- Replace the legacy olive/white theme with the current Perfec™ palette: forest `#00382F`, grass `#55D66B`, cream `#F6F2DE`, and light cream `#FBF9EE`, expressed through semantic theme tokens.
+- Bring over the actual self-hosted Perfec™ fonts: Muller Next Narrow ExtraBold for compact uppercase display headings and Montserrat for body/UI text.
+- Use minimal corner radii, precise borders, restrained shadows, pill-shaped actions, compact spacing, and subtle reduced-motion-safe reveals.
+- Bring over the correct forest and cream Perfec™ logotypes plus a small, purposeful selection of the brand’s hand-drawn doodles.
 
-## What you'll need to provide
+## Shared workspace shell
+- Replace the current row of outlined navigation buttons with a responsive branded workspace shell derived from the chosen precision-grid direction.
+- Desktop: dark forest sidebar with the Perfec™ logotype, grouped public navigation, clear active state, and a persistent “Submit a Rule” action.
+- Mobile: compact branded header with an accessible menu containing every primary destination.
+- Build a matching protected admin shell using the same visual language and existing admin destinations, user identity, and sign-out behavior.
+- Restyle the footer and cookie consent to use the same forest/cream/grass system.
 
-- An **Anthropic API key** (from https://console.anthropic.com/settings/keys). I'll request it as a secure backend secret before deploying — never exposed to the frontend.
+## Public pages
+- Recompose Scenario Helper as the primary command surface: strong display heading, focused input panel, clear guidance action, compact supporting philosophy, and clean response/rating/rules sections.
+- Apply the same dense grid language to Rules Browser, Rule Review, Submit Rule, About, and Contact without changing their content or interactions.
+- Harmonize legal, authentication, password reset, and not-found pages with the same typography, palette, surfaces, and controls.
 
-## Implementation steps
-
-### 1. Add `ANTHROPIC_API_KEY` secret
-Use the secrets tool to securely collect your Anthropic key.
-
-### 2. Create edge function `supabase/functions/generate-guidance/index.ts`
-- Public function (no auth required — matches today's anonymous flow).
-- Accepts `{ scenario: string }`.
-- Validates input with Zod (length 1–4000 chars).
-- Uses the service-role Supabase client to `SELECT title, description, area, discipline, skill FROM rules`.
-- Builds the system prompt with the 8 guiding principles you provided.
-- Builds the user prompt: scenario + serialized rule list (title + description).
-- Calls Anthropic `POST https://api.anthropic.com/v1/messages` with model `claude-sonnet-4-5-20250929`.
-- Uses **tool calling** to force structured JSON output (a `provide_guidance` tool with schema `{ reply: string, rules_used: [{title, reason}] }`) so we never have to parse loose JSON.
-- Returns `{ success: true, reply, rules_used }` matching today's shape.
-- Returns proper CORS headers and 4xx/5xx errors with messages.
-
-### 3. Update `src/pages/ScenarioHelper.tsx`
-- Replace the `fetch(googleScriptUrl)` block and all the JSONP/raw_response fallback parsing with a single `supabase.functions.invoke('generate-guidance', { body: { scenario } })` call.
-- Keep the existing sanitization (10k char cap, tag stripping, 200 char title cap).
-- Keep the `guidance_records` insert and the like/dislike rating flow exactly as-is.
-- Keep all UI, loading states, perfec™ bullets, and random scenario generator unchanged.
-
-### 4. Configuration
-- No `supabase/config.toml` change needed — default `verify_jwt = false` is correct for this public endpoint.
-- Edge function deploys automatically.
+## Admin pages
+- Apply the selected precision-grid structure to Dashboard, Rules, Responses, Guidance, Messages, and Suggestions.
+- Keep current tables, filters, forms, dialogs, statistics, and backend operations unchanged; update only layout and presentation.
+- Use consistent status treatments, compact cards/panels, readable data density, and shared page headings.
 
 ## Technical details
-
-**System prompt** (sent to Claude):
-> You provide thoughtful guidance based on a curated set of life/work rules. Follow these principles:
-> - Encourage independent thinking and personal responsibility
-> - Show genuine empathy and respect for diverse perspectives
-> - Maintain clear, professional, and constructive communication
-> - Be pragmatic and realistic
-> - Promote mindfulness and emotional self-awareness
-> - Support personal growth and development
-> - Value fairness, objectivity, and ethical considerations
-> - Focus on long-term, constructive outcomes
->
-> You will receive a user scenario and a list of rules. Use the `provide_guidance` tool to return concise actionable guidance and identify which rules from the provided list are most relevant, explaining how each applies to this specific scenario.
-
-**Tool schema** (forces structured output):
-```json
-{
-  "name": "provide_guidance",
-  "input_schema": {
-    "type": "object",
-    "properties": {
-      "reply": { "type": "string" },
-      "rules_used": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "title": { "type": "string" },
-            "reason": { "type": "string" }
-          },
-          "required": ["title", "reason"]
-        }
-      }
-    },
-    "required": ["reply", "rules_used"]
-  }
-}
-```
-
-**Rule payload size**: All rules will be sent on every call (per your choice). At today's count this is well within Claude Sonnet's 200k context window.
-
-**Removed**: The Google Apps Script URL and all JSONP/raw_response parsing fallbacks. The integration memory note about that script will become obsolete.
-
-## What stays the same
-- The page UI, loading state, random scenario button, perfec™ bullets
-- The `guidance_records` table writes (scenario, guidance, applied_rules)
-- The Like / Not Liked rating flow
-- The "click an applied rule to browse it" navigation
-- All sanitization defenses
+- Add shared layout/branding components first, then update page shells to consume them.
+- Keep all colors and shadows token-driven; remove page-level hardcoded white/gray styling found during the audit.
+- Preserve current routing, cloud calls, guidance generation, rule tracking, authentication, ratings, and form submissions.
+- Update app metadata and favicon references only where needed to represent Number One Rules by Perfec™ accurately.
+- Verify the key public and admin screens at desktop and mobile widths, including navigation, dialogs, forms, loading states, and overflow.
