@@ -20,6 +20,7 @@ const ScenarioHelper = () => {
   const [currentGuidanceId, setCurrentGuidanceId] = useState<string | null>(null);
   const [rating, setRating] = useState<string | null>(null);
   const [currentPerfecBullet, setCurrentPerfecBullet] = useState(0);
+  const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   const perfecBullets = [
     "the celebration of being one better than yesterday",
