@@ -282,6 +282,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      rate_guidance: {
+        Args: { _id: string; _rating: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
