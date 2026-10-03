@@ -154,18 +154,21 @@ const ScenarioHelper = () => {
         // Save guidance record to database
         try {
           const ruleTitles = rulesUsed.map((rule: any) => rule.title);
-          const { data: insertedData, error: insertError } = await supabase
+          const newId = crypto.randomUUID();
+          setCurrentGuidanceId(null);
+          setRating(null);
+          const { error: insertError } = await supabase
             .from("guidance_records")
             .insert({
+              id: newId,
               scenario: scenario.trim(),
               guidance: data.reply,
               applied_rules: ruleTitles,
-            })
-            .select("id")
-            .single();
-          if (!insertError && insertedData) {
-            setCurrentGuidanceId(insertedData.id);
-            setRating(null); // Reset rating for new guidance
+            });
+          if (insertError) {
+            console.error("Error saving guidance record:", insertError);
+          } else {
+            setCurrentGuidanceId(newId);
           }
         } catch (dbError) {
           console.error("Error saving guidance record:", dbError);
@@ -196,13 +199,12 @@ const ScenarioHelper = () => {
   const handleRating = async (ratingValue: "Liked" | "Not Liked") => {
     if (!currentGuidanceId) return;
     try {
-      const { error } = await supabase
-        .from("guidance_records")
-        .update({
-          rating: ratingValue,
-        })
-        .eq("id", currentGuidanceId);
+      const { data: saved, error } = await supabase.rpc("rate_guidance" as any, {
+        _id: currentGuidanceId,
+        _rating: ratingValue,
+      });
       if (error) throw error;
+      if (!saved) throw new Error("Rating not saved");
       setRating(ratingValue);
       toast({
         title: "Thank you!",
