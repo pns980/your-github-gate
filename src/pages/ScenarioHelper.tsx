@@ -216,6 +216,97 @@ const ScenarioHelper = () => {
       });
     }
   };
+  const buildResponseText = () => {
+    const plain = response
+      .replace(/\*\*(.+?)\*\*/g, "$1")
+      .replace(/\*(.+?)\*/g, "$1")
+      .trim();
+    const ruleLines =
+      appliedRules.length > 0
+        ? appliedRules
+            .map((rule: any) => `• ${rule.title}${rule.reason ? ` — ${rule.reason}` : ""}`)
+            .join("\n")
+        : "No rules listed.";
+    return [
+      "PERFEC™ GUIDANCE",
+      "",
+      `Scenario: ${scenario.trim()}`,
+      "",
+      plain,
+      "",
+      "#1 RULES APPLIED",
+      ruleLines,
+      "",
+      `Number One Rules — ${window.location.origin}`,
+    ].join("\n");
+  };
+
+  const copyText = async (text: string) => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {
+      // fall through to the legacy path below
+    }
+    try {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(area);
+      return ok;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleCopy = async () => {
+    const ok = await copyText(buildResponseText());
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast({ title: "Copied", description: "The full response is on your clipboard." });
+    } else {
+      toast({
+        title: "Couldn't copy",
+        description: "Your browser blocked clipboard access. Select the text and copy it manually.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleShare = async () => {
+    const text = buildResponseText();
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: "Perfec™ Guidance", text, url: window.location.origin });
+        return;
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+        // fall through to copy when the share sheet fails
+      }
+    }
+    const ok = await copyText(text);
+    if (ok) {
+      toast({
+        title: "Copied",
+        description: "Sharing isn't available here, so the response was copied — paste it anywhere.",
+      });
+    } else {
+      toast({
+        title: "Couldn't share",
+        description: "This browser supports neither sharing nor clipboard access.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen gradient-bg p-4 sm:p-6 md:p-8">
       <div className="max-w-[1200px] mx-auto">
@@ -281,10 +372,35 @@ const ScenarioHelper = () => {
 
           {response && (
             <div className="bg-surface-muted rounded-sm p-4 sm:p-6 md:p-8 border border-border">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-foreground flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
-                Perfec™ Guidance
-              </h2>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
+                  Perfec™ Guidance
+                </h2>
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handleCopy}
+                    variant="outline"
+                    size="sm"
+                    aria-label="Copy the full response"
+                    className="h-8 gap-2 px-3 text-xs sm:text-sm"
+                  >
+                    {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                    <span className="hidden sm:inline">{copied ? "Copied" : "Copy"}</span>
+                  </Button>
+                  <Button
+                    onClick={handleShare}
+                    variant="outline"
+                    size="sm"
+                    aria-label="Share the full response"
+                    className="h-8 gap-2 px-3 text-xs sm:text-sm"
+                  >
+                    <Share2 className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Share</span>
+                  </Button>
+                </div>
+              </div>
+
 
               <div className="bg-card rounded-sm p-4 sm:p-6 mb-4 sm:mb-6  border border-border">
                 <div
