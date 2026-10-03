@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Lightbulb, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Lightbulb, ThumbsUp, ThumbsDown, Copy, Check, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
